@@ -550,6 +550,16 @@ function normalizeDoi(doi = "") {
   return String(doi).trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, "").toLowerCase();
 }
 
+function normalizePublicationTitle(title = "") {
+  return String(title)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u2010-\u2015]/g, "-")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 function formatAuthors(authors = []) {
   const names = authors.map((author) => (typeof author === "string" ? author : author.name)).filter(Boolean);
   if (names.length <= 6) return names.join(", ");
@@ -575,6 +585,22 @@ function normalizePubmedPublication(publication) {
     doi,
     url: publication.uid ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : "",
     sortDate: publication.sortpubdate || publication.pubdate || "",
+  };
+}
+
+function normalizeSavedPublication(publication) {
+  const doi = getDoi(publication);
+  return {
+    id: publication.id || (doi ? `doi:${normalizeDoi(doi)}` : `saved:${normalizePublicationTitle(publication.title)}`),
+    provider: publication.provider || "Google Scholar",
+    uid: publication.uid || "",
+    title: publication.title || "",
+    authors: publication.authors || [],
+    source: publication.source || "",
+    pubdate: publication.pubdate || publication.year || "",
+    doi,
+    url: publication.url || (publication.uid ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : doi ? `https://doi.org/${doi}` : ""),
+    sortDate: publication.sortDate || publication.pubdate || publication.year || "",
   };
 }
 
@@ -623,27 +649,50 @@ function normalizeOrcidPublication(summary, profile) {
   };
 }
 
+function publicationKeys(publication) {
+  const keys = [];
+  const doi = normalizeDoi(publication.doi);
+  const title = normalizePublicationTitle(publication.title);
+  if (doi) keys.push(`doi:${doi}`);
+  if (publication.uid) keys.push(`uid:${publication.uid}`);
+  if (publication.id) keys.push(`id:${publication.id}`);
+  if (title) keys.push(`title:${title}`);
+  return keys;
+}
+
+function isEnrichmentProvider(provider = "") {
+  return ["PubMed", "Crossref", "ORCID"].includes(provider);
+}
+
 function mergePublications(publications, limit = archivePublicationLimit()) {
   const merged = new Map();
+  const aliases = new Map();
   for (const publication of publications.filter((item) => item?.title)) {
-    const doi = normalizeDoi(publication.doi);
-    const key = doi || publication.uid || publication.id || publication.title.toLowerCase();
+    const keys = publicationKeys(publication);
+    if (!keys.length) continue;
+    const key = keys.map((candidate) => aliases.get(candidate)).find(Boolean) || keys[0];
     const existing = merged.get(key);
     if (!existing) {
       merged.set(key, {
         ...publication,
         providers: [publication.provider].filter(Boolean),
       });
+      keys.forEach((candidate) => aliases.set(candidate, key));
       continue;
     }
 
     const next = { ...existing };
+    const shouldPreferIncoming = isEnrichmentProvider(publication.provider);
     for (const field of ["uid", "title", "source", "pubdate", "doi", "url", "sortDate"]) {
       if (!next[field] && publication[field]) next[field] = publication[field];
+      if (shouldPreferIncoming && ["uid", "source", "pubdate", "doi", "url", "sortDate"].includes(field) && publication[field]) {
+        next[field] = publication[field];
+      }
     }
     if ((!next.authors || !next.authors.length) && publication.authors?.length) next.authors = publication.authors;
     next.providers = [...new Set([...(next.providers || []), publication.provider].filter(Boolean))];
     merged.set(key, next);
+    keys.forEach((candidate) => aliases.set(candidate, key));
   }
 
   return [...merged.values()]
@@ -881,6 +930,7 @@ async function loadPublications(settings = activePublicationSettings) {
   publicationStatus.textContent = "Loading publication records...";
   if (publicationSummary) publicationSummary.textContent = "";
   if (refreshButton) refreshButton.disabled = true;
+  const savedPublications = (settings.fallbackPublications || []).map(normalizeSavedPublication);
 
   try {
     const results = await Promise.allSettled([
@@ -890,14 +940,14 @@ async function loadPublications(settings = activePublicationSettings) {
       fetchCrossrefQueryPublications(settings),
     ]);
     const publications = mergePublications(
-      results.flatMap((result) => (result.status === "fulfilled" ? result.value : [])),
+      [...savedPublications, ...results.flatMap((result) => (result.status === "fulfilled" ? result.value : []))],
       archivePublicationLimit(settings),
     );
     if (!publications.length) throw new Error("No publication records found");
     renderPublications(publications, "live");
   } catch (error) {
     renderPublications(
-      mergePublications((settings.fallbackPublications || []).map(normalizePubmedPublication), archivePublicationLimit(settings)),
+      mergePublications(savedPublications, archivePublicationLimit(settings)),
       "fallback",
     );
   } finally {

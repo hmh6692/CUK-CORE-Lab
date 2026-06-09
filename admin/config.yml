@@ -206,6 +206,7 @@ collections:
             required: false
             summary: "{{fields.title}}"
             fields:
+              - { label: "Provider", name: "provider", widget: "string", required: false, default: "Google Scholar" }
               - { label: "PubMed ID", name: "uid", widget: "string", required: false }
               - { label: "Title", name: "title", widget: "string" }
               - label: "Authors"
@@ -215,3 +216,5 @@ collections:
               - { label: "Journal", name: "source", widget: "string", required: false }
               - { label: "Publication Date", name: "pubdate", widget: "string", required: false }
               - { label: "DOI", name: "doi", widget: "string", required: false }
+              - { label: "Record URL", name: "url", widget: "string", required: false }
+              - { label: "Sort Date", name: "sortDate", widget: "string", required: false }

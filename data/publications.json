@@ -2,9 +2,9 @@
   "recentLimit": 5,
   "orcidProfiles": [
     {
-      "maxWorks": 8,
       "name": "Sun-Kyeong Park",
-      "orcid": "0000-0003-4421-4513"
+      "orcid": "0000-0003-4421-4513",
+      "maxWorks": 100
     }
   ],
   "crossrefDois": [
@@ -17,89 +17,864 @@
   "scholarUrl": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
   "fallbackPublications": [
     {
-      "uid": "41896839",
-      "title": "Economic evaluation of diversion programs for people with drug-related legal involvement: a systematic review.",
+      "provider": "Google Scholar",
+      "title": "Economic evaluation of diversion programs for people with drug-related legal involvement: a systematic review",
       "authors": [
-        "Nam KA",
-        "Ha MK",
-        "Kang DW",
-        "Park SK"
+        "K Nam",
+        "MK Ha",
+        "DW Kang",
+        "SK Park"
       ],
       "source": "BMC Public Health",
       "pubdate": "2026 Mar 27",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41896839/",
+      "sortDate": "2026/03/27 00:00",
+      "uid": "41896839",
       "doi": "10.1186/s12889-026-27078-w"
     },
     {
-      "uid": "38845302",
-      "title": "Cost-effectiveness analysis of the 20-valent pneumococcal conjugate vaccine for the pediatric population in South Korea.",
+      "provider": "Google Scholar",
+      "title": "A systematic review of cost-effectiveness studies of later-line treatments for refractory metastatic colorectal cancer",
       "authors": [
-        "Kang DW",
-        "June Choe Y",
-        "Lee JY",
-        "Suk IA",
-        "Kim YS",
-        "Kim HY",
-        "Byun BK",
-        "Park SK"
+        "H Ahn",
+        "K Nam",
+        "J Kim",
+        "DW Kang",
+        "SK Park"
+      ],
+      "source": "Expert Rev Pharmacoecon Outcomes Res",
+      "pubdate": "2026 Feb",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41379419/",
+      "sortDate": "2026/02/01 00:00",
+      "uid": "41379419",
+      "doi": "10.1080/14737167.2025.2603954"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Evaluation of the outcomes and influencing factors of non-custodial educational programmes for people who use drugs in South Korea",
+      "authors": [
+        "K Nam",
+        "IS Oh",
+        "SK Park"
+      ],
+      "source": "Drugs: Education, Prevention and Policy, 1-13",
+      "pubdate": "2025",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:BqipwSGYUEgC",
+      "sortDate": "2025"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Integrated Medication Management in Community-Based Care: Insights from Australia and Korea’s Pilot Initiative",
+      "authors": [
+        "H Ahn",
+        "H Yoo",
+        "Y Yoon",
+        "SK Park"
+      ],
+      "source": "Korean Journal of Clinical Pharmacy 35 (3), 166-176",
+      "pubdate": "2025",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:NMxIlDl6LWMC",
+      "sortDate": "2025"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "A Comparative Study of Patient-Centered Medical Product Development-Focusing on the United States and Europe",
+      "authors": [
+        "GH Choi",
+        "HJ Song",
+        "H Cho",
+        "S Lee",
+        "HI Jung",
+        "D Jang",
+        "MH Park",
+        "SK Park",
+        "..."
+      ],
+      "source": "Yakhak Hoeji 69 (4), 374-384",
+      "pubdate": "2025",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:YFjsv_pBGBYC",
+      "sortDate": "2025"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Public Health and Economic Impact of COVID-19 Vaccination with the Pfizer-BioNTech COVID-19 Vaccine, XBB. 1.5, for Older Adults in South Korea",
+      "authors": [
+        "DW Kang",
+        "SHD Cho",
+        "Y Yoon",
+        "JY Song",
+        "SK Park"
+      ],
+      "source": "Yakhak Hoeji 69 (3), 263-272",
+      "pubdate": "2025",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:blknAaTinKkC",
+      "sortDate": "2025"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Trends in the cost of ovarian cancer across phases of care and surgical years in Korea",
+      "authors": [
+        "BC Oh",
+        "SK Park",
+        "S Kang"
+      ],
+      "source": "J Gynecol Oncol",
+      "pubdate": "2026 Mar",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41234152/",
+      "sortDate": "2026/03/01 00:00",
+      "doi": "10.3802/jgo.2026.37.e30",
+      "uid": "41234152"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Proposal for the activation of drug rehabilitation centers",
+      "authors": [
+        "K Nam",
+        "SK Park"
+      ],
+      "source": "Korean Journal of Clinical Pharmacy 34 (4), 222-231",
+      "pubdate": "2024",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:JV2RwH3_ST0C",
+      "sortDate": "2024"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Factors influencing drug shortages and their resolution in South Korean community pharmacies",
+      "authors": [
+        "YH Lee",
+        "D An",
+        "Y Baek",
+        "K Yoo",
+        "S Hyun",
+        "SK Park",
+        "EK Lee"
+      ],
+      "source": "Risk Manag Healthc Policy",
+      "pubdate": "2024",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39228959/",
+      "sortDate": "2024/08/30 00:00",
+      "doi": "10.2147/RMHP.S473859",
+      "uid": "39228959"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Effects of pharmacist-led home visit services and factors influencing medication adherence improvement",
+      "authors": [
+        "H Ahn",
+        "BK Byun",
+        "TH Lee",
+        "DW Kang",
+        "SK Park"
+      ],
+      "source": "PLoS One",
+      "pubdate": "2024",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39576809/",
+      "sortDate": "2024/11/22 00:00",
+      "uid": "39576809",
+      "doi": "10.1371/journal.pone.0314204"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness of next-generation sequencing for advanced EGFR/ALK-negative non-small cell lung cancer",
+      "authors": [
+        "DW Kang",
+        "SK Park",
+        "S Kang",
+        "EK Lee"
+      ],
+      "source": "Lung Cancer",
+      "pubdate": "2024 Nov",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39366308/",
+      "sortDate": "2024/11/01 00:00",
+      "uid": "39366308",
+      "doi": "10.1016/j.lungcan.2024.107970"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness analysis of the 20-valent pneumococcal conjugate vaccine for the pediatric population in South Korea",
+      "authors": [
+        "DW Kang",
+        "YJ Choe",
+        "JY Lee",
+        "IA Suk",
+        "YS Kim",
+        "HY Kim",
+        "BK Byun",
+        "SK Park"
       ],
       "source": "Vaccine",
       "pubdate": "2024 Sep 17",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38845302/",
+      "sortDate": "2024/09/17 00:00",
+      "uid": "38845302",
       "doi": "10.1016/j.vaccine.2024.05.048"
     },
     {
-      "uid": "38242507",
-      "title": "Comparative efficacy of vericiguat to sacubitril/valsartan for patients with heart failure reduced ejection fraction: Systematic review and network meta-analysis.",
+      "provider": "Google Scholar",
+      "title": "Evaluation of the Outcomes and Influencing Factors of Non-Custodial Educational Programmes for Drug Abusers",
       "authors": [
-        "Kang DW",
-        "Kang SH",
-        "Lee K",
-        "Nam K",
-        "Kim ES",
-        "Youn JC",
-        "Park SK"
+        "K Nam",
+        "IS Oh",
+        "SK Park"
       ],
-      "source": "International Journal of Cardiology",
+      "source": "",
+      "pubdate": "2024",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:hMod-77fHWUC",
+      "sortDate": "2024"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Comparative efficacy of vericiguat to sacubitril/valsartan for patients with heart failure reduced ejection fraction: Systematic review and network meta-analysis",
+      "authors": [
+        "DW Kang",
+        "SH Kang",
+        "K Lee",
+        "K Nam",
+        "ES Kim",
+        "JC Youn",
+        "SK Park"
+      ],
+      "source": "Int J Cardiol",
       "pubdate": "2024 Apr 1",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38242507/",
+      "sortDate": "2024/04/01 00:00",
+      "uid": "38242507",
       "doi": "10.1016/j.ijcard.2024.131786"
     },
     {
-      "uid": "38225184",
-      "title": "Cost-effectiveness of the 20-valent pneumococcal conjugate vaccine versus the 23-valent pneumococcal polysaccharide vaccine for older adults in South Korea.",
+      "provider": "Google Scholar",
+      "title": "Eligibility and cost-utility analysis of dapagliflozin in patients with heart failure across the whole spectrum of ejection fraction in South Korea",
       "authors": [
-        "Kang DW",
-        "Kim CR",
-        "Song JY",
-        "Park SK"
+        "ES Kim",
+        "SK Park",
+        "DS Cho",
+        "JC Youn",
+        "HS Lee",
+        "HY Lee",
+        "HJ Cho",
+        "JO Choi",
+        "..."
+      ],
+      "source": "Am J Cardiovasc Drugs",
+      "pubdate": "2024 Mar",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38413500/",
+      "sortDate": "2024/03/01 00:00",
+      "doi": "10.1007/s40256-024-00632-w",
+      "uid": "38413500"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness of the 20-valent pneumococcal conjugate vaccine versus the 23-valent pneumococcal polysaccharide vaccine for older adults in South Korea",
+      "authors": [
+        "DW Kang",
+        "CR Kim",
+        "JY Song",
+        "SK Park"
       ],
       "source": "Vaccine",
       "pubdate": "2024 Feb 6",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38225184/",
+      "sortDate": "2024/02/06 00:00",
+      "uid": "38225184",
       "doi": "10.1016/j.vaccine.2024.01.031"
     },
     {
-      "uid": "37365452",
-      "title": "Systematic Review of the Economic Evaluation of Sodium-Glucose Cotransporter-2 Inhibitors Used as Treatment in Patients with Heart Failure.",
+      "provider": "Google Scholar",
+      "title": "Real-World Eligibility and Cost-Effectiveness Analysis of Empagliflozin for Heart Failure in Korea",
       "authors": [
-        "Nam K",
-        "Cho DS",
-        "Kim H",
-        "Kwon B",
-        "Yoon Y",
-        "Park C",
-        "Kim ES",
-        "Youn JC",
-        "Park SK"
+        "ES Kim",
+        "SK Park",
+        "JC Youn",
+        "HS Lee",
+        "HY Lee",
+        "HJ Cho",
+        "JO Choi",
+        "ES Jeon",
+        "..."
       ],
-      "source": "Clinical Drug Investigation",
+      "source": "J Korean Med Sci",
+      "pubdate": "2024 Jan 8",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38193327/",
+      "sortDate": "2024/01/08 00:00",
+      "doi": "10.3346/jkms.2024.39.e8",
+      "uid": "38193327"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Comparison of perceived importance and performance of community pharmacists’ role in South Korea during the coronavirus disease 2019 pandemic",
+      "authors": [
+        "Y Baek",
+        "SK Park",
+        "YH Lee",
+        "KH Son",
+        "HJ Na",
+        "HG Choi",
+        "YG Kwon",
+        "EK Lee"
+      ],
+      "source": "Disaster Med Public Health Prep",
+      "pubdate": "2023 Dec 4",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38044034/",
+      "sortDate": "2023/12/04 00:00",
+      "uid": "38044034",
+      "doi": "10.1017/dmp.2023.221"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Effectiveness of next-generation sequencing for patients with advanced non-small-cell lung cancer: a population-based registry study",
+      "authors": [
+        "DW Kang",
+        "SK Park",
+        "YL Yu",
+        "Y Lee",
+        "DH Lee",
+        "S Kang"
+      ],
+      "source": "ESMO Open",
+      "pubdate": "2024-1",
+      "url": "https://doi.org/10.1016/j.esmoop.2023.102200",
+      "sortDate": "2024-1",
+      "doi": "10.1016/j.esmoop.2023.102200"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Impact of β-lactam allergies on antibiotic use, clinical outcomes, and economic costs in patients receiving surgical prophylactic antibiotics",
+      "authors": [
+        "E Heo",
+        "Y Jeong",
+        "KN Heo",
+        "H Kim",
+        "HR Kang",
+        "SK Park",
+        "JY Lee"
+      ],
+      "source": "Journal of Hospital Infection 139, 249-250",
+      "pubdate": "2023",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:TQgYirikUcIC",
+      "sortDate": "2023"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Hospital outcomes and costs for prostate cancer patients with comorbid heart failure by age group: An analysis of the US Nationwide Inpatient Sample",
+      "authors": [
+        "A Yu",
+        "R Thaliffdeen",
+        "SK Park",
+        "C Park"
+      ],
+      "source": "J Eval Clin Pract",
+      "pubdate": "2023 Sep",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37256549/",
+      "sortDate": "2023/09/01 00:00",
+      "uid": "37256549",
+      "doi": "10.1111/jep.13869"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Systematic Review of the Economic Evaluation of Sodium–Glucose Cotransporter-2 Inhibitors Used as Treatment in Patients with Heart Failure",
+      "authors": [
+        "K Nam",
+        "DSH Cho",
+        "H Kim",
+        "B Kwon",
+        "Y Yoon",
+        "C Park",
+        "ES Kim",
+        "JC Youn",
+        "..."
+      ],
+      "source": "Clin Drug Investig",
       "pubdate": "2023 Jul",
-      "doi": "10.1007/s40261-023-01283-6"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37365452/",
+      "sortDate": "2023/07/01 00:00",
+      "doi": "10.1007/s40261-023-01283-6",
+      "uid": "37365452"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Analysis of Socioeconomic Indirect Cost of Premature Death in Patients with HER2-positive Metastatic Breast Cancer (MBC) using Nationwide Claims Data",
+      "authors": [
+        "HY Ko",
+        "A Choi",
+        "B Hong",
+        "JH Bae",
+        "IS Oh",
+        "SK Park",
+        "YH Park",
+        "JY Shin"
+      ],
+      "source": "Yakhak Hoeji 67 (3), 189-196",
+      "pubdate": "2023",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:e5wmG9Sq2KIC",
+      "sortDate": "2023"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "RWD152 Hospital Outcomes and Costs for Prostate Cancer Patients With Comorbid Heart Failure by Age Group: An Analysis of the US Nationwide Inpatient Sample",
+      "authors": [
+        "A Yu",
+        "R Thaliffdeen",
+        "SK Park",
+        "C Park"
+      ],
+      "source": "Value in Health 25 (12), S479",
+      "pubdate": "2022",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:mB3voiENLucC",
+      "sortDate": "2022"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness analysis of smoking cessation interventions with behavioral support: a study based on the Benefits of Smoking Cessation on Outcomes (BENESCO) model",
+      "authors": [
+        "SK Park",
+        "DW Kang",
+        "EK Lee"
+      ],
+      "source": "Nicotine Tob Res",
+      "pubdate": "2022 Nov 12",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35862219/",
+      "sortDate": "2022/11/12 00:00",
+      "doi": "10.1093/ntr/ntac172",
+      "uid": "35862219"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "A systematic review of economic evaluations of tyrosine kinase inhibitors for non-small cell lung cancer (NSCLC)",
+      "authors": [
+        "JY Byun",
+        "SK Park",
+        "BP Ng",
+        "YS Liu",
+        "CR Kim",
+        "C Park"
+      ],
+      "source": "Expert Opin Pharmacother",
+      "pubdate": "2022 Aug",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35759783/",
+      "sortDate": "2022/08/01 00:00",
+      "doi": "10.1080/14656566.2022.2095203",
+      "uid": "35759783"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Effectiveness of nationwide insurance coverage for next-generation sequencing in advanced colorectal cancer: A real-world data study.",
+      "authors": [
+        "SK Park",
+        "DW Kang",
+        "YL Yu",
+        "Y Cha",
+        "S Kang"
+      ],
+      "source": "Journal of Clinical Oncology 40 (16_suppl), 3602-3602",
+      "pubdate": "2022",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:IWHjjKOFINEC",
+      "sortDate": "2022"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Effectiveness of nationwide insurance coverage for next-generation sequencing in advanced non–small cell lung cancer: A real-world data study.",
+      "authors": [
+        "DW Kang",
+        "SK Park",
+        "YL Yu",
+        "DH Lee",
+        "S Kang"
+      ],
+      "source": "Journal of Clinical Oncology 40 (16_suppl), 9134-9134",
+      "pubdate": "2022",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:L8Ckcad2t8MC",
+      "sortDate": "2022"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Health-related quality of life among elderly breast cancer patients treated with adjuvant endocrine therapy: a US Medicare population-based study",
+      "authors": [
+        "C Park",
+        "SK Park",
+        "A Woo",
+        "BP Ng"
+      ],
+      "source": "Quality of Life Research 31 (5), 1345-1357",
+      "pubdate": "2022",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:dhFuZR0502QC",
+      "sortDate": "2022"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "In-hospital mortality, length of stay and hospital costs for hospitalized breast cancer patients with comorbid heart failure in the USA",
+      "authors": [
+        "C Park",
+        "SK Park",
+        "JN Upshaw",
+        "MA Schonberg"
+      ],
+      "source": "Curr Med Res Opin",
+      "pubdate": "2021 Dec",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34525896/",
+      "sortDate": "2021/12/01 00:00",
+      "uid": "34525896",
+      "doi": "10.1080/03007995.2021.1980775"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Hospital outcomes of male breast cancer in the United States.",
+      "authors": [
+        "SK Park",
+        "BP Ng",
+        "HK Chun",
+        "C Park"
+      ],
+      "source": "Am J Manag Care",
+      "pubdate": "2021 Jun 1",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34156221/",
+      "sortDate": "2021/06/01 00:00",
+      "uid": "34156221",
+      "doi": "10.37765/ajmc.2021.88666"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Association of congestive heart failure with hospital outcomes among renal cancer patients in the United States: analysis of nationwide inpatient sample",
+      "authors": [
+        "SK Park",
+        "L Park",
+        "C Silverman",
+        "JH Heo",
+        "C Park"
+      ],
+      "source": "Expert Rev Pharmacoecon Outcomes Res",
+      "pubdate": "2021 Jun",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33645366/",
+      "sortDate": "2021/06/01 00:00",
+      "uid": "33645366",
+      "doi": "10.1080/14737167.2021.1897576"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness analyses of targeted therapy and immunotherapy for advanced non-small cell lung cancer in the United States: a systematic review",
+      "authors": [
+        "A Yu",
+        "E Huang",
+        "M Abe",
+        "K An",
+        "SK Park",
+        "C Park"
+      ],
+      "source": "Expert Rev Pharmacoecon Outcomes Res",
+      "pubdate": "2021 Jun",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33554675/",
+      "sortDate": "2021/06/01 00:00",
+      "uid": "33554675",
+      "doi": "10.1080/14737167.2021.1886928"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "A network meta‐analysis of efficacy and safety of first‐line and second‐line therapies for the management of metastatic renal cell carcinoma",
+      "authors": [
+        "JH Heo",
+        "C Park",
+        "S Ghosh",
+        "SK Park",
+        "M Zivkovic",
+        "KL Rascati"
+      ],
+      "source": "J Clin Pharm Ther",
+      "pubdate": "2021 Feb",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33112003/",
+      "sortDate": "2021/02/01 00:00",
+      "uid": "33112003",
+      "doi": "10.1111/jcpt.13282"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Haematological cancer versus solid tumour end-of-life care: a longitudinal data analysis",
+      "authors": [
+        "SY Yang",
+        "SK Park",
+        "HR Kang",
+        "HL Kim",
+        "EK Lee",
+        "SH Kwon"
+      ],
+      "source": "BMJ Support Palliat Care",
+      "pubdate": "2020 Dec 29",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33376113/",
+      "sortDate": "2020/12/29 00:00",
+      "uid": "33376113",
+      "doi": "10.1136/bmjspcare-2020-002453"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Association of depression with adherence to breast cancer screening among women aged 50 to 74 years in the United States",
+      "authors": [
+        "C Park",
+        "X Ma",
+        "SK Park",
+        "KA Lawson"
+      ],
+      "source": "J Eval Clin Pract",
+      "pubdate": "2020 Dec",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31994268/",
+      "sortDate": "2020/12/01 00:00",
+      "uid": "31994268",
+      "doi": "10.1111/jep.13356"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "The economic impact of disease progression and death in hormone receptor positive (HR+), human epidermal growth factor receptor 2 negative (HER2-) advanced breast cancer …",
+      "authors": [
+        "SK Park",
+        "JA Park",
+        "SY Yang",
+        "JY Shin",
+        "H Koh"
+      ],
+      "source": "Current Medical Research and Opinion 36 (11), 1825-1833",
+      "pubdate": "2020",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:qxL8FJ1GzNcC",
+      "sortDate": "2020"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Beyond uncertainty: negative findings for the association between the use of proton pump inhibitors and risk of dementia",
+      "authors": [
+        "SK Park",
+        "JH Nam",
+        "H Lee",
+        "H Chung",
+        "EK Lee",
+        "JY Shin"
+      ],
+      "source": "J Gastroenterol Hepatol",
+      "pubdate": "2019 Dec",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31145825/",
+      "sortDate": "2019/12/01 00:00",
+      "uid": "31145825",
+      "doi": "10.1111/jgh.14745"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Economic evaluations of oral medications for breast cancer treatment in the US: a systematic review with a focus on cost-effectiveness threshold",
+      "authors": [
+        "SK Park",
+        "HK Chun",
+        "C Park"
+      ],
+      "source": "Expert Review of Pharmacoeconomics & Outcomes Research 19 (6), 633-643",
+      "pubdate": "2019",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:4TOpqqG69KYC",
+      "sortDate": "2019"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "A comparison of leukotriene receptor antagonists to low-dose inhaled corticosteroids in the elderly with mild asthma",
+      "authors": [
+        "SH Hong",
+        "HR Kang",
+        "JH Nam",
+        "SK Park",
+        "TB Kim",
+        "EK Lee"
+      ],
+      "source": "J Allergy Clin Immunol Pract",
+      "pubdate": "2019 Nov-Dec",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31108218/",
+      "sortDate": "2019/11/01 00:00",
+      "uid": "31108218",
+      "doi": "10.1016/j.jaip.2019.05.006"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-utility analysis of sacubitril/valsartan use compared with standard care in chronic heart failure patients with reduced ejection fraction in South Korea",
+      "authors": [
+        "SK Park",
+        "SH Hong",
+        "HJ Kim",
+        "S Kim",
+        "EK Lee"
+      ],
+      "source": "Clin Ther",
+      "pubdate": "2019 Jun",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31101372/",
+      "sortDate": "2019/06/01 00:00",
+      "uid": "31101372",
+      "doi": "10.1016/j.clinthera.2019.04.031"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "The effect of tablet splitting on the mass loss, uniformity, and stability: by hand or splitter?",
+      "authors": [
+        "DH Sil Seong",
+        "Ju-Young Shin",
+        "Daejin Kim",
+        "Inmyung Song",
+        "Sangouk Sun",
+        "Inok Kim ..."
+      ],
+      "source": "Journal of Asian Association of Schools of Pharmacy 8, 7-14",
+      "pubdate": "2019",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:ULOm3_A8WrAC",
+      "sortDate": "2019"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "The utility of 5 hypothetical health states in heart failure using time trade-off (TTO) and EQ-5D-5L in Korea",
+      "authors": [
+        "SH Hong",
+        "JY Lee",
+        "SK Park",
+        "JH Nam",
+        "HJ Song",
+        "SY Park",
+        "EK Lee"
+      ],
+      "source": "Clin Drug Investig",
+      "pubdate": "2018 Aug",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29804184/",
+      "sortDate": "2018/08/01 00:00",
+      "uid": "29804184",
+      "doi": "10.1007/s40261-018-0659-8"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "The uncertainty of the association between proton pump inhibitor use and the risk of dementia: prescription sequence symmetry analysis using a Korean healthcare database …",
+      "authors": [
+        "SK Park",
+        "YH Baek",
+        "N Pratt",
+        "L Kalisch Ellett",
+        "JY Shin"
+      ],
+      "source": "Drug safety 41 (6), 615-624",
+      "pubdate": "2018",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:WF5omc3nYNoC",
+      "sortDate": "2018"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Eliciting societal preferences of reimbursement decision criteria for anti cancer drugs in South Korea",
+      "authors": [
+        "SH Kwon",
+        "SK Park",
+        "JH Byun",
+        "EK Lee"
+      ],
+      "source": "Expert Rev Pharmacoecon Outcomes Res",
+      "pubdate": "2017 Aug",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28019130/",
+      "sortDate": "2017/08/01 00:00",
+      "uid": "28019130",
+      "doi": "10.1080/14737167.2017.1277144"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "A comparison of discontinuation rates of tofacitinib and biologic disease-modifying anti-rheumatic drugs in rheumatoid arthritis: a systematic review and Bayesian network meta …",
+      "authors": [
+        "SK Park",
+        "MY Lee",
+        "EJ Jang",
+        "HL Kim",
+        "DM Ha",
+        "EK Lee"
+      ],
+      "source": "Clinical and Experimental Rheumatology 35 (4), 689-699",
+      "pubdate": "2017",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:0EnyYjriUFMC",
+      "sortDate": "2017"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness analysis of treatment sequence initiating with etanercept compared with leflunomide in rheumatoid arthritis: impact of reduced etanercept cost with patent …",
+      "authors": [
+        "SK Park",
+        "SH Park",
+        "MY Lee",
+        "JH Park",
+        "JH Jeong",
+        "EK Lee"
+      ],
+      "source": "Clinical Therapeutics 38 (11), 2430-2446. e3",
+      "pubdate": "2016",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:eQOLeE2rZwMC",
+      "sortDate": "2016"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Cost-effectiveness of tofacitinib in the treatment of moderate to severe rheumatoid arthritis in South Korea",
+      "authors": [
+        "MY Lee",
+        "SK Park",
+        "SY Park",
+        "JH Byun",
+        "SM Lee",
+        "SK Ko",
+        "EK Lee"
+      ],
+      "source": "Clin Ther",
+      "pubdate": "2015 Aug",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26243076/",
+      "sortDate": "2015/08/01 00:00",
+      "uid": "26243076",
+      "doi": "10.1016/j.clinthera.2015.07.001"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Comparative Effectiveness of Biologic DMARDs in Rheumatoid Arthritis Patients with Inadequate Response to conventional DMARDs: Using a Bayesian Network Meta-analysis",
+      "authors": [
+        "SK Park",
+        "HL Kim",
+        "MY Lee",
+        "A Kim",
+        "EK Lee"
+      ],
+      "source": "Korean Journal of Clinical Pharmacy, 9-17",
+      "pubdate": "2015",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:_kc_bZDykSQC",
+      "sortDate": "2015"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Comparative effectiveness of cycling of tumor necrosis factor-α (TNF-α) inhibitors versus switching to non-TNF biologics in rheumatoid arthritis patients with inadequate …",
+      "authors": [
+        "HL Kim",
+        "MY Lee",
+        "SY Park",
+        "SK Park",
+        "JH Byun",
+        "S Kwon",
+        "EK Lee"
+      ],
+      "source": "Archives of pharmacal research 37 (5), 662-670",
+      "pubdate": "2014",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:ufrVoPGSRksC",
+      "sortDate": "2014"
+    },
+    {
+      "provider": "Google Scholar",
+      "title": "Systematic Review and Mixed Treatment Comparison of Biologic Drugs to Patients with Rheumatoid Arthritis Refractory to TNF-inhibitors: Analysis of ACR 20/50/70 and HAQ Scores.",
+      "authors": [
+        "P Sun-Kyeong",
+        "LEE Min-Young",
+        "LEE Eui-Kyung"
+      ],
+      "source": "추계총회 및 학술대회 2013 (1), 694-694",
+      "pubdate": "2013",
+      "url": "https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=-3ZiVL4AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=-3ZiVL4AAAAJ:ZeXyd9-uunAC",
+      "sortDate": "2013"
     }
   ],
   "kicker": "Publications",
-  "crossrefQueries": [],
+  "crossrefQueries": [
+    {
+      "name": "Sun-Kyeong Park ORCID",
+      "orcid": "0000-0003-4421-4513",
+      "query": "",
+      "rows": 100
+    }
+  ],
   "pubmedQueries": [
     {
       "name": "Sun-Kyeong Park",
-      "term": "sk.park@catholic.ac.kr[Affiliation]"
+      "term": "Sun-Kyeong Park[Author]"
     }
   ],
   "title": "Latest publications from PubMed",
