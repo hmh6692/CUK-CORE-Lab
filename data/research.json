@@ -1,0 +1,34 @@
+{
+  "kicker": "Research",
+  "title": "Methods that connect evidence, cost, and outcomes",
+  "cards": [
+    {
+      "icon": "line-chart",
+      "title": "Economic Evaluation",
+      "description": "Cost-effectiveness and value assessment of medicines, vaccines, and health interventions in Korean and global decision settings."
+    },
+    {
+      "icon": "network",
+      "title": "Evidence Synthesis",
+      "description": "Systematic reviews and Bayesian network meta-analysis to compare treatment options when direct evidence is limited."
+    },
+    {
+      "icon": "database",
+      "title": "Real-World Data",
+      "description": "Big-data analysis and pharmacoepidemiologic studies that examine utilization, outcomes, safety, and costs in routine care."
+    },
+    {
+      "icon": "heart-pulse",
+      "title": "Disease Areas",
+      "description": "Applications include breast cancer, non-small cell lung cancer, colorectal cancer, heart failure, and vaccine policy."
+    }
+  ],
+  "methodTags": [
+    "Pharmaceutical outcomes",
+    "Policy research",
+    "Cost analysis",
+    "Systematic review",
+    "Bayesian NMA",
+    "Real-world evidence"
+  ]
+}

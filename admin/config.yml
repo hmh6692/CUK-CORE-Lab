@@ -1,0 +1,215 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: "assets/uploads"
+public_folder: "assets/uploads"
+
+site_url: "/"
+display_url: "/"
+logo_url: "/assets/hero-heor-lab.png"
+
+collections:
+  - name: "site"
+    label: "Site Content"
+    files:
+      - label: "General Site Text"
+        name: "site"
+        file: "data/site.json"
+        format: "json"
+        fields:
+          - label: "Brand"
+            name: "brand"
+            widget: "object"
+            fields:
+              - { label: "Logo Initials", name: "mark", widget: "string" }
+              - { label: "Logo Image", name: "logo", widget: "image", required: false }
+              - { label: "Header Name", name: "name", widget: "string" }
+              - { label: "Header Tagline", name: "tagline", widget: "string" }
+          - label: "Browser Metadata"
+            name: "meta"
+            widget: "object"
+            fields:
+              - { label: "Browser Title", name: "title", widget: "string" }
+              - { label: "Search Description", name: "description", widget: "text" }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Small Label", name: "kicker", widget: "string" }
+              - { label: "Main Title", name: "title", widget: "string" }
+              - { label: "Lead Text", name: "lede", widget: "text" }
+              - { label: "Primary Button Text", name: "primaryButtonText", widget: "string" }
+              - { label: "Secondary Button Text", name: "secondaryButtonText", widget: "string" }
+          - label: "About"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Small Label", name: "kicker", widget: "string" }
+              - { label: "Section Title", name: "title", widget: "string" }
+              - label: "Paragraphs"
+                name: "paragraphs"
+                widget: "list"
+                field: { label: "Paragraph", name: "paragraph", widget: "text" }
+          - label: "Contact"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Small Label", name: "kicker", widget: "string" }
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Address", name: "address", widget: "text" }
+              - { label: "Email", name: "email", widget: "string" }
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Lab Name", name: "name", widget: "string" }
+              - { label: "Footer Tagline", name: "tagline", widget: "string" }
+
+      - label: "Research"
+        name: "research"
+        file: "data/research.json"
+        format: "json"
+        fields:
+          - { label: "Small Label", name: "kicker", widget: "string" }
+          - { label: "Section Title", name: "title", widget: "string" }
+          - label: "Research Cards"
+            name: "cards"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - label: "Icon"
+                name: "icon"
+                widget: "select"
+                options:
+                  - "line-chart"
+                  - "network"
+                  - "database"
+                  - "heart-pulse"
+                  - "pill"
+                  - "microscope"
+                  - "chart-no-axes-combined"
+                  - "file-search"
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+          - label: "Method Tags"
+            name: "methodTags"
+            widget: "list"
+            field: { label: "Tag", name: "tag", widget: "string" }
+
+      - label: "People"
+        name: "people"
+        file: "data/people.json"
+        format: "json"
+        fields:
+          - { label: "Small Label", name: "kicker", widget: "string" }
+          - { label: "Section Title", name: "title", widget: "string" }
+          - label: "Principal Investigator"
+            name: "principalInvestigator"
+            widget: "object"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Role", name: "role", widget: "string" }
+              - { label: "Initials", name: "initials", widget: "string" }
+              - { label: "Title / Affiliation", name: "title", widget: "text" }
+              - { label: "Photo", name: "photo", widget: "image", required: false }
+              - label: "Education"
+                name: "education"
+                widget: "list"
+                summary: "{{fields.degree}}"
+                fields:
+                  - { label: "Degree", name: "degree", widget: "string" }
+                  - { label: "Details", name: "details", widget: "string" }
+              - label: "Academic Experience"
+                name: "experience"
+                widget: "list"
+                required: false
+                summary: "{{fields.period}} - {{fields.role}}"
+                fields:
+                  - { label: "Period", name: "period", widget: "string" }
+                  - { label: "Role", name: "role", widget: "string" }
+                  - { label: "Institution", name: "institution", widget: "string" }
+          - label: "Lab Members"
+            name: "members"
+            widget: "list"
+            required: false
+            summary: "{{fields.name}} - {{fields.role}}"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "Current Student"
+                  - "Alumni"
+                  - "Researcher"
+                  - "Collaborator"
+              - { label: "Role", name: "role", widget: "string", required: false }
+              - { label: "Title / Program", name: "title", widget: "string", required: false }
+              - { label: "Bio", name: "bio", widget: "text", required: false }
+              - { label: "Initials", name: "initials", widget: "string", required: false }
+              - { label: "Photo", name: "photo", widget: "image", required: false }
+          - label: "People Section Notes"
+            name: "teamNotes"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+      - label: "Publications"
+        name: "publications"
+        file: "data/publications.json"
+        format: "json"
+        fields:
+          - { label: "Small Label", name: "kicker", widget: "string" }
+          - { label: "Section Title", name: "title", widget: "string" }
+          - { label: "Google Scholar URL", name: "scholarUrl", widget: "string", required: false }
+          - label: "PubMed Search Queries"
+            name: "pubmedQueries"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Researcher Name", name: "name", widget: "string" }
+              - { label: "PubMed Query", name: "term", widget: "string" }
+          - label: "ORCID Profiles"
+            name: "orcidProfiles"
+            widget: "list"
+            required: false
+            summary: "{{fields.name}} - {{fields.orcid}}"
+            fields:
+              - { label: "Researcher Name", name: "name", widget: "string" }
+              - { label: "ORCID iD", name: "orcid", widget: "string" }
+              - { label: "Maximum Works", name: "maxWorks", widget: "number", required: false, default: 8, value_type: "int" }
+          - label: "Crossref ORCID / Search Queries"
+            name: "crossrefQueries"
+            widget: "list"
+            required: false
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Label", name: "name", widget: "string" }
+              - { label: "ORCID iD", name: "orcid", widget: "string", required: false }
+              - { label: "Crossref Search Query", name: "query", widget: "string", required: false }
+              - { label: "Maximum Results", name: "rows", widget: "number", required: false, default: 8, value_type: "int" }
+          - label: "Crossref DOI Lookups"
+            name: "crossrefDois"
+            widget: "list"
+            required: false
+            field: { label: "DOI", name: "doi", widget: "string" }
+          - label: "Saved Publications"
+            name: "fallbackPublications"
+            widget: "list"
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "PubMed ID", name: "uid", widget: "string", required: false }
+              - { label: "Title", name: "title", widget: "string" }
+              - label: "Authors"
+                name: "authors"
+                widget: "list"
+                field: { label: "Author", name: "author", widget: "string" }
+              - { label: "Journal", name: "source", widget: "string", required: false }
+              - { label: "Publication Date", name: "pubdate", widget: "string", required: false }
+              - { label: "DOI", name: "doi", widget: "string", required: false }

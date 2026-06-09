@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Cross-disciplinary Outcomes Research for Evidence Lab at the College of Pharmacy, The Catholic University of Korea."
+      data-meta-description
+    />
+    <title>CUK-CORE Lab</title>
+    <link rel="preload" as="image" href="assets/hero-heor-lab.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="CUK-CORE Lab home" data-brand-home>
+        <img class="brand-logo" src="logo.png" alt="" data-brand-logo hidden />
+        <span class="brand-mark" data-brand-mark>SP</span>
+        <span>
+          <strong data-brand-name>CUK-CORE Lab</strong>
+          <small data-brand-tagline>Cross-disciplinary Outcomes Research for Evidence</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle>
+        <i data-lucide="menu" aria-hidden="true"></i>
+      </button>
+
+      <nav class="site-nav" aria-label="Primary navigation" data-nav>
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#people">People</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow" data-hero-kicker>Cross-disciplinary Outcomes Research for Evidence</p>
+          <h1 id="hero-title" data-hero-title>CUK-CORE Lab</h1>
+          <p class="hero-lede" data-hero-lede>
+            We study how medicines, vaccines, and health interventions create value in real-world
+            care, using health economics, evidence synthesis, and pharmacoepidemiology.
+          </p>
+          <div class="hero-actions" aria-label="Hero links">
+            <a class="button primary" href="#research" data-hero-primary>Explore Research</a>
+            <a class="button secondary" href="#publications" data-hero-secondary>Latest Publications</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="intro-section" id="about" aria-labelledby="about-title">
+        <div class="section-grid">
+          <div>
+            <p class="section-kicker" data-about-kicker>About the Lab</p>
+            <h2 id="about-title" data-about-title>Evidence for better pharmaceutical decisions</h2>
+          </div>
+          <div class="intro-copy" data-about-paragraphs>
+            <p>
+              Led by Prof. Sun-Kyeong Park, the lab focuses on pharmaceutical outcomes and policy
+              research. Our work connects economic evaluation, systematic review, Bayesian network
+              meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.
+            </p>
+            <p>
+              The group is intentionally small and method-focused, creating room for close mentoring
+              and careful work across cancer, heart failure, vaccines, and other high-impact disease
+              areas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="research-section" id="research" aria-labelledby="research-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-research-kicker>Research</p>
+          <h2 id="research-title" data-research-title>Methods that connect evidence, cost, and outcomes</h2>
+        </div>
+
+        <div class="research-grid" data-research-cards></div>
+      </section>
+
+      <section class="method-band" aria-label="Research methods">
+        <div class="method-track" data-method-tags></div>
+      </section>
+
+      <section class="publications-section" id="publications" aria-labelledby="publications-title">
+        <div class="section-heading publications-heading">
+          <div>
+            <p class="section-kicker" data-publications-kicker>Publications</p>
+            <h2 id="publications-title" data-publications-title>Latest publications from PubMed</h2>
+          </div>
+          <div class="publication-actions">
+            <button class="icon-button" type="button" data-refresh-publications aria-label="Refresh publications">
+              <i data-lucide="refresh-cw" aria-hidden="true"></i>
+            </button>
+            <a class="button compact" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noreferrer" data-pubmed-link>
+              PubMed
+              <i data-lucide="external-link" aria-hidden="true"></i>
+            </a>
+            <a class="button compact" href="https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate" target="_blank" rel="noreferrer" data-scholar-link>
+              Scholar
+              <i data-lucide="external-link" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="publication-meta">
+          <span data-publication-status>Loading PubMed records...</span>
+          <span data-publication-query>PubMed feed: lab researcher identifiers</span>
+        </div>
+
+        <div class="publication-list" data-publication-list aria-live="polite">
+          <article class="publication-card skeleton">
+            <div></div>
+            <div></div>
+            <div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="people-section" id="people" aria-labelledby="people-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-people-kicker>People</p>
+          <h2 id="people-title" data-people-title>A small group with close mentorship</h2>
+        </div>
+
+        <div class="people-layout">
+          <article class="pi-card" data-pi-card></article>
+          <div class="team-notes" data-team-notes></div>
+        </div>
+
+        <div class="member-grid" data-member-grid hidden></div>
+      </section>
+
+      <section class="contact-section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-inner">
+          <div>
+            <p class="section-kicker" data-contact-kicker>Contact</p>
+            <h2 id="contact-title" data-contact-title>Connect with the lab</h2>
+            <p data-contact-address>
+              College of Pharmacy, The Catholic University of Korea<br />
+              43 Jibong-ro, Bucheon, 14662, South Korea
+            </p>
+          </div>
+          <a class="contact-link" href="mailto:sk.park@catholic.ac.kr" data-contact-email>
+            <i data-lucide="mail" aria-hidden="true"></i>
+            sk.park@catholic.ac.kr
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; <span data-year></span> <span data-footer-name>CUK-CORE Lab</span></p>
+      <p data-footer-tagline>Cross-disciplinary Outcomes Research for Evidence - College of Pharmacy</p>
+    </footer>
+  </body>
+</html>

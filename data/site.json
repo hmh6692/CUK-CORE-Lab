@@ -1,0 +1,37 @@
+{
+  "brand": {
+    "mark": "SP",
+    "logo": "logo.png",
+    "name": "CUK-CORE Lab",
+    "tagline": "Cross-disciplinary Outcomes Research for Evidence"
+  },
+  "meta": {
+    "title": "CUK-CORE Lab",
+    "description": "Cross-disciplinary Outcomes Research for Evidence Lab at the College of Pharmacy, The Catholic University of Korea."
+  },
+  "hero": {
+    "kicker": "Cross-disciplinary Outcomes Research for Evidence",
+    "title": "CUK-CORE Lab",
+    "lede": "We study how medicines, vaccines, and health interventions create value in real-world care, using health economics, evidence synthesis, and pharmacoepidemiology.",
+    "primaryButtonText": "Explore Research",
+    "secondaryButtonText": "Latest Publications"
+  },
+  "about": {
+    "kicker": "About the Lab",
+    "title": "Evidence for better pharmaceutical decisions",
+    "paragraphs": [
+      "Led by Prof. Sun-Kyeong Park, the lab focuses on pharmaceutical outcomes and policy research. Our work connects economic evaluation, systematic review, Bayesian network meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.",
+      "The group is intentionally small and method-focused, creating room for close mentoring and careful work across cancer, heart failure, vaccines, and other high-impact disease areas."
+    ]
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title": "Connect with the lab",
+    "address": "College of Pharmacy, The Catholic University of Korea\n43 Jibong-ro, Bucheon, 14662, South Korea",
+    "email": "sk.park@catholic.ac.kr"
+  },
+  "footer": {
+    "name": "CUK-CORE Lab",
+    "tagline": "Cross-disciplinary Outcomes Research for Evidence - College of Pharmacy"
+  }
+}

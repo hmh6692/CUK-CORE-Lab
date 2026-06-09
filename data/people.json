@@ -1,0 +1,58 @@
+{
+  "kicker": "People",
+  "title": "Cultivating researchers for evidence-driven healthcare",
+  "principalInvestigator": {
+    "name": "Sun-Kyeong Park, Ph.D.",
+    "role": "Principal Investigator",
+    "initials": "SP",
+    "title": "Assistant Professor, College of Pharmacy, The Catholic University of Korea.",
+    "photo": "PI_profile.jpg",
+    "education": [
+      {
+        "degree": "Ph.D.",
+        "details": "Health and Social Pharmacy, Sungkyunkwan University"
+      },
+      {
+        "degree": "B.S.",
+        "details": "Pharmacy, Sookmyung Women's University"
+      }
+    ],
+    "experience": [
+      {
+        "period": "Aug. 2020-Present",
+        "role": "Assistant Professor",
+        "institution": "College of Pharmacy, The Catholic University of Korea"
+      },
+      {
+        "period": "Apr. 2019-May 2020",
+        "role": "Postdoctoral Research Associate",
+        "institution": "School of Pharmacy, Northeastern University"
+      },
+      {
+        "period": "Apr. 2018-Mar. 2019",
+        "role": "External Researcher",
+        "institution": "National Evidence-based Healthcare Collaborating Agency (NECA)"
+      },
+      {
+        "period": "Mar. 2017-Feb. 2019",
+        "role": "Postdoctoral Researcher",
+        "institution": "Research Institute of Pharmaceutical Sciences, Sungkyunkwan University"
+      }
+    ]
+  },
+  "members": [],
+  "teamNotes": [
+    {
+      "title": "Graduate Researchers",
+      "description": "Current students work on health economics, outcomes research, evidence synthesis, and real-world data projects."
+    },
+    {
+      "title": "Alumni",
+      "description": "Former graduate students have contributed to applied pharmaceutical policy and economic evaluation studies."
+    },
+    {
+      "title": "Prospective Members",
+      "description": "Students interested in quantitative health research, pharmacy policy, and evidence synthesis are welcome to get in touch."
+    }
+  ]
+}
