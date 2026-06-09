@@ -115,6 +115,31 @@
           <span data-publication-query>PubMed feed: lab researcher identifiers</span>
         </div>
 
+        <div class="publication-toolbar" aria-label="Publication view options">
+          <div class="publication-tabs" role="tablist" aria-label="Publication list view">
+            <button
+              class="publication-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-publication-view="recent"
+            >
+              Recent 5
+            </button>
+            <button
+              class="publication-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-publication-view="all"
+            >
+              Complete list
+              <span data-publication-count></span>
+            </button>
+          </div>
+          <p class="publication-summary" data-publication-summary></p>
+        </div>
+
         <div class="publication-list" data-publication-list aria-live="polite">
           <article class="publication-card skeleton">
             <div></div>

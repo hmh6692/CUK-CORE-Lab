@@ -167,6 +167,8 @@ collections:
           - { label: "Small Label", name: "kicker", widget: "string" }
           - { label: "Section Title", name: "title", widget: "string" }
           - { label: "Google Scholar URL", name: "scholarUrl", widget: "string", required: false }
+          - { label: "Recent List Count", name: "recentLimit", widget: "number", default: 5, min: 1, max: 12, value_type: "int" }
+          - { label: "Archive Fetch Limit", name: "archiveLimit", widget: "number", default: 100, min: 5, max: 250, value_type: "int" }
           - label: "PubMed Search Queries"
             name: "pubmedQueries"
             widget: "list"

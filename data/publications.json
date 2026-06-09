@@ -2,6 +2,8 @@
   "kicker": "Publications",
   "title": "Latest publications from PubMed",
   "scholarUrl": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
+  "recentLimit": 5,
+  "archiveLimit": 100,
   "pubmedQueries": [
     {
       "name": "Sun-Kyeong Park",

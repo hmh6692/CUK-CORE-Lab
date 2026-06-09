@@ -140,6 +140,8 @@ const defaultContent = {
     kicker: "Publications",
     title: "Latest publications from PubMed",
     scholarUrl: "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
+    recentLimit: 5,
+    archiveLimit: 100,
     pubmedQueries: [{ name: "Sun-Kyeong Park", term: "sk.park@catholic.ac.kr[Affiliation]" }],
     orcidProfiles: [],
     crossrefQueries: [],
@@ -205,10 +207,18 @@ const publicationQuery = document.querySelector("[data-publication-query]");
 const pubmedLink = document.querySelector("[data-pubmed-link]");
 const scholarLink = document.querySelector("[data-scholar-link]");
 const refreshButton = document.querySelector("[data-refresh-publications]");
+const publicationViewButtons = document.querySelectorAll("[data-publication-view]");
+const publicationCount = document.querySelector("[data-publication-count]");
+const publicationSummary = document.querySelector("[data-publication-summary]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 
 let activePublicationSettings = defaultContent.publications;
+let publicationState = {
+  records: [],
+  sourceMode: "live",
+  view: "recent",
+};
 
 function escapeHtml(value = "") {
   return String(value)
@@ -242,6 +252,20 @@ function safeUrl(value = "") {
     return text;
   }
   return "";
+}
+
+function boundedNumber(value, fallback, min, max) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(parsed)));
+}
+
+function recentPublicationLimit(settings = activePublicationSettings) {
+  return boundedNumber(settings.recentLimit, 5, 1, 12);
+}
+
+function archivePublicationLimit(settings = activePublicationSettings) {
+  return boundedNumber(settings.archiveLimit, 100, 5, 250);
 }
 
 function multilineHtml(value = "") {
@@ -483,6 +507,8 @@ function renderPublicationSettings(settings) {
   activePublicationSettings = settings;
   setText("[data-publications-kicker]", settings.kicker);
   setText("[data-publications-title]", settings.title);
+  const recentButton = document.querySelector('[data-publication-view="recent"]');
+  if (recentButton) recentButton.textContent = `Recent ${recentPublicationLimit(settings)}`;
 
   const query = buildPubmedQuery(settings.pubmedQueries);
   const label = buildPubmedLabel(settings.pubmedQueries) || "configured lab researchers";
@@ -597,7 +623,7 @@ function normalizeOrcidPublication(summary, profile) {
   };
 }
 
-function mergePublications(publications) {
+function mergePublications(publications, limit = archivePublicationLimit()) {
   const merged = new Map();
   for (const publication of publications.filter((item) => item?.title)) {
     const doi = normalizeDoi(publication.doi);
@@ -622,7 +648,7 @@ function mergePublications(publications) {
 
   return [...merged.values()]
     .sort((a, b) => sortDateValue(b.sortDate || b.pubdate) - sortDateValue(a.sortDate || a.pubdate))
-    .slice(0, 12);
+    .slice(0, limit);
 }
 
 async function fetchPubmedPublications(settings) {
@@ -630,7 +656,7 @@ async function fetchPubmedPublications(settings) {
   if (!query) return [];
   const searchUrl = `${eutilsBase}/esearch.fcgi?db=pubmed&term=${encodeURIComponent(
     query,
-  )}&retmode=json&retmax=12&sort=pub+date&${eutilsParams}`;
+  )}&retmode=json&retmax=${archivePublicationLimit(settings)}&sort=pub+date&${eutilsParams}`;
   const searchResponse = await fetch(searchUrl);
   if (!searchResponse.ok) throw new Error("PubMed search failed");
   const searchData = await searchResponse.json();
@@ -661,7 +687,7 @@ async function fetchOrcidPublications(settings) {
           groupExternalIds: group["external-ids"]?.["external-id"] || [],
         })),
       );
-      const maxWorks = Number(profile.maxWorks || 8);
+      const maxWorks = boundedNumber(profile.maxWorks, archivePublicationLimit(settings), 1, archivePublicationLimit(settings));
       return summaries.slice(0, maxWorks).map((summary) => normalizeOrcidPublication(summary, profile));
     }),
   );
@@ -691,7 +717,7 @@ async function fetchCrossrefQueryPublications(settings) {
   const groups = await Promise.all(
     queries.map(async (query) => {
       const params = new URLSearchParams({
-        rows: String(query.rows || 8),
+        rows: String(boundedNumber(query.rows, archivePublicationLimit(settings), 1, archivePublicationLimit(settings))),
         sort: "published",
         order: "desc",
         mailto: "sk.park@catholic.ac.kr",
@@ -708,52 +734,152 @@ async function fetchCrossrefQueryPublications(settings) {
   return groups.flat();
 }
 
-function renderPublications(publications, mode = "live") {
-  if (!publicationList || !publicationStatus) return;
+function publicationLinks(publication) {
+  const doi = getDoi(publication);
+  return {
+    doi,
+    doiUrl: doi ? `https://doi.org/${doi}` : "",
+    publicationUrl: publication.url || (publication.uid ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : ""),
+  };
+}
 
-  publicationList.innerHTML = publications
-    .map((publication) => {
-      const doi = getDoi(publication);
-      const pubmedUrl = publication.url || (publication.uid ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : "");
-      const doiUrl = doi ? `https://doi.org/${doi}` : "";
-      const title = escapeHtml(publication.title);
-      return `
-        <article class="publication-card">
-          <p class="source-line">${escapeHtml((publication.providers || [publication.provider || mode]).join(" + "))}</p>
-          <h3>${
-            pubmedUrl
-              ? `<a href="${pubmedUrl}" target="_blank" rel="noreferrer">${title}</a>`
-              : title
-          }</h3>
-          <p class="journal-line">
-            <span>${escapeHtml(publication.source || "Journal")}</span>
-            <span>${escapeHtml(publication.pubdate || "")}</span>
-          </p>
-          <p>${escapeHtml(formatAuthors(publication.authors))}</p>
-          ${
-            doi
-              ? `<p class="doi"><a href="${doiUrl}" target="_blank" rel="noreferrer">doi: ${escapeHtml(doi)}</a></p>`
-              : ""
-          }
-        </article>
-      `;
-    })
-    .join("");
+function renderPublicationCard(publication, mode = "live") {
+  const { doi, doiUrl, publicationUrl } = publicationLinks(publication);
+  const title = escapeHtml(publication.title);
+  return `
+    <article class="publication-card">
+      <p class="source-line">${escapeHtml((publication.providers || [publication.provider || mode]).join(" + "))}</p>
+      <h3>${
+        publicationUrl
+          ? `<a href="${publicationUrl}" target="_blank" rel="noreferrer">${title}</a>`
+          : title
+      }</h3>
+      <p class="journal-line">
+        <span>${escapeHtml(publication.source || "Journal")}</span>
+        <span>${escapeHtml(publication.pubdate || "")}</span>
+      </p>
+      <p>${escapeHtml(formatAuthors(publication.authors))}</p>
+      ${
+        doi
+          ? `<p class="doi"><a href="${doiUrl}" target="_blank" rel="noreferrer">doi: ${escapeHtml(doi)}</a></p>`
+          : ""
+      }
+    </article>
+  `;
+}
 
+function publicationYear(publication) {
+  return String(publication.sortDate || publication.pubdate || "").match(/\b(19|20)\d{2}\b/)?.[0] || "In press";
+}
+
+function renderPublicationArchiveItem(publication, mode = "live") {
+  const { doi, doiUrl, publicationUrl } = publicationLinks(publication);
+  const title = escapeHtml(publication.title);
+  return `
+    <article class="publication-row">
+      <div class="publication-row-main">
+        <p class="source-line">${escapeHtml((publication.providers || [publication.provider || mode]).join(" + "))}</p>
+        <h3>${
+          publicationUrl
+            ? `<a href="${publicationUrl}" target="_blank" rel="noreferrer">${title}</a>`
+            : title
+        }</h3>
+        <p class="journal-line">
+          <span>${escapeHtml(publication.source || "Journal")}</span>
+          <span>${escapeHtml(publication.pubdate || "")}</span>
+        </p>
+        <p>${escapeHtml(formatAuthors(publication.authors))}</p>
+      </div>
+      ${
+        doi
+          ? `<a class="publication-doi-chip" href="${doiUrl}" target="_blank" rel="noreferrer">DOI</a>`
+          : ""
+      }
+    </article>
+  `;
+}
+
+function renderPublicationArchive(publications, mode = "live") {
+  const groups = publications.reduce((acc, publication) => {
+    const year = publicationYear(publication);
+    if (!acc.has(year)) acc.set(year, []);
+    acc.get(year).push(publication);
+    return acc;
+  }, new Map());
+
+  return `
+    <div class="publication-archive">
+      ${[...groups.entries()]
+        .map(
+          ([year, items]) => `
+            <section class="publication-year-group" aria-label="${escapeHtml(year)} publications">
+              <div class="publication-year">${escapeHtml(year)}</div>
+              <div class="publication-year-items">
+                ${items.map((item) => renderPublicationArchiveItem(item, mode)).join("")}
+              </div>
+            </section>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function updatePublicationChrome() {
+  const total = publicationState.records.length;
+  const recentLimit = recentPublicationLimit();
+  const visibleCount = publicationState.view === "all" ? total : Math.min(recentLimit, total);
   const stamp = new Date().toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
-  publicationStatus.textContent =
-    mode === "live"
-      ? `Loaded ${publications.length} records from configured sources - ${stamp}`
-      : `Showing saved publication records - ${stamp}`;
+
+  publicationViewButtons.forEach((button) => {
+    const isActive = button.dataset.publicationView === publicationState.view;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  if (publicationCount) publicationCount.textContent = total ? String(total) : "";
+  if (publicationSummary) publicationSummary.textContent = `${visibleCount} shown - ${total} total`;
+  if (publicationStatus) {
+    publicationStatus.textContent =
+      publicationState.sourceMode === "live"
+        ? `${visibleCount} shown from configured sources - ${stamp}`
+        : `${visibleCount} shown from saved publication records - ${stamp}`;
+  }
+}
+
+function renderPublicationView() {
+  if (!publicationList) return;
+  const { records, sourceMode, view } = publicationState;
+  const recentLimit = recentPublicationLimit();
+  const visiblePublications = view === "all" ? records : records.slice(0, recentLimit);
+
+  publicationList.classList.toggle("is-archive", view === "all");
+  publicationList.innerHTML =
+    view === "all"
+      ? renderPublicationArchive(visiblePublications, sourceMode)
+      : visiblePublications.map((publication) => renderPublicationCard(publication, sourceMode)).join("");
+
+  updatePublicationChrome();
+}
+
+function renderPublications(publications, mode = "live") {
+  if (!publicationList || !publicationStatus) return;
+  publicationState = {
+    ...publicationState,
+    records: publications,
+    sourceMode: mode,
+  };
+  renderPublicationView();
 }
 
 async function loadPublications(settings = activePublicationSettings) {
   if (!publicationList || !publicationStatus) return;
-  publicationStatus.textContent = "Loading PubMed records...";
+  publicationStatus.textContent = "Loading publication records...";
+  if (publicationSummary) publicationSummary.textContent = "";
   if (refreshButton) refreshButton.disabled = true;
 
   try {
@@ -763,14 +889,29 @@ async function loadPublications(settings = activePublicationSettings) {
       fetchCrossrefDoiPublications(settings),
       fetchCrossrefQueryPublications(settings),
     ]);
-    const publications = mergePublications(results.flatMap((result) => (result.status === "fulfilled" ? result.value : [])));
+    const publications = mergePublications(
+      results.flatMap((result) => (result.status === "fulfilled" ? result.value : [])),
+      archivePublicationLimit(settings),
+    );
     if (!publications.length) throw new Error("No publication records found");
     renderPublications(publications, "live");
   } catch (error) {
-    renderPublications((settings.fallbackPublications || []).map(normalizePubmedPublication), "fallback");
+    renderPublications(
+      mergePublications((settings.fallbackPublications || []).map(normalizePubmedPublication), archivePublicationLimit(settings)),
+      "fallback",
+    );
   } finally {
     if (refreshButton) refreshButton.disabled = false;
   }
+}
+
+function setupPublicationViews() {
+  publicationViewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      publicationState.view = button.dataset.publicationView === "all" ? "all" : "recent";
+      renderPublicationView();
+    });
+  });
 }
 
 function setupNavigation() {
@@ -822,6 +963,7 @@ async function init() {
   renderPeople(people);
   renderPublicationSettings(publications);
   setupNavigation();
+  setupPublicationViews();
   setupNetlifyIdentityRedirect();
   refreshButton?.addEventListener("click", () => loadPublications(activePublicationSettings));
   await loadPublications(publications);
