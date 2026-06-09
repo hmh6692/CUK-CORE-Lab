@@ -1,17 +1,12 @@
 {
-  "kicker": "Publications",
-  "title": "Latest publications from PubMed",
-  "scholarUrl": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
   "recentLimit": 5,
-  "archiveLimit": 100,
-  "pubmedQueries": [
+  "orcidProfiles": [
     {
+      "maxWorks": 8,
       "name": "Sun-Kyeong Park",
-      "term": "sk.park@catholic.ac.kr[Affiliation]"
+      "orcid": "0000-0003-4421-4513"
     }
   ],
-  "orcidProfiles": [],
-  "crossrefQueries": [],
   "crossrefDois": [
     "10.1186/s12889-026-27078-w",
     "10.1016/j.vaccine.2024.05.048",
@@ -19,11 +14,17 @@
     "10.1016/j.vaccine.2024.01.031",
     "10.1007/s40261-023-01283-6"
   ],
+  "scholarUrl": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
   "fallbackPublications": [
     {
       "uid": "41896839",
       "title": "Economic evaluation of diversion programs for people with drug-related legal involvement: a systematic review.",
-      "authors": ["Nam KA", "Ha MK", "Kang DW", "Park SK"],
+      "authors": [
+        "Nam KA",
+        "Ha MK",
+        "Kang DW",
+        "Park SK"
+      ],
       "source": "BMC Public Health",
       "pubdate": "2026 Mar 27",
       "doi": "10.1186/s12889-026-27078-w"
@@ -31,7 +32,16 @@
     {
       "uid": "38845302",
       "title": "Cost-effectiveness analysis of the 20-valent pneumococcal conjugate vaccine for the pediatric population in South Korea.",
-      "authors": ["Kang DW", "June Choe Y", "Lee JY", "Suk IA", "Kim YS", "Kim HY", "Byun BK", "Park SK"],
+      "authors": [
+        "Kang DW",
+        "June Choe Y",
+        "Lee JY",
+        "Suk IA",
+        "Kim YS",
+        "Kim HY",
+        "Byun BK",
+        "Park SK"
+      ],
       "source": "Vaccine",
       "pubdate": "2024 Sep 17",
       "doi": "10.1016/j.vaccine.2024.05.048"
@@ -39,7 +49,15 @@
     {
       "uid": "38242507",
       "title": "Comparative efficacy of vericiguat to sacubitril/valsartan for patients with heart failure reduced ejection fraction: Systematic review and network meta-analysis.",
-      "authors": ["Kang DW", "Kang SH", "Lee K", "Nam K", "Kim ES", "Youn JC", "Park SK"],
+      "authors": [
+        "Kang DW",
+        "Kang SH",
+        "Lee K",
+        "Nam K",
+        "Kim ES",
+        "Youn JC",
+        "Park SK"
+      ],
       "source": "International Journal of Cardiology",
       "pubdate": "2024 Apr 1",
       "doi": "10.1016/j.ijcard.2024.131786"
@@ -47,7 +65,12 @@
     {
       "uid": "38225184",
       "title": "Cost-effectiveness of the 20-valent pneumococcal conjugate vaccine versus the 23-valent pneumococcal polysaccharide vaccine for older adults in South Korea.",
-      "authors": ["Kang DW", "Kim CR", "Song JY", "Park SK"],
+      "authors": [
+        "Kang DW",
+        "Kim CR",
+        "Song JY",
+        "Park SK"
+      ],
       "source": "Vaccine",
       "pubdate": "2024 Feb 6",
       "doi": "10.1016/j.vaccine.2024.01.031"
@@ -55,10 +78,30 @@
     {
       "uid": "37365452",
       "title": "Systematic Review of the Economic Evaluation of Sodium-Glucose Cotransporter-2 Inhibitors Used as Treatment in Patients with Heart Failure.",
-      "authors": ["Nam K", "Cho DS", "Kim H", "Kwon B", "Yoon Y", "Park C", "Kim ES", "Youn JC", "Park SK"],
+      "authors": [
+        "Nam K",
+        "Cho DS",
+        "Kim H",
+        "Kwon B",
+        "Yoon Y",
+        "Park C",
+        "Kim ES",
+        "Youn JC",
+        "Park SK"
+      ],
       "source": "Clinical Drug Investigation",
       "pubdate": "2023 Jul",
       "doi": "10.1007/s40261-023-01283-6"
     }
-  ]
+  ],
+  "kicker": "Publications",
+  "crossrefQueries": [],
+  "pubmedQueries": [
+    {
+      "name": "Sun-Kyeong Park",
+      "term": "sk.park@catholic.ac.kr[Affiliation]"
+    }
+  ],
+  "title": "Latest publications from PubMed",
+  "archiveLimit": 100
 }
