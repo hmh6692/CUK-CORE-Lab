@@ -1,0 +1,9 @@
+# Example backend block for GitHub Pages + GitHub OAuth provider.
+# Copy this block over the backend block at the top of admin/config.yml
+# only after you have configured an OAuth provider.
+
+backend:
+  name: github
+  repo: OWNER/REPOSITORY
+  branch: main
+  base_url: https://YOUR-OAUTH-PROVIDER.example.com

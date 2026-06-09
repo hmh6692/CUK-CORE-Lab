@@ -3,6 +3,7 @@
 This is a static lab website with a browser-based editor at `/admin/`.
 
 For GitHub Pages hosting, see `GITHUB_PAGES.md`.
+For browser-based admin editing setup, see `ADMIN_AUTH_SETUP.md`.
 
 ## Local Preview
 
@@ -31,7 +32,7 @@ Images uploaded through the admin UI are stored in:
 
 ## Admin Setup
 
-The admin screen uses Decap CMS with Netlify Identity and Git Gateway.
+The admin screen uses Decap CMS. The active configuration is ready for Netlify Identity and Git Gateway.
 
 1. Push this folder to a GitHub repository.
 2. Deploy the repository on Netlify.
@@ -39,6 +40,6 @@ The admin screen uses Decap CMS with Netlify Identity and Git Gateway.
 4. Set registration to Invite only.
 5. Enable Git Gateway.
 6. Invite the site editor by email.
-7. Open `/admin/` on the deployed site and log in.
+7. Open `/admin/` on the deployed Netlify site and log in.
 
 After the editor saves changes, Decap CMS commits the updated JSON/images to GitHub, and Netlify redeploys the public website.
