@@ -32,6 +32,7 @@ jobs:
         run: |
           mkdir _site
           cp index.html styles.css script.js logo.png PI_profile.jpg _site/
+          cp robots.txt sitemap.xml _site/
           cp -R assets data admin _site/
           touch _site/.nojekyll
           if [ -f CNAME ]; then cp CNAME _site/CNAME; fi

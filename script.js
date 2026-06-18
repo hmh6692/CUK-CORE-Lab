@@ -13,9 +13,9 @@ const defaultContent = {
       tagline: "Cross-disciplinary Outcomes Research for Evidence",
     },
     meta: {
-      title: "CUK-CORE Lab",
+      title: "CUK-CORE Lab | Catholic University of Korea Outcomes Research",
       description:
-        "Cross-disciplinary Outcomes Research for Evidence Lab at the College of Pharmacy, The Catholic University of Korea.",
+        "CUK-CORE Lab is the Cross-disciplinary Outcomes Research for Evidence Lab led by Prof. Sun-Kyeong Park at the College of Pharmacy, The Catholic University of Korea.",
     },
     hero: {
       kicker: "Cross-disciplinary Outcomes Research for Evidence",
@@ -287,9 +287,15 @@ function createIcons() {
 }
 
 function renderSite(site) {
-  document.title = site.meta?.title || defaultContent.site.meta.title;
+  const title = site.meta?.title || defaultContent.site.meta.title;
+  const metaDescription = site.meta?.description || defaultContent.site.meta.description;
+  document.title = title;
   const description = document.querySelector("[data-meta-description]");
-  if (description) description.setAttribute("content", site.meta?.description || defaultContent.site.meta.description);
+  if (description) description.setAttribute("content", metaDescription);
+  document.querySelector("[data-og-title]")?.setAttribute("content", title);
+  document.querySelector("[data-og-description]")?.setAttribute("content", metaDescription);
+  document.querySelector("[data-twitter-title]")?.setAttribute("content", title);
+  document.querySelector("[data-twitter-description]")?.setAttribute("content", metaDescription);
 
   setText("[data-brand-mark]", site.brand?.mark);
   setText("[data-brand-name]", site.brand?.name);
