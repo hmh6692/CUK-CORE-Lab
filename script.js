@@ -29,7 +29,7 @@ const defaultContent = {
       title: "Evidence for better pharmaceutical decisions",
       paragraphs: [
         "Led by Prof. Sun-Kyeong Park, the lab focuses on pharmaceutical outcomes and policy research. Our work connects economic evaluation, systematic review, Bayesian network meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.",
-        "The group is intentionally small and method-focused, creating room for close mentoring and careful work across cancer, heart failure, vaccines, and other high-impact disease areas.",
+        "The lab combines focused mentorship with methodologically rigorous work across cancer, heart failure, vaccines, and other high-impact disease areas.",
       ],
     },
     contact: {
@@ -90,6 +90,15 @@ const defaultContent = {
       initials: "SP",
       title: "Assistant Professor, College of Pharmacy, The Catholic University of Korea.",
       photo: "PI_profile.jpg",
+      profileLinks: [
+        { label: "ORCID", url: "https://orcid.org/0000-0003-4421-4513", icon: "badge-check" },
+        {
+          label: "Google Scholar",
+          url: "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
+          icon: "graduation-cap",
+        },
+        { label: "Email", url: "mailto:sk.park@catholic.ac.kr", icon: "mail" },
+      ],
       education: [
         { degree: "Ph.D.", details: "Health and Social Pharmacy, Sungkyunkwan University" },
         { degree: "B.S.", details: "Pharmacy, Sookmyung Women's University" },
@@ -138,7 +147,7 @@ const defaultContent = {
   },
   publications: {
     kicker: "Publications",
-    title: "Latest publications from PubMed",
+    title: "Recent and complete publications",
     scholarUrl: "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
     recentLimit: 5,
     archiveLimit: 100,
@@ -210,6 +219,9 @@ const refreshButton = document.querySelector("[data-refresh-publications]");
 const publicationViewButtons = document.querySelectorAll("[data-publication-view]");
 const publicationCount = document.querySelector("[data-publication-count]");
 const publicationSummary = document.querySelector("[data-publication-summary]");
+const publicationFilters = document.querySelector("[data-publication-filters]");
+const publicationSearch = document.querySelector("[data-publication-search]");
+const publicationYearFilter = document.querySelector("[data-publication-year]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 
@@ -218,6 +230,8 @@ let publicationState = {
   records: [],
   sourceMode: "live",
   view: "recent",
+  query: "",
+  year: "all",
 };
 
 function escapeHtml(value = "") {
@@ -252,6 +266,11 @@ function safeUrl(value = "") {
     return text;
   }
   return "";
+}
+
+function safeProfileUrl(value = "") {
+  const text = String(value).trim();
+  return /^(https?:\/\/|mailto:)/i.test(text) ? text : "";
 }
 
 function boundedNumber(value, fallback, min, max) {
@@ -427,6 +446,58 @@ function experienceHtml(experience = []) {
   `;
 }
 
+function profileLinksHtml(links = []) {
+  const visibleLinks = links
+    .map((link) => ({ ...link, url: safeProfileUrl(link.url) }))
+    .filter((link) => link.label && link.url);
+  if (!visibleLinks.length) return "";
+
+  return `
+    <div class="profile-links" aria-label="Researcher profiles">
+      ${visibleLinks
+        .map((link) => {
+          const externalAttributes = link.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noreferrer"';
+          return `
+            <a class="profile-link" href="${escapeHtml(link.url)}"${externalAttributes}>
+              <i data-lucide="${escapeHtml(link.icon || "external-link")}" aria-hidden="true"></i>
+              ${escapeHtml(link.label)}
+            </a>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function memberCardHtml(member) {
+  return `
+    <article class="member-card">
+      ${personVisual(member)}
+      <div>
+        <p class="role">${escapeHtml(member.role || member.category || "Lab Member")}</p>
+        <h3>${escapeHtml(member.name)}</h3>
+        ${member.title ? `<p>${escapeHtml(member.title)}</p>` : ""}
+        ${member.bio ? `<p>${escapeHtml(member.bio)}</p>` : ""}
+      </div>
+    </article>
+  `;
+}
+
+function memberGroupHtml(title, members) {
+  if (!members.length) return "";
+  return `
+    <section class="member-group" aria-label="${escapeHtml(title)}">
+      <div class="member-group-heading">
+        <h3>${escapeHtml(title)}</h3>
+        <span>${members.length}</span>
+      </div>
+      <div class="member-grid">
+        ${members.map(memberCardHtml).join("")}
+      </div>
+    </section>
+  `;
+}
+
 function renderPeople(people) {
   setText("[data-people-kicker]", people.kicker);
   setText("[data-people-title]", people.title);
@@ -440,15 +511,23 @@ function renderPeople(people) {
         <p class="role">${escapeHtml(pi.role)}</p>
         <h3>${escapeHtml(pi.name)}</h3>
         <p>${escapeHtml(pi.title)}</p>
+        ${profileLinksHtml(pi.profileLinks)}
         ${educationHtml(pi.education)}
         ${experienceHtml(pi.experience)}
       </div>
     `,
   );
 
+  const visibleMembers = (people.members || []).filter((member) => member.name);
+  const notes = (people.teamNotes || []).filter((note) => {
+    if (!visibleMembers.length) return true;
+    return /prospective|join|contact/i.test(note.title || "");
+  });
+  const teamNotes = document.querySelector("[data-team-notes]");
+  if (teamNotes) teamNotes.hidden = notes.length === 0;
   setHtml(
     "[data-team-notes]",
-    (people.teamNotes || [])
+    notes
       .map(
         (note) => `
           <article>
@@ -460,25 +539,15 @@ function renderPeople(people) {
       .join(""),
   );
 
-  const visibleMembers = (people.members || []).filter((member) => member.name);
   const memberGrid = document.querySelector("[data-member-grid]");
   if (!memberGrid) return;
   memberGrid.hidden = visibleMembers.length === 0;
-  memberGrid.innerHTML = visibleMembers
-    .map(
-      (member) => `
-        <article class="member-card">
-          ${personVisual(member)}
-          <div>
-            <p class="role">${escapeHtml(member.role || member.category || "Lab Member")}</p>
-            <h3>${escapeHtml(member.name)}</h3>
-            <p>${escapeHtml(member.title || "")}</p>
-            ${member.bio ? `<p>${escapeHtml(member.bio)}</p>` : ""}
-          </div>
-        </article>
-      `,
-    )
-    .join("");
+  const alumni = visibleMembers.filter((member) => member.category === "Alumni");
+  const currentMembers = visibleMembers.filter((member) => member.category !== "Alumni");
+  memberGrid.innerHTML = [
+    memberGroupHtml("Current Researchers", currentMembers),
+    memberGroupHtml("Alumni", alumni),
+  ].join("");
 }
 
 function buildPubmedQuery(queries = []) {
@@ -880,10 +949,49 @@ function renderPublicationArchive(publications, mode = "live") {
   `;
 }
 
+function publicationSearchText(publication) {
+  return [
+    publication.title,
+    publication.source,
+    publication.pubdate,
+    ...(publication.authors || []).map((author) => (typeof author === "string" ? author : author?.name)),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLocaleLowerCase();
+}
+
+function filteredArchivePublications() {
+  const query = publicationState.query.trim().toLocaleLowerCase();
+  return publicationState.records.filter((publication) => {
+    const matchesYear = publicationState.year === "all" || publicationYear(publication) === publicationState.year;
+    const matchesQuery = !query || publicationSearchText(publication).includes(query);
+    return matchesYear && matchesQuery;
+  });
+}
+
+function updatePublicationFilterOptions() {
+  if (!publicationYearFilter) return;
+  const currentYear = publicationState.year;
+  const years = [...new Set(publicationState.records.map(publicationYear))].sort((a, b) => {
+    if (a === "In press") return -1;
+    if (b === "In press") return 1;
+    return Number(b) - Number(a);
+  });
+  publicationYearFilter.innerHTML = [
+    '<option value="all">All years</option>',
+    ...years.map((year) => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`),
+  ].join("");
+  const availableYears = new Set(["all", ...years]);
+  publicationState.year = availableYears.has(currentYear) ? currentYear : "all";
+  publicationYearFilter.value = publicationState.year;
+}
+
 function updatePublicationChrome() {
   const total = publicationState.records.length;
   const recentLimit = recentPublicationLimit();
-  const visibleCount = publicationState.view === "all" ? total : Math.min(recentLimit, total);
+  const filteredCount = filteredArchivePublications().length;
+  const visibleCount = publicationState.view === "all" ? filteredCount : Math.min(recentLimit, total);
   const stamp = new Date().toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -896,8 +1004,14 @@ function updatePublicationChrome() {
     button.setAttribute("aria-selected", String(isActive));
   });
 
+  if (publicationFilters) publicationFilters.hidden = publicationState.view !== "all";
   if (publicationCount) publicationCount.textContent = total ? String(total) : "";
-  if (publicationSummary) publicationSummary.textContent = `${visibleCount} shown - ${total} total`;
+  if (publicationSummary) {
+    const isFiltered = publicationState.query.trim() || publicationState.year !== "all";
+    publicationSummary.textContent = isFiltered
+      ? `${visibleCount} matching - ${total} total`
+      : `${visibleCount} shown - ${total} total`;
+  }
   if (publicationStatus) {
     publicationStatus.textContent =
       publicationState.sourceMode === "live"
@@ -910,15 +1024,25 @@ function renderPublicationView() {
   if (!publicationList) return;
   const { records, sourceMode, view } = publicationState;
   const recentLimit = recentPublicationLimit();
-  const visiblePublications = view === "all" ? records : records.slice(0, recentLimit);
+  const visiblePublications = view === "all" ? filteredArchivePublications() : records.slice(0, recentLimit);
 
   publicationList.classList.toggle("is-archive", view === "all");
-  publicationList.innerHTML =
-    view === "all"
-      ? renderPublicationArchive(visiblePublications, sourceMode)
-      : visiblePublications.map((publication) => renderPublicationCard(publication, sourceMode)).join("");
+  if (!visiblePublications.length && view === "all") {
+    publicationList.innerHTML = `
+      <div class="publication-empty">
+        <i data-lucide="search-x" aria-hidden="true"></i>
+        <p>No publications match these filters.</p>
+      </div>
+    `;
+  } else {
+    publicationList.innerHTML =
+      view === "all"
+        ? renderPublicationArchive(visiblePublications, sourceMode)
+        : visiblePublications.map((publication) => renderPublicationCard(publication, sourceMode)).join("");
+  }
 
   updatePublicationChrome();
+  createIcons();
 }
 
 function renderPublications(publications, mode = "live") {
@@ -928,6 +1052,7 @@ function renderPublications(publications, mode = "live") {
     records: publications,
     sourceMode: mode,
   };
+  updatePublicationFilterOptions();
   renderPublicationView();
 }
 
@@ -967,6 +1092,16 @@ function setupPublicationViews() {
       publicationState.view = button.dataset.publicationView === "all" ? "all" : "recent";
       renderPublicationView();
     });
+  });
+
+  publicationSearch?.addEventListener("input", () => {
+    publicationState.query = publicationSearch.value;
+    renderPublicationView();
+  });
+
+  publicationYearFilter?.addEventListener("change", () => {
+    publicationState.year = publicationYearFilter.value;
+    renderPublicationView();
   });
 }
 

@@ -115,6 +115,23 @@ collections:
               - { label: "Initials", name: "initials", widget: "string" }
               - { label: "Title / Affiliation", name: "title", widget: "text" }
               - { label: "Photo", name: "photo", widget: "image", required: false }
+              - label: "Profile Links"
+                name: "profileLinks"
+                widget: "list"
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+                  - label: "Icon"
+                    name: "icon"
+                    widget: "select"
+                    default: "external-link"
+                    options:
+                      - "badge-check"
+                      - "graduation-cap"
+                      - "mail"
+                      - "external-link"
               - label: "Education"
                 name: "education"
                 widget: "list"

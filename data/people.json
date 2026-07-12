@@ -7,6 +7,23 @@
     "initials": "SP",
     "title": "Assistant Professor, College of Pharmacy, The Catholic University of Korea.",
     "photo": "PI_profile.jpg",
+    "profileLinks": [
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0003-4421-4513",
+        "icon": "badge-check"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
+        "icon": "graduation-cap"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:sk.park@catholic.ac.kr",
+        "icon": "mail"
+      }
+    ],
     "education": [
       {
         "degree": "Ph.D.",

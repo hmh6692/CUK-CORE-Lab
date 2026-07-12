@@ -88,6 +88,7 @@
     <script src="script.js" defer></script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="CUK-CORE Lab home" data-brand-home>
         <img class="brand-logo" src="logo.png" alt="" data-brand-logo hidden />
@@ -111,7 +112,8 @@
       </nav>
     </header>
 
-    <main id="top">
+    <main id="main-content">
+      <span id="top" aria-hidden="true"></span>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow" data-hero-kicker>Cross-disciplinary Outcomes Research for Evidence</p>
@@ -140,9 +142,8 @@
               meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.
             </p>
             <p>
-              The group is intentionally small and method-focused, creating room for close mentoring
-              and careful work across cancer, heart failure, vaccines, and other high-impact disease
-              areas.
+              The lab combines focused mentorship with methodologically rigorous work across cancer,
+              heart failure, vaccines, and other high-impact disease areas.
             </p>
           </div>
         </div>
@@ -165,7 +166,7 @@
         <div class="section-heading publications-heading">
           <div>
             <p class="section-kicker" data-publications-kicker>Publications</p>
-            <h2 id="publications-title" data-publications-title>Latest publications from PubMed</h2>
+            <h2 id="publications-title" data-publications-title>Recent and complete publications</h2>
           </div>
           <div class="publication-actions">
             <button class="icon-button" type="button" data-refresh-publications aria-label="Refresh publications">
@@ -212,6 +213,26 @@
           <p class="publication-summary" data-publication-summary></p>
         </div>
 
+        <div class="publication-filters" data-publication-filters hidden>
+          <label class="publication-search">
+            <span class="visually-hidden">Search complete publication list</span>
+            <i data-lucide="search" aria-hidden="true"></i>
+            <input
+              type="search"
+              placeholder="Search title, author, or journal"
+              autocomplete="off"
+              data-publication-search
+            />
+          </label>
+          <label class="publication-year-filter">
+            <span class="visually-hidden">Filter publications by year</span>
+            <select data-publication-year aria-label="Filter publications by year">
+              <option value="all">All years</option>
+            </select>
+            <i data-lucide="chevron-down" aria-hidden="true"></i>
+          </label>
+        </div>
+
         <div class="publication-list" data-publication-list aria-live="polite">
           <article class="publication-card skeleton">
             <div></div>
@@ -224,7 +245,7 @@
       <section class="people-section" id="people" aria-labelledby="people-title">
         <div class="section-heading">
           <p class="section-kicker" data-people-kicker>People</p>
-          <h2 id="people-title" data-people-title>A small group with close mentorship</h2>
+          <h2 id="people-title" data-people-title>Cultivating researchers for evidence-driven healthcare</h2>
         </div>
 
         <div class="people-layout">
@@ -232,7 +253,7 @@
           <div class="team-notes" data-team-notes></div>
         </div>
 
-        <div class="member-grid" data-member-grid hidden></div>
+        <div class="member-groups" data-member-grid hidden></div>
       </section>
 
       <section class="contact-section" id="contact" aria-labelledby="contact-title">
