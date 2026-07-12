@@ -6,6 +6,8 @@
     "role": "Principal Investigator",
     "initials": "SP",
     "title": "Assistant Professor, College of Pharmacy, The Catholic University of Korea.",
+    "localName": "박선경 교수",
+    "localAffiliation": "가톨릭대학교 약학대학 · 보건사회약학",
     "photo": "PI_profile.jpg",
     "profileLinks": [
       {
@@ -17,6 +19,11 @@
         "label": "Google Scholar",
         "url": "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
         "icon": "graduation-cap"
+      },
+      {
+        "label": "University Profile",
+        "url": "https://pharm.catholic.ac.kr/pharmacy/faculty/faculty.do?mode=view&persNo=212010916",
+        "icon": "building-2"
       },
       {
         "label": "Email",

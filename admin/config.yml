@@ -53,6 +53,7 @@ collections:
                 name: "paragraphs"
                 widget: "list"
                 field: { label: "Paragraph", name: "paragraph", widget: "text" }
+              - { label: "Korean Search Introduction", name: "localContext", widget: "text", required: false }
           - label: "Contact"
             name: "contact"
             widget: "object"
@@ -114,6 +115,8 @@ collections:
               - { label: "Role", name: "role", widget: "string" }
               - { label: "Initials", name: "initials", widget: "string" }
               - { label: "Title / Affiliation", name: "title", widget: "text" }
+              - { label: "Korean Name", name: "localName", widget: "string", required: false }
+              - { label: "Korean Affiliation", name: "localAffiliation", widget: "string", required: false }
               - { label: "Photo", name: "photo", widget: "image", required: false }
               - label: "Profile Links"
                 name: "profileLinks"
@@ -130,6 +133,7 @@ collections:
                     options:
                       - "badge-check"
                       - "graduation-cap"
+                      - "building-2"
                       - "mail"
                       - "external-link"
               - label: "Education"

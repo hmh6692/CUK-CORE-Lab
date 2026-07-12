@@ -6,8 +6,8 @@
     "tagline": "Cross-disciplinary Outcomes Research for Evidence"
   },
   "meta": {
-    "title": "CUK-CORE Lab | Catholic University of Korea Outcomes Research",
-    "description": "CUK-CORE Lab is the Cross-disciplinary Outcomes Research for Evidence Lab led by Prof. Sun-Kyeong Park at the College of Pharmacy, The Catholic University of Korea."
+    "title": "CUK-CORE Lab | 박선경 교수 · 가톨릭대학교 약학대학",
+    "description": "가톨릭대학교 약학대학 박선경 교수의 CUK-CORE Lab입니다. 보건사회약학, 약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터 연구를 수행합니다."
   },
   "hero": {
     "kicker": "Cross-disciplinary Outcomes Research for Evidence",
@@ -22,7 +22,8 @@
     "paragraphs": [
       "Led by Prof. Sun-Kyeong Park, the lab focuses on pharmaceutical outcomes and policy research. Our work connects economic evaluation, systematic review, Bayesian network meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.",
       "The lab combines focused mentorship with methodologically rigorous work across cancer, heart failure, vaccines, and other high-impact disease areas."
-    ]
+    ],
+    "localContext": "CUK-CORE Lab은 가톨릭대학교 약학대학 박선경 교수가 이끄는 보건사회약학 연구실로, 약물경제성평가와 빅데이터 기반 건강성과연구를 수행합니다."
   },
   "contact": {
     "kicker": "Contact",

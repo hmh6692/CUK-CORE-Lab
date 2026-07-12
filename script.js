@@ -13,9 +13,9 @@ const defaultContent = {
       tagline: "Cross-disciplinary Outcomes Research for Evidence",
     },
     meta: {
-      title: "CUK-CORE Lab | Catholic University of Korea Outcomes Research",
+      title: "CUK-CORE Lab | 박선경 교수 · 가톨릭대학교 약학대학",
       description:
-        "CUK-CORE Lab is the Cross-disciplinary Outcomes Research for Evidence Lab led by Prof. Sun-Kyeong Park at the College of Pharmacy, The Catholic University of Korea.",
+        "가톨릭대학교 약학대학 박선경 교수의 CUK-CORE Lab입니다. 보건사회약학, 약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터 연구를 수행합니다.",
     },
     hero: {
       kicker: "Cross-disciplinary Outcomes Research for Evidence",
@@ -31,6 +31,8 @@ const defaultContent = {
         "Led by Prof. Sun-Kyeong Park, the lab focuses on pharmaceutical outcomes and policy research. Our work connects economic evaluation, systematic review, Bayesian network meta-analysis, big-data analysis, healthcare cost analysis, and pharmacoepidemiology.",
         "The lab combines focused mentorship with methodologically rigorous work across cancer, heart failure, vaccines, and other high-impact disease areas.",
       ],
+      localContext:
+        "CUK-CORE Lab은 가톨릭대학교 약학대학 박선경 교수가 이끄는 보건사회약학 연구실로, 약물경제성평가와 빅데이터 기반 건강성과연구를 수행합니다.",
     },
     contact: {
       kicker: "Contact",
@@ -89,6 +91,8 @@ const defaultContent = {
       role: "Principal Investigator",
       initials: "SP",
       title: "Assistant Professor, College of Pharmacy, The Catholic University of Korea.",
+      localName: "박선경 교수",
+      localAffiliation: "가톨릭대학교 약학대학 · 보건사회약학",
       photo: "PI_profile.jpg",
       profileLinks: [
         { label: "ORCID", url: "https://orcid.org/0000-0003-4421-4513", icon: "badge-check" },
@@ -96,6 +100,11 @@ const defaultContent = {
           label: "Google Scholar",
           url: "https://scholar.google.co.kr/citations?hl=en&user=-3ZiVL4AAAAJ&view_op=list_works&sortby=pubdate",
           icon: "graduation-cap",
+        },
+        {
+          label: "University Profile",
+          url: "https://pharm.catholic.ac.kr/pharmacy/faculty/faculty.do?mode=view&persNo=212010916",
+          icon: "building-2",
         },
         { label: "Email", url: "mailto:sk.park@catholic.ac.kr", icon: "mail" },
       ],
@@ -346,6 +355,11 @@ function renderSite(site) {
   setText("[data-about-title]", site.about?.title);
   const paragraphs = site.about?.paragraphs || [];
   setHtml("[data-about-paragraphs]", paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join(""));
+  const aboutLocal = document.querySelector("[data-about-local]");
+  if (aboutLocal) {
+    aboutLocal.textContent = site.about?.localContext || "";
+    aboutLocal.hidden = !site.about?.localContext;
+  }
 
   setText("[data-contact-kicker]", site.contact?.kicker);
   setText("[data-contact-title]", site.contact?.title);
@@ -511,6 +525,14 @@ function renderPeople(people) {
         <p class="role">${escapeHtml(pi.role)}</p>
         <h3>${escapeHtml(pi.name)}</h3>
         <p>${escapeHtml(pi.title)}</p>
+        ${
+          pi.localName || pi.localAffiliation
+            ? `<p class="profile-local" lang="ko">
+                ${pi.localName ? `<strong>${escapeHtml(pi.localName)}</strong>` : ""}
+                ${pi.localAffiliation ? `<span>${escapeHtml(pi.localAffiliation)}</span>` : ""}
+              </p>`
+            : ""
+        }
         ${profileLinksHtml(pi.profileLinks)}
         ${educationHtml(pi.education)}
         ${experienceHtml(pi.experience)}
