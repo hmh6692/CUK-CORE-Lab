@@ -498,7 +498,6 @@ function memberCardHtml(member) {
 
   return `
     <article class="member-card">
-      ${personVisual(member)}
       <div class="member-card-copy">
         <p class="role">${escapeHtml(member.role || member.category || "Lab Member")}</p>
         <h3>${escapeHtml(member.name)}</h3>

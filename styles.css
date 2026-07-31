@@ -1138,14 +1138,14 @@ summary:focus-visible {
 }
 
 .member-card {
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  gap: 18px;
-  padding: 22px;
+  padding: 24px;
+  border-top: 3px solid var(--green-2);
 }
 
 .member-card h3 {
-  margin-top: 0;
+  margin: 6px 0 0;
+  font-family: var(--font-en-serif);
+  font-size: 1.35rem;
 }
 
 .member-card p + p {
@@ -1153,7 +1153,10 @@ summary:focus-visible {
 }
 
 .member-card-copy {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  min-height: 218px;
 }
 
 .member-interests {
@@ -1181,7 +1184,8 @@ summary:focus-visible {
   align-items: center;
   gap: 7px;
   max-width: 100%;
-  margin-top: 16px;
+  margin-top: auto;
+  padding-top: 18px;
   color: var(--blue);
   font-size: 0.86rem;
   font-weight: 700;
@@ -1675,8 +1679,13 @@ summary:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .member-card {
-    grid-template-columns: 1fr;
+  .member-card-copy {
+    min-height: 0;
+  }
+
+  .member-email {
+    margin-top: 16px;
+    padding-top: 0;
   }
 
   .mini-cv div {
