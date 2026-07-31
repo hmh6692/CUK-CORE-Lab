@@ -1152,6 +1152,53 @@ summary:focus-visible {
   margin-top: 8px;
 }
 
+.member-card-copy {
+  min-width: 0;
+}
+
+.member-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member-interests li {
+  padding: 4px 8px;
+  border: 1px solid rgba(47, 107, 88, 0.18);
+  border-radius: 4px;
+  color: var(--green);
+  background: rgba(47, 107, 88, 0.07);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.member-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  margin-top: 16px;
+  color: var(--blue);
+  font-size: 0.86rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.member-email:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.member-email svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
 .contact-section {
   color: var(--paper);
   background: var(--green);

@@ -171,6 +171,16 @@ collections:
               - { label: "Role", name: "role", widget: "string", required: false }
               - { label: "Title / Program", name: "title", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
+              - label: "Research Interests"
+                name: "researchInterests"
+                widget: "list"
+                required: false
+                field: { label: "Research Interest", name: "interest", widget: "string" }
+              - label: "Public Email"
+                name: "email"
+                widget: "string"
+                required: false
+                hint: "This email address is displayed publicly on the website."
               - { label: "Initials", name: "initials", widget: "string", required: false }
               - { label: "Photo", name: "photo", widget: "image", required: false }
           - label: "People Section Notes"

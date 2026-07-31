@@ -64,7 +64,44 @@
       }
     ]
   },
-  "members": [],
+  "members": [
+    {
+      "name": "Hyunji Kim",
+      "category": "Current Student",
+      "role": "Ph.D. Student (Coursework Completed)",
+      "researchInterests": [
+        "Big Data Analytics",
+        "Health Economics",
+        "Systematic Review"
+      ],
+      "email": "hyunji0012@catholic.ac.kr",
+      "initials": "HK"
+    },
+    {
+      "name": "Yebin Yoon",
+      "category": "Current Student",
+      "role": "M.S. Student",
+      "researchInterests": [
+        "Big Data Analytics",
+        "Machine Learning",
+        "Health Economics",
+        "Patient Preference Research"
+      ],
+      "email": "yebin0007@catholic.ac.kr",
+      "initials": "YY"
+    },
+    {
+      "name": "Hwayoung Ahn",
+      "category": "Current Student",
+      "role": "Ph.D. Student (Coursework Completed)",
+      "researchInterests": [
+        "Pharmacy Services",
+        "Integrated Care"
+      ],
+      "email": "gungeul@hanmail.net",
+      "initials": "HA"
+    }
+  ],
   "teamNotes": [
     {
       "title": "Graduate Researchers",

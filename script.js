@@ -283,6 +283,11 @@ function safeProfileUrl(value = "") {
   return /^(https?:\/\/|mailto:)/i.test(text) ? text : "";
 }
 
+function safeEmail(value = "") {
+  const text = String(value).trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text) ? text : "";
+}
+
 function boundedNumber(value, fallback, min, max) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return fallback;
@@ -486,14 +491,38 @@ function profileLinksHtml(links = []) {
 }
 
 function memberCardHtml(member) {
+  const interests = Array.isArray(member.researchInterests)
+    ? member.researchInterests.filter(Boolean)
+    : [];
+  const email = safeEmail(member.email);
+
   return `
     <article class="member-card">
       ${personVisual(member)}
-      <div>
+      <div class="member-card-copy">
         <p class="role">${escapeHtml(member.role || member.category || "Lab Member")}</p>
         <h3>${escapeHtml(member.name)}</h3>
         ${member.title ? `<p>${escapeHtml(member.title)}</p>` : ""}
         ${member.bio ? `<p>${escapeHtml(member.bio)}</p>` : ""}
+        ${
+          interests.length
+            ? `
+              <ul class="member-interests" aria-label="Research interests">
+                ${interests.map((interest) => `<li>${escapeHtml(interest)}</li>`).join("")}
+              </ul>
+            `
+            : ""
+        }
+        ${
+          email
+            ? `
+              <a class="member-email" href="mailto:${escapeHtml(email)}">
+                <i data-lucide="mail" aria-hidden="true"></i>
+                ${escapeHtml(email)}
+              </a>
+            `
+            : ""
+        }
       </div>
     </article>
   `;
