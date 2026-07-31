@@ -500,7 +500,10 @@ function memberCardHtml(member) {
     <article class="member-card">
       <div class="member-card-copy">
         <p class="role">${escapeHtml(member.role || member.category || "Lab Member")}</p>
-        <h3>${escapeHtml(member.name)}</h3>
+        <div class="member-name-row">
+          <h3>${escapeHtml(member.name)}</h3>
+          ${member.enrollmentType ? `<span class="member-status">${escapeHtml(member.enrollmentType)}</span>` : ""}
+        </div>
         ${member.title ? `<p>${escapeHtml(member.title)}</p>` : ""}
         ${member.bio ? `<p>${escapeHtml(member.bio)}</p>` : ""}
         ${

@@ -69,6 +69,7 @@
       "name": "Hyunji Kim",
       "category": "Current Student",
       "role": "Ph.D. Student (Coursework Completed)",
+      "enrollmentType": "Full-time",
       "researchInterests": [
         "Big Data Analytics",
         "Health Economics",
@@ -80,6 +81,7 @@
       "name": "Yebin Yoon",
       "category": "Current Student",
       "role": "M.S. Student",
+      "enrollmentType": "Full-time",
       "researchInterests": [
         "Big Data Analytics",
         "Machine Learning",
@@ -92,6 +94,7 @@
       "name": "Hwayoung Ahn",
       "category": "Current Student",
       "role": "Ph.D. Student (Coursework Completed)",
+      "enrollmentType": "Part-time",
       "researchInterests": [
         "Pharmacy Services",
         "Integrated Care"

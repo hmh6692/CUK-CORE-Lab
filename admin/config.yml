@@ -169,6 +169,13 @@ collections:
                   - "Researcher"
                   - "Collaborator"
               - { label: "Role", name: "role", widget: "string", required: false }
+              - label: "Enrollment Type"
+                name: "enrollmentType"
+                widget: "select"
+                required: false
+                options:
+                  - "Full-time"
+                  - "Part-time"
               - { label: "Title / Program", name: "title", widget: "string", required: false }
               - { label: "Bio", name: "bio", widget: "text", required: false }
               - label: "Research Interests"
