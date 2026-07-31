@@ -11,6 +11,8 @@
   --gold: #c8a84f;
   --shadow: 0 18px 44px rgba(16, 34, 29, 0.1);
   --max: 1180px;
+  --font-en-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-en-serif: "Source Serif 4", Georgia, serif;
   --font-kr-sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-kr-serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
 }
@@ -28,8 +30,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--wash);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-en-sans);
   line-height: 1.6;
 }
 
@@ -224,7 +225,7 @@ summary:focus-visible {
 .contact-inner h2 {
   margin: 0;
   line-height: 1.05;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-en-serif);
   font-weight: 700;
 }
 
@@ -674,7 +675,7 @@ summary:focus-visible {
   border-radius: 8px;
   color: var(--green);
   background: rgba(255, 255, 255, 0.78);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-en-serif);
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -1112,7 +1113,7 @@ summary:focus-visible {
 
 .member-group-heading h3 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-en-serif);
   font-size: 1.45rem;
 }
 
