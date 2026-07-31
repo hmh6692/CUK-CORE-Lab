@@ -13,14 +13,15 @@ const defaultContent = {
       tagline: "Cross-disciplinary Outcomes Research for Evidence",
     },
     meta: {
-      title: "CUK-CORE Lab | 박선경 교수 · 가톨릭대학교 약학대학",
+      title: "박선경 교수 연구실 | 가톨릭대학교 사회약학 · CUK-CORE Lab",
       description:
-        "가톨릭대학교 약학대학 박선경 교수의 CUK-CORE Lab입니다. 보건사회약학, 약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터 연구를 수행합니다.",
+        "가톨릭대학교 사회약학 박선경 교수 연구실 CUK-CORE Lab입니다. 보건사회약학, 약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터 연구를 수행합니다.",
     },
     hero: {
       kicker: "Cross-disciplinary Outcomes Research for Evidence",
       title: "CUK-CORE Lab",
       lede: "We study how medicines, vaccines, and health interventions create value in real-world care, using health economics, evidence synthesis, and pharmacoepidemiology.",
+      localLabel: "가톨릭대학교 사회약학 · 박선경 교수 연구실",
       primaryButtonText: "Explore Research",
       secondaryButtonText: "Latest Publications",
     },
@@ -348,6 +349,7 @@ function renderSite(site) {
   setText("[data-hero-kicker]", site.hero?.kicker);
   setText("[data-hero-title]", site.hero?.title);
   setText("[data-hero-lede]", site.hero?.lede);
+  setText("[data-hero-local]", site.hero?.localLabel);
   setText("[data-hero-primary]", site.hero?.primaryButtonText);
   setText("[data-hero-secondary]", site.hero?.secondaryButtonText);
 

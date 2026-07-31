@@ -41,6 +41,7 @@ collections:
               - { label: "Small Label", name: "kicker", widget: "string" }
               - { label: "Main Title", name: "title", widget: "string" }
               - { label: "Lead Text", name: "lede", widget: "text" }
+              - { label: "Korean Search Label", name: "localLabel", widget: "string", required: false }
               - { label: "Primary Button Text", name: "primaryButtonText", widget: "string" }
               - { label: "Secondary Button Text", name: "secondaryButtonText", widget: "string" }
           - label: "About"
