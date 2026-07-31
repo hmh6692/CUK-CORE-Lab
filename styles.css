@@ -13,8 +13,9 @@
   --max: 1180px;
   --font-en-sans: "Source Sans 3", "Segoe UI", sans-serif;
   --font-en-serif: "Source Serif 4", Georgia, serif;
-  --font-kr-sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --font-kr-serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
+  --font-kr-sans:
+    "Source Sans 3", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-kr-serif: "Source Serif 4", "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
 }
 
 * {
