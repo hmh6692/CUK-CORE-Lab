@@ -38,6 +38,7 @@ html[lang="ko"] body {
 }
 
 [lang="ko"] {
+  font-family: var(--font-kr-sans);
   word-break: keep-all;
 }
 
