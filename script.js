@@ -1165,6 +1165,14 @@ function setupNetlifyIdentityRedirect() {
 }
 
 async function init() {
+  if (document.body.matches("[data-static-page]")) {
+    const year = document.querySelector("[data-year]");
+    if (year) year.textContent = new Date().getFullYear();
+    setupNavigation();
+    createIcons();
+    return;
+  }
+
   const [site, research, people, publications] = await Promise.all([
     fetchJson("data/site.json", defaultContent.site),
     fetchJson("data/research.json", defaultContent.research),
