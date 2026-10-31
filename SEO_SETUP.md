@@ -31,7 +31,22 @@ https://cukcorelab.catholic.ac.kr/sitemap.xml
    `https://cukcorelab.catholic.ac.kr/`
 9. Click `Request indexing`.
 
-## Helpful Follow-up
+## Search Entry Policy (2026-10-31)
+
+- The English-led main page at `/` is the search landing page. Its title,
+  description and visible Korean introduction identify the lab in Korean too.
+- `/social-pharmacy/` remains available through the site's Korean introduction
+  link, but uses `noindex, follow` and is excluded from `sitemap.xml`.
+- Neither page advertises the Korean page as an indexed `hreflang` alternate.
+  Each keeps its own canonical URL because their content is not identical.
+- Do not block `/social-pharmacy/` in `robots.txt`: crawlers must be able to read
+  its `noindex` tag. Do not add referrer-based redirects for search visitors.
+- After deployment, inspect the main URL and request indexing in the existing
+  Search Console property. Check the Korean URL's live HTML for `noindex`.
+  Existing search results change only after recrawling; timing and ranking
+  cannot be guaranteed. Removing the Korean result does not transfer its rank.
+
+## External Links
 
 Ask official university/profile pages to link to the lab website. Good places include the PI faculty page, college/lab directory, ORCID profile, Google Scholar profile, and department announcements. These links help Google discover and trust the site.
 

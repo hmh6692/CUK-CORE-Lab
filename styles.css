@@ -1269,7 +1269,37 @@ summary:focus-visible {
 }
 
 .local-page {
+  --local-title-size: 3rem;
+  --local-heading-size: 2rem;
   background: var(--paper);
+  font-size: 1rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.local-page h1,
+.local-page h2 {
+  margin: 0;
+  font-family: var(--font-kr-serif);
+  font-weight: 600;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.local-page h2,
+.local-page .section-heading h2 {
+  font-size: var(--local-heading-size);
+}
+
+.local-page .section-kicker,
+.local-page .eyebrow {
+  font-family: var(--font-kr-sans);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.local-page .site-nav a {
+  white-space: nowrap;
 }
 
 .local-hero {
@@ -1304,26 +1334,23 @@ summary:focus-visible {
 
 .local-hero h1 {
   max-width: 730px;
-  margin: 0;
-  font-family: var(--font-kr-serif);
-  font-size: 3.65rem;
-  font-weight: 600;
-  line-height: 1.08;
+  font-size: var(--local-title-size);
+  line-height: 1.35;
 }
 
 .local-hero-lede {
   max-width: 690px;
   margin: 26px 0 0;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.12rem;
+  font-size: 1.0625rem;
   line-height: 1.85;
 }
 
 .local-identity {
   margin: 20px 0 0;
   color: #e4c966;
-  font-size: 0.92rem;
-  font-weight: 800;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .local-section {
@@ -1337,25 +1364,14 @@ summary:focus-visible {
 .local-heading-grid {
   display: grid;
   grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
-  gap: 68px;
+  gap: 64px;
   align-items: start;
-}
-
-.local-heading-grid h2,
-.local-profile-copy h2,
-.local-contact-inner h2 {
-  margin: 0;
-  font-family: var(--font-kr-serif);
-  font-size: 2.45rem;
-  font-weight: 600;
-  line-height: 1.16;
 }
 
 .local-copy {
   display: grid;
   gap: 18px;
   color: #2d3c38;
-  font-size: 1.04rem;
 }
 
 .local-copy p {
@@ -1390,9 +1406,10 @@ summary:focus-visible {
 
 .local-topic h3 {
   margin: 8px 0 12px;
-  font-family: var(--font-kr-serif);
-  font-size: 1.22rem;
+  font-family: var(--font-kr-sans);
+  font-size: 1.125rem;
   font-weight: 600;
+  line-height: 1.6;
 }
 
 .local-topic p {
@@ -1402,25 +1419,31 @@ summary:focus-visible {
 
 .local-profile {
   display: grid;
-  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
-  gap: 64px;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 56px;
   align-items: center;
-  max-width: var(--max);
+  max-width: 960px;
   margin: 0 auto;
 }
 
-.local-profile-photo {
+.local-profile-frame {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  border-radius: 8px;
-  object-fit: cover;
-  object-position: center top;
-  box-shadow: var(--shadow);
+  max-width: 200px;
+  height: auto;
+  aspect-ratio: 15 / 19;
+  border-radius: 104px 104px 34px 34px;
 }
 
-.local-profile-copy > p {
+.local-profile-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.local-profile-copy > p:not(.section-kicker) {
   max-width: 720px;
-  margin: 20px 0 0;
+  margin: 18px 0 0;
   color: #2d3c38;
 }
 
@@ -1428,17 +1451,22 @@ summary:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 18px;
-  margin-top: 22px;
+  margin-top: 18px;
   color: var(--muted);
-  font-size: 0.94rem;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .local-profile-links {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 28px;
+  margin-top: 24px;
+}
+
+.local-profile-links .button {
+  width: auto;
+  font-weight: 600;
 }
 
 .local-contact {
@@ -1456,7 +1484,11 @@ summary:focus-visible {
   margin: 0 auto;
 }
 
-.local-contact-inner p {
+.local-contact-inner > div {
+  min-width: 0;
+}
+
+.local-contact-inner p:not(.section-kicker) {
   max-width: 650px;
   margin: 16px 0 0;
   color: rgba(255, 255, 255, 0.82);
@@ -1575,22 +1607,22 @@ summary:focus-visible {
       url("assets/optimized/hero-mobile.webp");
   }
 
-  .local-hero h1 {
-    font-size: 2.85rem;
+  .local-page {
+    --local-title-size: 2.5rem;
+    --local-heading-size: 1.875rem;
   }
 
   .local-section {
     padding: 66px 22px;
   }
 
-  .local-heading-grid,
-  .local-profile {
+  .local-heading-grid {
     grid-template-columns: 1fr;
     gap: 34px;
   }
 
-  .local-profile-photo {
-    width: min(310px, 100%);
+  .local-profile {
+    gap: 36px;
   }
 
   .local-contact-inner {
@@ -1621,8 +1653,9 @@ summary:focus-visible {
     font-size: 2.28rem;
   }
 
-  .local-hero h1 {
-    font-size: 2.35rem;
+  .local-page {
+    --local-title-size: 2rem;
+    --local-heading-size: 1.75rem;
   }
 
   .local-hero-lede {
@@ -1634,10 +1667,13 @@ summary:focus-visible {
     gap: 30px;
   }
 
-  .local-heading-grid h2,
-  .local-profile-copy h2,
-  .local-contact-inner h2 {
-    font-size: 2rem;
+  .local-profile {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .local-profile-frame {
+    max-width: 176px;
   }
 
   .hero-actions,

@@ -21,15 +21,15 @@ const defaultContent = embeddedContent() || {
       tagline: "Cross-disciplinary Outcomes Research for Evidence",
     },
     meta: {
-      title: "박선경 교수 연구실 | 가톨릭대학교 사회약학 · CUK-CORE Lab",
+      title: "가톨릭대학교 사회약학 연구실 | 박선경 교수 · CUK-CORE Lab",
       description:
-        "가톨릭대학교 사회약학 박선경 교수 연구실 CUK-CORE Lab입니다. 보건사회약학, 약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터 연구를 수행합니다.",
+        "가톨릭대학교 사회약학 연구실 CUK-CORE Lab의 공식 웹사이트입니다. 박선경 교수와 연구실 구성원, 약물경제성평가·건강성과연구·보건의료 빅데이터 연구 및 출판 논문을 소개합니다.",
     },
     hero: {
       kicker: "Cross-disciplinary Outcomes Research for Evidence",
       title: "CUK-CORE Lab",
       lede: "We study how medicines, vaccines, and health interventions create value in real-world care, using health economics, evidence synthesis, and pharmacoepidemiology.",
-      localLabel: "가톨릭대학교 사회약학 · 박선경 교수 연구실",
+      localLabel: "가톨릭대학교 사회약학 연구실 · 박선경 교수",
       primaryButtonText: "Explore Research",
       secondaryButtonText: "Latest Publications",
     },
@@ -41,7 +41,7 @@ const defaultContent = embeddedContent() || {
         "The lab combines focused mentorship with methodologically rigorous work across cancer, heart failure, vaccines, and other high-impact disease areas.",
       ],
       localContext:
-        "CUK-CORE Lab은 가톨릭대학교 약학대학 박선경 교수가 이끄는 보건사회약학 연구실로, 약물경제성평가와 빅데이터 기반 건강성과연구를 수행합니다.",
+        "가톨릭대학교 사회약학 연구실 CUK-CORE Lab은 약학대학 박선경 교수가 이끄는 보건사회약학 연구실입니다. 약물경제성평가와 빅데이터 기반 건강성과연구를 수행합니다.",
     },
     contact: {
       kicker: "Contact",
@@ -504,6 +504,7 @@ function renderKoreanPage(site, people, korean = {}) {
     const source = assetPath(pi.photo);
     if (source) photo.src = source;
     photo.hidden = !source;
+    photo.closest(".local-profile-frame")?.toggleAttribute("hidden", !source);
     photo.alt = [pi.localAffiliation, pi.localName].filter(Boolean).join(" ");
   }
   for (const [selector, label] of [["[data-local-university-link]", "University Profile"], ["[data-local-orcid-link]", "ORCID"]]) {
@@ -1415,7 +1416,9 @@ function setupNavigation() {
     }
   });
   document.addEventListener("click", (event) => {
-    if (!nav.contains(event.target) && !navToggle.contains(event.target)) setOpen(false);
+    // The toggle replaces its SVG during this click; use the original event path.
+    const path = event.composedPath();
+    if (!path.includes(nav) && !path.includes(navToggle)) setOpen(false);
   });
   document.addEventListener("focusin", (event) => {
     if (!nav.contains(event.target) && !navToggle.contains(event.target)) setOpen(false);

@@ -9,6 +9,7 @@ const { createRuntime, root } = require("../scripts/runtime.cjs");
 
 test("offline build retains complete source data and pre-renders public content", async () => {
   const { output, cache } = await build({ offline: true });
+  const site = JSON.parse(await fs.readFile(path.join(root, "data/site.json"), "utf8"));
   const people = JSON.parse(await fs.readFile(path.join(root, "data/people.json"), "utf8"));
   const settings = JSON.parse(await fs.readFile(path.join(root, "data/publications.json"), "utf8"));
   const memberCount = people.members.filter((member) => member.name).length;
@@ -17,6 +18,10 @@ test("offline build retains complete source data and pre-renders public content"
     const html = await fs.readFile(path.join(output, page), "utf8");
     const { document } = parseHTML(html);
     assert.ok(document.title.length > 0);
+    assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 0);
+    const pagePath = page === "index.html" ? "" : "social-pharmacy/";
+    assert.equal(document.querySelector('link[rel="canonical"]').getAttribute("href"), `https://cukcorelab.catholic.ac.kr/${pagePath}`);
+    assert.equal(document.querySelector('meta[name="robots"]').getAttribute("content"), pagePath ? "noindex, follow" : "index, follow");
     const content = JSON.parse(document.querySelector("[data-site-content]").textContent);
     assert.equal(content.people.members.length, people.members.length);
     assert.ok(document.querySelector('script[type="application/ld+json"]'));
@@ -35,8 +40,18 @@ test("offline build retains complete source data and pre-renders public content"
       assert.ok(document.querySelector('meta[name="google-site-verification"]'));
       assert.equal(document.querySelectorAll('.site-nav a[href="social-pharmacy/"]').length, 0);
       assert.equal(document.querySelectorAll('script[src*="netlify-identity"]').length, 0);
+      assert.equal(document.title, site.meta.title);
+      assert.equal(document.querySelector("[data-about-local]").textContent, site.about.localContext);
+      assert.ok(document.querySelector('a[href="social-pharmacy/"]'));
+    } else {
+      assert.ok(document.querySelector(".local-profile-frame .person-photo.local-profile-photo"));
+      assert.equal(document.querySelector(".local-profile-photo").getAttribute("height"), "823");
     }
   }
+  const { document: sitemap } = parseHTML(await fs.readFile(path.join(output, "sitemap.xml"), "utf8"));
+  assert.deepEqual([...sitemap.querySelectorAll("loc")].map((node) => node.textContent), ["https://cukcorelab.catholic.ac.kr/"]);
+  const robots = await fs.readFile(path.join(output, "robots.txt"), "utf8");
+  assert.ok(!/Disallow:\s*\/social-pharmacy/.test(robots));
   for (const file of ["admin/index.html", "admin/bootstrap.js", "admin/config.yml", "data/korean.json", "data/publications-cache.json"]) await fs.access(path.join(output, file));
   for (const file of ["package.json", "scripts/build.cjs", "README.md", "server.log"]) await assert.rejects(fs.access(path.join(output, file)));
 
@@ -77,4 +92,16 @@ test("CMS profile changes update Korean content and structured data", async () =
   assert.equal(document.querySelector(".contact-link").getAttribute("href"), "mailto:updated@example.org");
   const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
   assert.equal(schema["@graph"].find((item) => item["@type"] === "Person").jobTitle, "Updated academic title");
+});
+
+test("Korean profile hides its complete portrait frame when the photo is removed", async () => {
+  const site = JSON.parse(await fs.readFile(path.join(root, "data/site.json"), "utf8"));
+  const people = JSON.parse(await fs.readFile(path.join(root, "data/people.json"), "utf8"));
+  const { api, document } = createRuntime("social-pharmacy/index.html");
+  people.principalInvestigator.photo = "";
+  api.renderKoreanPage(site, people);
+  assert.equal(document.querySelector(".local-profile-frame").hasAttribute("hidden"), true);
+  people.principalInvestigator.photo = "PI_profile.jpg";
+  api.renderKoreanPage(site, people);
+  assert.equal(document.querySelector(".local-profile-frame").hasAttribute("hidden"), false);
 });

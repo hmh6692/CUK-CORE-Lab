@@ -169,3 +169,15 @@ test("mobile menu closes on Escape and reports its state", () => {
   document.dispatchEvent(event);
   assert.equal(toggle.getAttribute("aria-expanded"), "false");
 });
+
+test("clicking a replaced menu icon stays open until an outside click", () => {
+  const { api, document, window } = createRuntime("social-pharmacy/index.html");
+  const toggle = document.querySelector("[data-nav-toggle]");
+  toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10" /></svg>';
+  api.setupNavigation();
+  toggle.querySelector("path").dispatchEvent(new window.Event("click", { bubbles: true }));
+  assert.equal(toggle.getAttribute("aria-expanded"), "true");
+  assert.equal(toggle.getAttribute("aria-label"), "메뉴 닫기");
+  document.querySelector("main").click();
+  assert.equal(toggle.getAttribute("aria-expanded"), "false");
+});
