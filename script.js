@@ -269,6 +269,10 @@ function setText(selector, value) {
   if (element && value !== undefined && value !== null) element.textContent = value;
 }
 
+function pageText(english, korean) {
+  return document.documentElement.lang === "ko" ? korean : english;
+}
+
 function setHtml(selector, value) {
   const element = document.querySelector(selector);
   if (element) element.innerHTML = value;
@@ -310,7 +314,7 @@ function assetPath(value = "") {
     "logo.png": "assets/optimized/logo.webp",
     "PI_profile.jpg": "assets/optimized/PI_profile.webp",
   }[path] || path;
-  return optimized && document.body.matches("[data-static-page]") && !/^(https?:|\/)/.test(optimized)
+  return optimized && document.body.matches("[data-localized-page]") && !/^(https?:|\/)/.test(optimized)
     ? `../${optimized}`
     : optimized;
 }
@@ -474,67 +478,97 @@ function renderStructuredData(site, people, korean = null) {
   element.textContent = JSON.stringify(data).replace(/</g, "\\u003c");
 }
 
-function renderKoreanPage(site, people, korean = {}) {
-  const pi = people.principalInvestigator || {};
-  const logo = document.querySelector(".brand-logo");
-  if (logo) {
-    const source = assetPath(site.brand?.logo);
-    if (source) logo.src = source;
-    logo.hidden = !source;
-    logo.alt = site.brand?.name || "";
-  }
-  setText(".brand strong", site.brand?.name);
-  setText(".brand small", site.brand?.tagline);
-  setText(".local-hero .eyebrow", site.brand?.tagline);
-  setText("#local-title", korean.hero?.title);
-  setText(".local-hero-lede", korean.hero?.lede);
-  setText(".local-identity", [pi.localName, pi.localAffiliation].filter(Boolean).join(" · "));
-  setText("#overview-title", korean.about?.title);
-  if (korean.about?.paragraphs) setHtml(".local-copy", korean.about.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join(""));
-  setText("#research-local-title", korean.research?.title);
-  if (korean.research?.cards) setHtml(".local-topic-grid", korean.research.cards.map((card, index) => `
-    <article class="local-topic"><span>${String(index + 1).padStart(2, "0")}</span>
-      <h3>${escapeHtml(card.title)}</h3><p>${escapeHtml(card.description)}</p></article>`).join(""));
-  setText("#professor-title", pi.localName || pi.name);
-  setText('a[href="#professor"]', pi.localName || pi.name);
-  setText("[data-local-bio]", pi.localBio || "");
-  setHtml(".local-profile-meta", [pi.localAffiliation, site.brand?.name].filter(Boolean).map((text) => `<span>${escapeHtml(text)}</span>`).join(""));
-  const photo = document.querySelector(".local-profile-photo");
-  if (photo) {
-    const source = assetPath(pi.photo);
-    if (source) photo.src = source;
-    photo.hidden = !source;
-    photo.closest(".local-profile-frame")?.toggleAttribute("hidden", !source);
-    photo.alt = [pi.localAffiliation, pi.localName].filter(Boolean).join(" ");
-  }
-  for (const [selector, label] of [["[data-local-university-link]", "University Profile"], ["[data-local-orcid-link]", "ORCID"]]) {
-    const link = document.querySelector(selector);
-    const url = safeExternalUrl((pi.profileLinks || []).find((item) => item.label === label)?.url);
-    if (link) {
-      link.hidden = !url;
-      if (url) link.href = url;
-    }
-  }
-  setText("#local-contact-title", korean.contact?.title);
-  setText(".local-contact-inner > div > p:not(.section-kicker)", korean.contact?.address);
-  const email = safeEmail(site.contact?.email);
-  const contact = document.querySelector(".contact-link");
-  if (contact) {
-    contact.hidden = !email;
-    contact.href = `mailto:${email}`;
-    contact.innerHTML = `<i data-lucide="mail" aria-hidden="true"></i>${escapeHtml(email)}`;
-  }
-  if (korean.meta?.title) {
-    document.title = korean.meta.title;
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", korean.meta.title);
-    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", korean.meta.title);
-  }
-  if (korean.meta?.description) {
-    for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) {
-      document.querySelector(selector)?.setAttribute("content", korean.meta.description);
-    }
-  }
+function renderKoreanPage({ site, research, people, publications, korean = {} }) {
+  const translateItems = (items = [], translations = []) => items.map((item) => {
+    const translated = translations.find((entry) => entry.sourceTitle === item.title);
+    return {
+      ...item, sourceTitle: item.title,
+      title: translated?.title || item.title,
+      description: translated?.description || item.description,
+    };
+  });
+  renderSite({
+    ...site,
+    meta: { ...site.meta, ...korean.meta },
+    hero: { ...site.hero, ...korean.hero, primaryButtonText: "연구 분야", secondaryButtonText: "최근 논문" },
+    about: { ...site.about, ...korean.about, kicker: "연구실 소개", localContext: "" },
+    contact: { ...site.contact, ...korean.contact, kicker: "문의" },
+    footer: { ...site.footer, tagline: people.principalInvestigator?.localAffiliation || site.footer?.tagline },
+  });
+  renderResearch({
+    ...research,
+    kicker: "연구 분야",
+    title: korean.research?.title || research.title,
+    cards: translateItems(research.cards, korean.research?.cards),
+  });
+  renderPeople({
+    ...people,
+    kicker: "구성원",
+    title: korean.people?.title || people.title,
+    principalInvestigator: {
+      ...people.principalInvestigator,
+      role: "연구책임자",
+      title: people.principalInvestigator?.localBio || people.principalInvestigator?.title,
+    },
+    teamNotes: translateItems(people.teamNotes, korean.people?.teamNotes),
+  });
+  renderPublicationSettings({
+    ...publications, kicker: "논문", title: korean.publications?.title || "최근 논문과 전체 출판 목록",
+  });
   renderStructuredData(site, people, korean);
+
+  setText(".skip-link", "본문으로 이동");
+  for (const [id, label] of [["about", "연구실 소개"], ["research", "연구 분야"],
+    ["publications", "논문"], ["people", "구성원"], ["contact", "문의"]]) {
+    setText('.site-nav a[href="#' + id + '"]', label);
+  }
+  if (!document.querySelector("[data-language-switch]")) {
+    const link = document.createElement("a");
+    link.href = "../";
+    link.lang = "en";
+    link.textContent = "English";
+    link.setAttribute("data-language-switch", "");
+    nav.append(link);
+  }
+  document.querySelector("[data-brand-home]")?.setAttribute("href", "../");
+  document.querySelector("[data-brand-home]")?.setAttribute("aria-label", site.brand.name + " 홈");
+  document.querySelector("[data-hero-local]")?.setAttribute("href", "#people");
+  setText("[data-publication-all-label]", "전체 논문");
+  setText(".publication-search .visually-hidden", "전체 논문 검색");
+  setText(".publication-year-filter .visually-hidden", "출판 연도");
+  for (const [selector, attribute, value] of [
+    ["[data-nav]", "aria-label", "주요 메뉴"],
+    ["[data-nav-toggle]", "aria-label", navToggle?.getAttribute("aria-expanded") === "true" ? "메뉴 닫기" : "메뉴 열기"],
+    [".hero-actions", "aria-label", "연구실 바로가기"],
+    [".method-band", "aria-label", "연구 방법"],
+    [".publication-toolbar", "aria-label", "논문 보기 옵션"],
+    [".publication-tabs", "aria-label", "논문 목록"],
+    ["[data-refresh-publications]", "aria-label", "논문 새로고침"],
+    ["[data-refresh-publications]", "title", "새 논문 확인"],
+    ["[data-publication-search]", "placeholder", "논문 제목, 저자, 학술지 검색"],
+    ["[data-publication-year]", "aria-label", "출판 연도"],
+  ]) document.querySelector(selector)?.setAttribute(attribute, value);
+
+  for (const [previous, current] of [["overview", "about"], ["professor", "people"]]) {
+    if (document.getElementById(previous)) continue;
+    const anchor = document.createElement("span");
+    anchor.id = previous;
+    anchor.className = "legacy-anchor";
+    anchor.setAttribute("aria-hidden", "true");
+    document.getElementById(current)?.before(anchor);
+  }
+}
+
+function renderPageContent(content) {
+  if (document.documentElement.lang === "ko") {
+    renderKoreanPage(content);
+    return;
+  }
+  renderSite(content.site);
+  renderResearch(content.research);
+  renderPeople(content.people);
+  renderStructuredData(content.site, content.people);
+  renderPublicationSettings(content.publications);
 }
 
 function personVisual(person) {
@@ -562,7 +596,7 @@ function initialsFromName(name = "") {
 function educationHtml(education = []) {
   if (!education.length) return "";
   return `
-    <h4 class="profile-subheading">Education</h4>
+    <h4 class="profile-subheading">${pageText("Education", "학력")}</h4>
     <dl class="mini-cv">
       ${education
         .map(
@@ -583,7 +617,7 @@ function experienceHtml(experience = []) {
   return `
     <details class="experience-disclosure">
       <summary>
-        <span>Academic Experience</span>
+        <span>${pageText("Academic Experience", "주요 경력")}</span>
         <i data-lucide="chevron-down" aria-hidden="true"></i>
       </summary>
       <ol class="experience-list">
@@ -610,14 +644,14 @@ function profileLinksHtml(links = []) {
   if (!visibleLinks.length) return "";
 
   return `
-    <div class="profile-links" aria-label="Researcher profiles">
+    <div class="profile-links" aria-label="${pageText("Researcher profiles", "연구자 프로필")}">
       ${visibleLinks
         .map((link) => {
           const externalAttributes = link.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noreferrer"';
           return `
             <a class="profile-link" href="${escapeHtml(link.url)}"${externalAttributes}>
               <i data-lucide="${escapeHtml(link.icon || "external-link")}" aria-hidden="true"></i>
-              ${escapeHtml(link.label)}
+              ${escapeHtml(pageText(link.label, ({ "University Profile": "대학 공식 프로필", Email: "이메일" })[link.label] || link.label))}
             </a>
           `;
         })
@@ -645,7 +679,7 @@ function memberCardHtml(member) {
         ${
           interests.length
             ? `
-              <ul class="member-interests" aria-label="Research interests">
+              <ul class="member-interests" aria-label="${pageText("Research interests", "관심 연구 분야")}">
                 ${interests.map((interest) => `<li>${escapeHtml(interest)}</li>`).join("")}
               </ul>
             `
@@ -712,7 +746,7 @@ function renderPeople(people) {
   const visibleMembers = (people.members || []).filter((member) => member.name);
   const notes = (people.teamNotes || []).filter((note) => {
     if (!visibleMembers.length) return true;
-    return /prospective|join|contact/i.test(note.title || "");
+    return /prospective|join|contact/i.test(note.sourceTitle || note.title || "");
   });
   const teamNotes = document.querySelector("[data-team-notes]");
   if (teamNotes) teamNotes.hidden = notes.length === 0;
@@ -736,8 +770,8 @@ function renderPeople(people) {
   const alumni = visibleMembers.filter((member) => member.category === "Alumni");
   const currentMembers = visibleMembers.filter((member) => member.category !== "Alumni");
   memberGrid.innerHTML = [
-    memberGroupHtml("Current Researchers", currentMembers),
-    memberGroupHtml("Alumni", alumni),
+    memberGroupHtml(pageText("Current Researchers", "현재 연구원"), currentMembers),
+    memberGroupHtml(pageText("Alumni", "졸업생"), alumni),
   ].join("");
 }
 
@@ -774,12 +808,12 @@ function renderPublicationSettings(settings) {
   setText("[data-publications-kicker]", settings.kicker);
   setText("[data-publications-title]", settings.title);
   const recentButton = document.querySelector('[data-publication-view="recent"]');
-  if (recentButton) recentButton.textContent = `Recent ${recentPublicationLimit(settings)}`;
+  if (recentButton) recentButton.textContent = pageText(`Recent ${recentPublicationLimit(settings)}`, `최근 ${recentPublicationLimit(settings)}편`);
 
   const query = buildPubmedQuery(settings.pubmedQueries);
   const label = buildPubmedLabel(settings.pubmedQueries) || "configured lab researchers";
   const sourceLabel = configuredSources(settings).join(", ") || "saved records";
-  if (publicationQuery) publicationQuery.textContent = `Publication sources: ${sourceLabel} (${label})`;
+  if (publicationQuery) publicationQuery.textContent = pageText(`Publication sources: ${sourceLabel} (${label})`, `논문 출처: ${sourceLabel} (${label})`);
   if (pubmedLink && query) pubmedLink.href = `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(query)}`;
   const scholarUrl = safeExternalUrl(settings.scholarUrl);
   if (scholarLink) {
@@ -1205,8 +1239,8 @@ function renderPublicationArchive(publications, mode = "live") {
       ${[...groups.entries()]
         .map(
           ([year, items]) => `
-            <section class="publication-year-group" aria-label="${escapeHtml(year)} publications">
-              <div class="publication-year">${escapeHtml(year)}</div>
+            <section class="publication-year-group" aria-label="${escapeHtml(pageText(`${year} publications`, `${year} 논문`))}">
+              <div class="publication-year">${escapeHtml(year === "In press" ? pageText(year, "출판 예정") : year)}</div>
               <div class="publication-year-items">
                 ${items.map((item) => renderPublicationArchiveItem(item, mode)).join("")}
               </div>
@@ -1248,8 +1282,8 @@ function updatePublicationFilterOptions() {
     return Number(b) - Number(a);
   });
   publicationYearFilter.innerHTML = [
-    '<option value="all">All years</option>',
-    ...years.map((year) => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`),
+    `<option value="all">${pageText("All years", "전체 연도")}</option>`,
+    ...years.map((year) => `<option value="${escapeHtml(year)}">${escapeHtml(year === "In press" ? pageText(year, "출판 예정") : year)}</option>`),
   ].join("");
   const availableYears = new Set(["all", ...years]);
   publicationState.year = availableYears.has(currentYear) ? currentYear : "all";
@@ -1262,7 +1296,7 @@ function updatePublicationChrome() {
   const filteredCount = filteredArchivePublications().length;
   const visibleCount = publicationState.view === "all" ? filteredCount : Math.min(recentLimit, total);
   const checkedDate = publicationState.updatedAt ? new Date(publicationState.updatedAt) : null;
-  const stamp = checkedDate && Number.isFinite(checkedDate.getTime()) ? checkedDate.toLocaleDateString("en-US", {
+  const stamp = checkedDate && Number.isFinite(checkedDate.getTime()) ? checkedDate.toLocaleDateString(pageText("en-US", "ko-KR"), {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -1281,20 +1315,20 @@ function updatePublicationChrome() {
   if (publicationSummary) {
     const isFiltered = publicationState.view === "all" && (publicationState.query.trim() || publicationState.year !== "all");
     publicationSummary.textContent = isFiltered
-      ? `${visibleCount} matching - ${total} total`
-      : `${visibleCount} shown - ${total} total`;
+      ? pageText(`${visibleCount} matching - ${total} total`, `검색 결과 ${visibleCount}편 / 전체 ${total}편`)
+      : pageText(`${visibleCount} shown - ${total} total`, `${visibleCount}편 표시 / 전체 ${total}편`);
   }
   if (publicationStatus) {
     const failed = publicationState.sourceResults.some((source) => ["error", "partial"].includes(source.status));
-    publicationStatus.textContent = publicationState.isRefreshing ? "Checking publication sources..."
-      : !total ? "No publication records available."
-      : `${stamp ? `Last checked ${stamp}` : "Saved publication records"}${failed ? " - Some sources unavailable" : ""}`;
+    publicationStatus.textContent = publicationState.isRefreshing ? pageText("Checking publication sources...", "논문 출처 확인 중...")
+      : !total ? pageText("No publication records available.", "등록된 논문이 없습니다.")
+      : `${stamp ? pageText(`Last checked ${stamp}`, `최근 확인 ${stamp}`) : pageText("Saved publication records", "저장된 논문 목록")}${failed ? pageText(" - Some sources unavailable", " - 일부 출처 연결 불가") : ""}`;
   }
   if (publicationQuery && publicationState.sourceResults.length) {
     publicationQuery.textContent = publicationState.sourceResults.map((source) => {
-      if (source.status === "error") return `${source.name}: unavailable`;
-      if (source.status === "partial") return `${source.name}: partial`;
-      if (source.status === "empty") return `${source.name}: no public records`;
+      if (source.status === "error") return `${source.name}: ${pageText("unavailable", "연결 불가")}`;
+      if (source.status === "partial") return `${source.name}: ${pageText("partial", "일부 반영")}`;
+      if (source.status === "empty") return `${source.name}: ${pageText("no public records", "공개 논문 없음")}`;
       return source.name;
     }).join(" / ");
   }
@@ -1311,7 +1345,7 @@ function renderPublicationView() {
     publicationList.innerHTML = `
       <div class="publication-empty">
         <i data-lucide="search-x" aria-hidden="true"></i>
-        <p>${records.length ? "No publications match these filters." : "Publication records are currently unavailable."}</p>
+        <p>${records.length ? pageText("No publications match these filters.", "조건에 맞는 논문이 없습니다.") : pageText("Publication records are currently unavailable.", "현재 논문 목록을 불러올 수 없습니다.")}</p>
       </div>
     `;
   } else {
@@ -1434,38 +1468,23 @@ function setupNetlifyIdentityRedirect() {
 async function init() {
   setupNetlifyIdentityRedirect();
   setupNavigation();
-  if (document.body.matches("[data-static-page]")) {
-    const [site, people, korean] = await Promise.all([
-      fetchJson("../data/site.json", defaultContent.site),
-      fetchJson("../data/people.json", defaultContent.people),
-      fetchJson("../data/korean.json", defaultContent.korean || {}),
-    ]);
-    renderKoreanPage(site, people, korean);
-    const year = document.querySelector("[data-year]");
-    if (year) year.textContent = new Date().getFullYear();
-    createIcons();
-    return;
-  }
-
-  const [site, research, people, publications, publicationCache] = await Promise.all([
-    fetchJson("data/site.json", defaultContent.site),
-    fetchJson("data/research.json", defaultContent.research),
-    fetchJson("data/people.json", defaultContent.people),
-    fetchJson("data/publications.json", defaultContent.publications),
-    fetchJson("data/publications-cache.json", defaultContent.publicationCache || {}),
+  const base = document.body.matches("[data-localized-page]") ? "../" : "";
+  const [site, research, people, publications, publicationCache, korean] = await Promise.all([
+    fetchJson(`${base}data/site.json`, defaultContent.site),
+    fetchJson(`${base}data/research.json`, defaultContent.research),
+    fetchJson(`${base}data/people.json`, defaultContent.people),
+    fetchJson(`${base}data/publications.json`, defaultContent.publications),
+    fetchJson(`${base}data/publications-cache.json`, defaultContent.publicationCache || {}),
+    base ? fetchJson(`${base}data/korean.json`, defaultContent.korean || {}) : defaultContent.korean,
   ]);
 
   document.querySelector("[data-year]").textContent = new Date().getFullYear();
-  renderSite(site);
-  renderResearch(research);
-  renderPeople(people);
-  renderStructuredData(site, people);
-  renderPublicationSettings(publications);
+  renderPageContent({ site, research, people, publications, korean });
   setupPublicationViews();
   refreshButton?.addEventListener("click", () => loadPublications(activePublicationSettings));
   createIcons();
-  await loadPublications(publications, { refresh: false, cache: publicationCache });
+  await loadPublications(activePublicationSettings, { refresh: false, cache: publicationCache });
   createIcons();
 }
 
-if (!globalThis.CORE_STATIC_RENDER) init();
+if (!globalThis.CORE_STATIC_RENDER && !document.body.hasAttribute("data-main-layout")) init();

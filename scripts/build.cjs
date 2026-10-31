@@ -45,20 +45,17 @@ async function build({ offline = false, snapshotOnly = false } = {}) {
     await fs.cp(path.join(root, item), path.join(output, item), { recursive: true, force: true });
   }
   await fs.writeFile(path.join(output, "data/publications-cache.json"), `${JSON.stringify(cache, null, 2)}\n`);
-  main.api.renderSite(content.site);
-  main.api.renderResearch(content.research);
-  main.api.renderPeople(content.people);
-  main.api.renderStructuredData(content.site, content.people);
-  main.api.renderPublicationSettings(content.publications);
+  main.api.renderPageContent(content);
   main.api.renderPublications(cache.records, cache.mode, cache);
   main.document.querySelector("[data-year]").textContent = new Date().getFullYear();
   embedContent(main.document, { ...content, publicationCache: cache });
   await fs.writeFile(path.join(output, "index.html"), main.document.toString());
 
   const korean = createRuntime("social-pharmacy/index.html");
-  korean.api.renderKoreanPage(content.site, content.people, content.korean);
+  korean.api.renderPageContent(content);
+  korean.api.renderPublications(cache.records, cache.mode, cache);
   korean.document.querySelector("[data-year]").textContent = new Date().getFullYear();
-  embedContent(korean.document, { site: content.site, people: content.people, korean: content.korean });
+  embedContent(korean.document, { ...content, publicationCache: cache });
   await fs.writeFile(path.join(output, "social-pharmacy/index.html"), korean.document.toString());
   console.log("Static site built in _site/ (main page, Korean page, and admin).");
   return { output, cache };

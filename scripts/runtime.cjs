@@ -8,6 +8,12 @@ const root = path.resolve(__dirname, "..");
 function createRuntime(page = "index.html", overrides = {}) {
   const html = fs.readFileSync(path.join(root, page), "utf8");
   const { document, window } = parseHTML(html);
+  if (document.body.hasAttribute("data-main-layout")) {
+    // Both languages share the main template; only their content is localized.
+    const main = parseHTML(fs.readFileSync(path.join(root, "index.html"), "utf8"));
+    document.body.innerHTML = main.document.body.innerHTML;
+    document.body.removeAttribute("data-main-layout");
+  }
   // Use the same renderers for the browser, offline tests, and search-visible HTML.
   const context = vm.createContext({
     document, window, console, URL, URLSearchParams, AbortController,

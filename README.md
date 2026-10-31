@@ -31,9 +31,18 @@ Editable site content is stored in:
 - `data/publications.json`
 - `data/korean.json`
 
-The Korean page uses the same PI name, photo, profile links and contact email as
-the main page. Its Korean biography is edited under People; its other translated
-text is edited under Korean Introduction. No additional navigation tab is added.
+Both languages share the main page layout: About, Research, Publications,
+People and Contact. The build inserts the body of `index.html` into the Korean
+page template, then uses the same renderers and publication cache for both.
+Always preview `_site/` after building, not the source Korean template.
+
+People, profile photos, student details, academic experience and publication
+records come from the same source files. The Korean biography is edited under
+People; translated section text is edited under Korean Page. Research topics
+and team notes are matched by their English title, so reordering does not attach
+the wrong translation. A new or renamed item uses English until translated.
+The main page has no additional Korean navigation tab. The Korean page retains
+an English return link and remains excluded from search indexing.
 
 ## Build and Publications
 

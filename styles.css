@@ -588,7 +588,7 @@ summary:focus-visible {
   box-shadow: 0 8px 18px rgba(24, 63, 53, 0.18);
 }
 
-.publication-tab span {
+.publication-tab [data-publication-count] {
   min-width: 22px;
   padding: 1px 7px;
   border-radius: 999px;
@@ -882,6 +882,8 @@ summary:focus-visible {
   display: block;
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
   border: 3px solid var(--paper);
   border-radius: inherit;
   object-fit: cover;
@@ -1268,230 +1270,44 @@ summary:focus-visible {
   margin: 0;
 }
 
-.local-page {
-  --local-title-size: 3rem;
-  --local-heading-size: 2rem;
-  background: var(--paper);
-  font-size: 1rem;
-  line-height: 1.85;
+.korean-page {
+  --localized-heading-size: 2rem;
+  font-family: var(--font-kr-sans);
+  line-height: 1.75;
   overflow-wrap: anywhere;
 }
 
-.local-page h1,
-.local-page h2 {
-  margin: 0;
+.korean-page .section-grid h2,
+.korean-page .section-heading h2,
+.korean-page .contact-inner h2 {
   font-family: var(--font-kr-serif);
+  font-size: var(--localized-heading-size);
   font-weight: 600;
   line-height: 1.45;
   text-wrap: balance;
 }
 
-.local-page h2,
-.local-page .section-heading h2 {
-  font-size: var(--local-heading-size);
+.korean-page .member-group-heading h3 {
+  font-family: var(--font-kr-serif);
 }
 
-.local-page .section-kicker,
-.local-page .eyebrow {
-  font-family: var(--font-kr-sans);
-  font-weight: 700;
-  line-height: 1.6;
+.korean-page .research-card h3,
+.korean-page .team-notes h3 {
+  line-height: 1.5;
 }
 
-.local-page .site-nav a {
-  white-space: nowrap;
-}
-
-.local-hero {
-  display: flex;
-  align-items: center;
-  min-height: 62vh;
-  padding: 96px max(22px, calc((100vw - var(--max)) / 2)) 82px;
-  color: var(--paper);
-  background:
-    linear-gradient(90deg, rgba(15, 37, 32, 0.97) 0%, rgba(15, 37, 32, 0.84) 46%, rgba(15, 37, 32, 0.32) 100%),
-    url("assets/optimized/hero.webp") center right / cover no-repeat;
-}
-
-.local-hero-inner {
-  width: min(760px, 100%);
-}
-
-.local-breadcrumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-
-.local-breadcrumb svg {
-  width: 15px;
-  height: 15px;
-}
-
-.local-hero h1 {
-  max-width: 730px;
-  font-size: var(--local-title-size);
-  line-height: 1.35;
-}
-
-.local-hero-lede {
-  max-width: 690px;
-  margin: 26px 0 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.0625rem;
+.korean-page .hero-lede {
+  font-size: 1.125rem;
   line-height: 1.85;
 }
 
-.local-identity {
-  margin: 20px 0 0;
-  color: #e4c966;
-  font-size: 0.875rem;
-  font-weight: 600;
+.korean-page .site-nav a {
+  white-space: nowrap;
 }
 
-.local-section {
-  padding: 82px max(22px, calc((100vw - var(--max)) / 2));
-}
-
-.local-section.is-muted {
-  background: var(--wash);
-}
-
-.local-heading-grid {
-  display: grid;
-  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
-  gap: 64px;
-  align-items: start;
-}
-
-.local-copy {
-  display: grid;
-  gap: 18px;
-  color: #2d3c38;
-}
-
-.local-copy p {
-  margin: 0;
-}
-
-.local-topic-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 36px;
-  margin-top: 48px;
-}
-
-.local-topic {
-  padding-top: 22px;
-  border-top: 3px solid var(--green-2);
-}
-
-.local-topic:nth-child(2) {
-  border-color: var(--blue);
-}
-
-.local-topic:nth-child(3) {
-  border-color: var(--burgundy);
-}
-
-.local-topic span {
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
-.local-topic h3 {
-  margin: 8px 0 12px;
-  font-family: var(--font-kr-sans);
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.6;
-}
-
-.local-topic p {
-  margin: 0;
-  color: var(--muted);
-}
-
-.local-profile {
-  display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
-  gap: 56px;
-  align-items: center;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.local-profile-frame {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-  aspect-ratio: 15 / 19;
-  border-radius: 104px 104px 34px 34px;
-}
-
-.local-profile-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.local-profile-copy > p:not(.section-kicker) {
-  max-width: 720px;
-  margin: 18px 0 0;
-  color: #2d3c38;
-}
-
-.local-profile-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.local-profile-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.local-profile-links .button {
-  width: auto;
-  font-weight: 600;
-}
-
-.local-contact {
-  padding: 66px max(22px, calc((100vw - var(--max)) / 2));
-  color: var(--paper);
-  background: var(--green);
-}
-
-.local-contact-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 34px;
-  max-width: var(--max);
-  margin: 0 auto;
-}
-
-.local-contact-inner > div {
-  min-width: 0;
-}
-
-.local-contact-inner p:not(.section-kicker) {
-  max-width: 650px;
-  margin: 16px 0 0;
-  color: rgba(255, 255, 255, 0.82);
+.legacy-anchor {
+  display: block;
+  height: 0;
 }
 
 @media (max-width: 900px) {
@@ -1599,34 +1415,8 @@ summary:focus-visible {
     min-width: 82px;
   }
 
-  .local-hero {
-    min-height: 58vh;
-    padding: 78px 22px 64px;
-    background-image:
-      linear-gradient(90deg, rgba(15, 37, 32, 0.97) 0%, rgba(15, 37, 32, 0.84) 46%, rgba(15, 37, 32, 0.32) 100%),
-      url("assets/optimized/hero-mobile.webp");
-  }
-
-  .local-page {
-    --local-title-size: 2.5rem;
-    --local-heading-size: 1.875rem;
-  }
-
-  .local-section {
-    padding: 66px 22px;
-  }
-
-  .local-heading-grid {
-    grid-template-columns: 1fr;
-    gap: 34px;
-  }
-
-  .local-profile {
-    gap: 36px;
-  }
-
-  .local-contact-inner {
-    display: grid;
+  .korean-page {
+    --localized-heading-size: 1.875rem;
   }
 }
 
@@ -1653,27 +1443,12 @@ summary:focus-visible {
     font-size: 2.28rem;
   }
 
-  .local-page {
-    --local-title-size: 2rem;
-    --local-heading-size: 1.75rem;
+  .korean-page {
+    --localized-heading-size: 1.75rem;
   }
 
-  .local-hero-lede {
+  .korean-page .hero-lede {
     font-size: 1rem;
-  }
-
-  .local-topic-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .local-profile {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 28px;
-  }
-
-  .local-profile-frame {
-    max-width: 176px;
   }
 
   .hero-actions,

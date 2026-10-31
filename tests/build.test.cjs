@@ -7,6 +7,12 @@ const { parseHTML } = require("linkedom");
 const { build } = require("../scripts/build.cjs");
 const { createRuntime, root } = require("../scripts/runtime.cjs");
 
+async function loadContent() {
+  const entries = await Promise.all(["site", "research", "people", "publications", "korean"].map(async (name) =>
+    [name, JSON.parse(await fs.readFile(path.join(root, `data/${name}.json`), "utf8"))]));
+  return Object.fromEntries(entries);
+}
+
 test("offline build retains complete source data and pre-renders public content", async () => {
   const { output, cache } = await build({ offline: true });
   const site = JSON.parse(await fs.readFile(path.join(root, "data/site.json"), "utf8"));
@@ -14,6 +20,8 @@ test("offline build retains complete source data and pre-renders public content"
   const settings = JSON.parse(await fs.readFile(path.join(root, "data/publications.json"), "utf8"));
   const memberCount = people.members.filter((member) => member.name).length;
   const recentCount = Math.min(settings.recentLimit, cache.records.length);
+  let mainSections;
+  let mainPapers;
   for (const page of ["index.html", "social-pharmacy/index.html"]) {
     const html = await fs.readFile(path.join(output, page), "utf8");
     const { document } = parseHTML(html);
@@ -24,6 +32,16 @@ test("offline build retains complete source data and pre-renders public content"
     assert.equal(document.querySelector('meta[name="robots"]').getAttribute("content"), pagePath ? "noindex, follow" : "index, follow");
     const content = JSON.parse(document.querySelector("[data-site-content]").textContent);
     assert.equal(content.people.members.length, people.members.length);
+    assert.equal(content.publicationCache.records.length, cache.records.length);
+    assert.equal(document.querySelectorAll(".member-card").length, memberCount);
+    assert.equal(document.querySelectorAll(".member-card img, .member-card .initials").length, 0);
+    assert.equal(document.querySelectorAll(".publication-card").length, recentCount);
+    assert.equal(document.querySelectorAll(".research-card").length, content.research.cards.length);
+    assert.equal(document.querySelectorAll(".mini-cv > div").length, (people.principalInvestigator.education || []).length);
+    if (people.principalInvestigator.experience?.length) {
+      assert.equal(document.querySelector(".experience-disclosure").hasAttribute("open"), false);
+    }
+    assert.ok(document.querySelector(".pi-card").textContent.includes(people.principalInvestigator.name));
     assert.ok(document.querySelector('script[type="application/ld+json"]'));
     for (const element of document.querySelectorAll("[src], link[href]")) {
       const reference = element.getAttribute("src") || element.getAttribute("href");
@@ -33,10 +51,8 @@ test("offline build retains complete source data and pre-renders public content"
       await fs.access(target);
     }
     if (page === "index.html") {
-      assert.equal(document.querySelectorAll(".member-card").length, memberCount);
-      assert.equal(document.querySelectorAll(".member-card img, .member-card .initials").length, 0);
-      assert.equal(document.querySelectorAll(".publication-card").length, recentCount);
-      assert.ok(document.querySelector(".pi-card").textContent.includes(people.principalInvestigator.name));
+      mainSections = [...document.querySelectorAll("main > section")].map((node) => [node.id, node.className]);
+      mainPapers = [...document.querySelectorAll(".publication-card h3")].map((node) => node.textContent);
       assert.ok(document.querySelector('meta[name="google-site-verification"]'));
       assert.equal(document.querySelectorAll('.site-nav a[href="social-pharmacy/"]').length, 0);
       assert.equal(document.querySelectorAll('script[src*="netlify-identity"]').length, 0);
@@ -44,8 +60,13 @@ test("offline build retains complete source data and pre-renders public content"
       assert.equal(document.querySelector("[data-about-local]").textContent, site.about.localContext);
       assert.ok(document.querySelector('a[href="social-pharmacy/"]'));
     } else {
-      assert.ok(document.querySelector(".local-profile-frame .person-photo.local-profile-photo"));
-      assert.equal(document.querySelector(".local-profile-photo").getAttribute("height"), "823");
+      assert.deepEqual([...document.querySelectorAll("main > section")].map((node) => [node.id, node.className]), mainSections);
+      assert.deepEqual([...document.querySelectorAll(".publication-card h3")].map((node) => node.textContent), mainPapers);
+      assert.equal(document.querySelector("[data-publication-all-label]").textContent, "전체 논문");
+      assert.equal(document.querySelector("[data-language-switch]").getAttribute("href"), "../");
+      assert.ok(document.getElementById("overview"));
+      assert.ok(document.getElementById("professor"));
+      assert.equal(document.body.hasAttribute("data-main-layout"), false);
     }
   }
   const { document: sitemap } = parseHTML(await fs.readFile(path.join(output, "sitemap.xml"), "utf8"));
@@ -55,14 +76,16 @@ test("offline build retains complete source data and pre-renders public content"
   for (const file of ["admin/index.html", "admin/bootstrap.js", "admin/config.yml", "data/korean.json", "data/publications-cache.json"]) await fs.access(path.join(output, file));
   for (const file of ["package.json", "scripts/build.cjs", "README.md", "server.log"]) await assert.rejects(fs.access(path.join(output, file)));
 
-  const fallback = createRuntime("_site/index.html", {
-    fetch: async () => { throw new Error("Local data request unavailable"); },
-    window: { location: { hash: "", search: "" } },
-  });
-  await fallback.api.init();
-  assert.equal(fallback.document.querySelectorAll(".member-card").length, memberCount);
-  assert.equal(fallback.document.querySelectorAll(".publication-card").length, recentCount);
-  assert.ok(fallback.document.querySelector("[data-publication-summary]").textContent.includes(`${cache.records.length} total`));
+  for (const page of ["_site/index.html", "_site/social-pharmacy/index.html"]) {
+    const fallback = createRuntime(page, {
+      fetch: async () => { throw new Error("Local data request unavailable"); },
+      window: { location: { hash: "", search: "" } },
+    });
+    await fallback.api.init();
+    assert.equal(fallback.document.querySelectorAll(".member-card").length, memberCount);
+    assert.equal(fallback.document.querySelectorAll(".publication-card").length, recentCount);
+    assert.ok(fallback.document.querySelector("[data-publication-summary]").textContent.includes(String(cache.records.length)));
+  }
 });
 
 test("school admin URLs preserve auth callbacks and do not redirect Netlify", async () => {
@@ -78,30 +101,71 @@ test("school admin URLs preserve auth callbacks and do not redirect Netlify", as
 });
 
 test("CMS profile changes update Korean content and structured data", async () => {
-  const site = JSON.parse(await fs.readFile(path.join(root, "data/site.json"), "utf8"));
-  const people = JSON.parse(await fs.readFile(path.join(root, "data/people.json"), "utf8"));
-  const korean = JSON.parse(await fs.readFile(path.join(root, "data/korean.json"), "utf8"));
+  const content = await loadContent();
+  const { site, people } = content;
   people.principalInvestigator.localBio = "Updated biography";
   people.principalInvestigator.title = "Updated academic title";
   people.principalInvestigator.photo = "assets/uploads/new-photo.jpg";
   site.contact.email = "updated@example.org";
   const { api, document } = createRuntime("social-pharmacy/index.html");
-  api.renderKoreanPage(site, people, korean);
-  assert.equal(document.querySelector("[data-local-bio]").textContent, "Updated biography");
-  assert.equal(document.querySelector(".local-profile-photo").getAttribute("src"), "../assets/uploads/new-photo.jpg");
+  api.renderPageContent(content);
+  assert.ok(document.querySelector(".pi-card").textContent.includes("Updated biography"));
+  assert.equal(document.querySelector(".pi-card .person-photo").getAttribute("src"), "../assets/uploads/new-photo.jpg");
   assert.equal(document.querySelector(".contact-link").getAttribute("href"), "mailto:updated@example.org");
   const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
   assert.equal(schema["@graph"].find((item) => item["@type"] === "Person").jobTitle, "Updated academic title");
 });
 
-test("Korean profile hides its complete portrait frame when the photo is removed", async () => {
-  const site = JSON.parse(await fs.readFile(path.join(root, "data/site.json"), "utf8"));
-  const people = JSON.parse(await fs.readFile(path.join(root, "data/people.json"), "utf8"));
+test("Korean PI uses the shared portrait fallback without adding student photos", async () => {
+  const content = await loadContent();
   const { api, document } = createRuntime("social-pharmacy/index.html");
-  people.principalInvestigator.photo = "";
-  api.renderKoreanPage(site, people);
-  assert.equal(document.querySelector(".local-profile-frame").hasAttribute("hidden"), true);
-  people.principalInvestigator.photo = "PI_profile.jpg";
-  api.renderKoreanPage(site, people);
-  assert.equal(document.querySelector(".local-profile-frame").hasAttribute("hidden"), false);
+  content.people.principalInvestigator.photo = "";
+  api.renderPageContent(content);
+  assert.equal(document.querySelectorAll(".pi-card .person-photo-frame").length, 0);
+  assert.equal(document.querySelectorAll(".pi-card .initials").length, 1);
+  content.people.principalInvestigator.photo = "PI_profile.jpg";
+  api.renderPageContent(content);
+  assert.equal(document.querySelectorAll(".pi-card .person-photo-frame").length, 1);
+  assert.equal(document.querySelectorAll(".member-card img, .member-card .initials").length, 0);
+  assert.equal(document.querySelectorAll("[data-language-switch]").length, 1);
+});
+
+test("Korean research follows shared ordering and keeps untranslated new topics", async () => {
+  const content = await loadContent();
+  content.research.cards.reverse();
+  content.research.cards.push({ icon: "microscope", title: "New topic", description: "New description" });
+  const { api, document } = createRuntime("social-pharmacy/index.html");
+  api.renderPageContent(content);
+  const headings = [...document.querySelectorAll(".research-card h3")].map((node) => node.textContent);
+  assert.equal(headings.length, content.research.cards.length);
+  assert.equal(headings[0], content.korean.research.cards.find((card) => card.sourceTitle === content.research.cards[0].title).title);
+  assert.equal(headings.at(-1), "New topic");
+  const note = content.korean.people.teamNotes.find((item) => item.sourceTitle === "Prospective Members");
+  assert.ok(document.querySelector("[data-team-notes]").textContent.includes(note.title));
+});
+
+test("Korean archive uses the shared records, search and year filters", async () => {
+  const content = await loadContent();
+  const { api, document, window } = createRuntime("social-pharmacy/index.html");
+  api.renderPageContent(content);
+  api.renderPublications([
+    { title: "First research", sortDate: "2026-01-01" },
+    { title: "Second research", sortDate: "2025-01-01" },
+  ]);
+  api.setupPublicationViews();
+  document.querySelector('[data-publication-view="all"]').click();
+  assert.equal(document.querySelectorAll(".publication-row").length, 2);
+  const search = document.querySelector("[data-publication-search]");
+  search.value = "First";
+  search.dispatchEvent(new window.Event("input"));
+  assert.equal(document.querySelectorAll(".publication-row").length, 1);
+  assert.ok(document.querySelector("[data-publication-summary]").textContent.includes("검색 결과 1편"));
+  assert.equal(document.querySelector('[data-publication-year] option[value="all"]').textContent, "전체 연도");
+  search.value = "";
+  search.dispatchEvent(new window.Event("input"));
+  const year = document.querySelector("[data-publication-year]");
+  Object.defineProperty(year, "value", { value: "2025", configurable: true });
+  year.dispatchEvent(new window.Event("change"));
+  assert.equal(document.querySelectorAll(".publication-row").length, 1);
+  assert.ok(document.querySelector(".publication-row").textContent.includes("Second research"));
 });

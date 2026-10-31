@@ -70,7 +70,7 @@ collections:
               - { label: "Lab Name", name: "name", widget: "string" }
               - { label: "Footer Tagline", name: "tagline", widget: "string" }
 
-      - label: "Korean Introduction"
+      - label: "Korean Page"
         name: "korean"
         file: "data/korean.json"
         format: "json"
@@ -106,6 +106,25 @@ collections:
                 widget: "list"
                 summary: "{{fields.title}}"
                 fields:
+                  - { label: "English Topic Title", name: "sourceTitle", widget: "string", hint: "Match the title in Research. This keeps translations attached when topics are reordered." }
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "description", widget: "text" }
+          - label: "Publications"
+            name: "publications"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+          - label: "People"
+            name: "people"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - label: "Team Notes"
+                name: "teamNotes"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: "English Note Title", name: "sourceTitle", widget: "string", hint: "Match the title in People > Team Notes." }
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Description", name: "description", widget: "text" }
           - label: "Contact"
@@ -163,7 +182,7 @@ collections:
               - { label: "Title / Affiliation", name: "title", widget: "text" }
               - { label: "Korean Name", name: "localName", widget: "string", required: false }
               - { label: "Korean Affiliation", name: "localAffiliation", widget: "string", required: false }
-              - { label: "Korean Biography", name: "localBio", widget: "text", required: false, hint: "Displayed on the Korean introduction page." }
+              - { label: "Korean Biography", name: "localBio", widget: "text", required: false, hint: "Displayed in the PI card on the Korean page." }
               - { label: "Photo", name: "photo", widget: "image", required: false }
               - label: "Profile Links"
                 name: "profileLinks"

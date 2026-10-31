@@ -4,7 +4,7 @@
     "description": "가톨릭대학교 사회약학 연구실 CUK-CORE Lab은 박선경 교수가 이끄는 보건사회약학 연구실입니다. 약물경제성평가, 건강성과연구, 근거합성, 보건의료 빅데이터 연구를 수행합니다."
   },
   "hero": {
-    "title": "가톨릭대학교 사회약학 연구실",
+    "title": "CUK-CORE Lab",
     "lede": "CUK-CORE Lab은 가톨릭대학교 약학대학 박선경 교수가 이끄는 보건사회약학 연구실입니다. 의약품과 보건의료 중재가 실제 진료 환경에서 만드는 가치와 성과를 연구합니다."
   },
   "about": {
@@ -15,19 +15,50 @@
     ]
   },
   "research": {
-    "title": "가톨릭대학교 사회약학 연구",
+    "title": "근거, 비용, 건강성과를 연결하는 연구",
     "cards": [
       {
+        "sourceTitle": "Economic Evaluation",
         "title": "약물경제성평가",
         "description": "의약품, 백신과 치료전략의 비용효과성 및 가치를 분석하여 합리적인 급여와 보건의료 자원배분을 위한 근거를 제시합니다."
       },
       {
-        "title": "건강성과연구와 빅데이터",
-        "description": "실제 진료자료와 보건의료 빅데이터를 활용하여 의료이용, 치료성과, 안전성과 질병부담을 분석합니다."
+        "sourceTitle": "Evidence Synthesis",
+        "title": "근거합성",
+        "description": "직접 비교 근거가 부족한 상황에서 체계적 문헌고찰과 베이지안 네트워크 메타분석으로 치료 대안의 효과를 비교합니다."
       },
       {
-        "title": "근거합성과 정책연구",
-        "description": "체계적 문헌고찰과 네트워크 메타분석으로 분산된 연구근거를 통합하고 의약품 정책과 임상 의사결정에 활용합니다."
+        "sourceTitle": "Real-World Data",
+        "title": "실제 진료자료 연구",
+        "description": "보건의료 빅데이터 분석과 약물역학 연구를 통해 실제 진료 환경의 의료이용, 치료성과, 안전성과 비용을 평가합니다."
+      },
+      {
+        "sourceTitle": "Disease Areas",
+        "title": "주요 질환과 정책",
+        "description": "유방암, 비소세포폐암, 대장암, 심부전과 백신 정책 등 다양한 질환 및 보건의료 의사결정에 연구 방법론을 적용합니다."
+      }
+    ]
+  },
+  "publications": {
+    "title": "최근 논문과 전체 출판 목록"
+  },
+  "people": {
+    "title": "근거 중심 보건의료를 이끌 연구자를 양성합니다",
+    "teamNotes": [
+      {
+        "sourceTitle": "Graduate Researchers",
+        "title": "대학원 연구원",
+        "description": "보건경제학, 건강성과연구, 근거합성 및 실제 진료자료를 활용하는 연구를 수행합니다."
+      },
+      {
+        "sourceTitle": "Alumni",
+        "title": "졸업생",
+        "description": "졸업생들은 의약품 정책과 경제성평가 연구에 기여해 왔습니다."
+      },
+      {
+        "sourceTitle": "Prospective Members",
+        "title": "진학 및 연구 참여 문의",
+        "description": "정량적 보건의료 연구, 의약품 정책과 근거합성에 관심 있는 학생들의 문의를 환영합니다."
       }
     ]
   },
