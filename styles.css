@@ -1432,6 +1432,12 @@ summary:focus-visible {
   height: 0;
 }
 
+@media (min-width: 901px) and (max-width: 1024px) {
+  .site-nav a {
+    padding-inline: 9px;
+  }
+}
+
 @media (max-width: 900px) {
   .site-header {
     padding-inline: 18px;

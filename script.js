@@ -525,14 +525,15 @@ function renderKoreanPage({ site, research, people, publications, korean = {} })
     ["publications", "논문"], ["people", "구성원"], ["contact", "문의"]]) {
     setText('.site-nav a[href="#' + id + '"]', label);
   }
-  if (!document.querySelector("[data-language-switch]")) {
-    const link = document.createElement("a");
-    link.href = "../";
-    link.lang = "en";
-    link.textContent = "English";
-    link.setAttribute("data-language-switch", "");
-    nav.append(link);
+  let languageLink = document.querySelector("[data-language-switch]");
+  if (!languageLink) {
+    languageLink = document.createElement("a");
+    languageLink.setAttribute("data-language-switch", "");
+    nav.append(languageLink);
   }
+  languageLink.href = "../";
+  languageLink.lang = "en";
+  languageLink.textContent = "English";
   document.querySelector("[data-brand-home]")?.setAttribute("href", "../");
   document.querySelector("[data-brand-home]")?.setAttribute("aria-label", site.brand.name + " 홈");
   document.querySelector("[data-hero-local]")?.setAttribute("href", "#people");

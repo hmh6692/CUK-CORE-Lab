@@ -41,8 +41,9 @@ records come from the same source files. The Korean biography is edited under
 People; translated section text is edited under Korean Page. Research topics
 and team notes are matched by their English title, so reordering does not attach
 the wrong translation. A new or renamed item uses English until translated.
-The main page has no additional Korean navigation tab. The Korean page retains
-an English return link and remains excluded from search indexing.
+The main navigation includes a Korean language link, and the Korean page has
+an English return link. Both are available in the mobile menu as well.
+The Korean page remains excluded from search indexing; the main page is the search entry.
 
 The Prospective Members note includes research questions and inquiry links.
 Edit it under People > People Section Notes > Prospective Members Details;

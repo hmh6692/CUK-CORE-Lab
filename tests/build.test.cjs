@@ -37,6 +37,11 @@ test("offline build retains complete source data and pre-renders public content"
     assert.equal(document.querySelectorAll(".member-card img, .member-card .initials").length, 0);
     assert.equal(document.querySelectorAll(".publication-card").length, recentCount);
     assert.equal(document.querySelectorAll(".research-card").length, content.research.cards.length);
+    const languageLink = document.querySelector(".site-nav [data-language-switch]");
+    assert.equal(document.querySelectorAll("[data-language-switch]").length, 1);
+    assert.equal(languageLink.getAttribute("href"), pagePath ? "../" : "social-pharmacy/");
+    assert.equal(languageLink.getAttribute("lang"), pagePath ? "en" : "ko");
+    assert.equal(languageLink.textContent, pagePath ? "English" : "한국어");
     assert.equal(document.querySelectorAll(".mini-cv > div").length, (people.principalInvestigator.education || []).length);
     if (people.principalInvestigator.experience?.length) {
       assert.equal(document.querySelector(".experience-disclosure").hasAttribute("open"), false);
@@ -54,7 +59,7 @@ test("offline build retains complete source data and pre-renders public content"
       mainSections = [...document.querySelectorAll("main > section")].map((node) => [node.id, node.className]);
       mainPapers = [...document.querySelectorAll(".publication-card h3")].map((node) => node.textContent);
       assert.ok(document.querySelector('meta[name="google-site-verification"]'));
-      assert.equal(document.querySelectorAll('.site-nav a[href="social-pharmacy/"]').length, 0);
+      assert.equal(document.querySelectorAll('.site-nav a[href="social-pharmacy/"]').length, 1);
       assert.equal(document.querySelectorAll('script[src*="netlify-identity"]').length, 0);
       assert.equal(document.title, site.meta.title);
       assert.equal(document.querySelector("[data-about-local]").textContent, site.about.localContext);
@@ -128,6 +133,8 @@ test("Korean PI uses the shared portrait fallback without adding student photos"
   assert.equal(document.querySelectorAll(".pi-card .person-photo-frame").length, 1);
   assert.equal(document.querySelectorAll(".member-card img, .member-card .initials").length, 0);
   assert.equal(document.querySelectorAll("[data-language-switch]").length, 1);
+  assert.equal(document.querySelector("[data-language-switch]").textContent, "English");
+  assert.equal(document.querySelector("[data-language-switch]").getAttribute("href"), "../");
 });
 
 test("Korean research follows shared ordering and keeps untranslated new topics", async () => {
