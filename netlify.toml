@@ -1,3 +1,6 @@
 [build]
-  command = "mkdir -p _site && cp index.html styles.css script.js logo.png PI_profile.jpg robots.txt sitemap.xml _site/ && cp -R assets data admin _site/ && touch _site/.nojekyll"
+  command = "npm run build"
   publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "22"

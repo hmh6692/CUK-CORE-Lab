@@ -5,6 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: "17 21 * * *"
 
 permissions:
   contents: read
@@ -28,14 +30,20 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare static site
-        run: |
-          mkdir _site
-          cp index.html styles.css script.js logo.png PI_profile.jpg _site/
-          cp robots.txt sitemap.xml _site/
-          cp -R assets data admin social-pharmacy _site/
-          touch _site/.nojekyll
-          if [ -f CNAME ]; then cp CNAME _site/CNAME; fi
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install build dependencies
+        run: npm ci --ignore-scripts --no-fund
+
+      - name: Verify site behavior
+        run: npm test
+
+      - name: Build static site and refresh publications
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

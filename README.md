@@ -1,6 +1,7 @@
 # CUK-CORE Lab Website
 
-This is a static lab website with a browser-based editor at `/admin/`.
+This is a static lab website with a browser-based editor at
+`https://cuk-core-lab.netlify.app/admin/`. The school-domain `/admin/` redirects there.
 
 For GitHub Pages hosting, see `GITHUB_PAGES.md`.
 For browser-based admin editing setup, see `ADMIN_AUTH_SETUP.md`.
@@ -8,7 +9,10 @@ For browser-based admin editing setup, see `ADMIN_AUTH_SETUP.md`.
 ## Local Preview
 
 ```powershell
-python -m http.server 8080 --bind 127.0.0.1
+npm ci --ignore-scripts
+npm test
+npm run build:offline
+python -m http.server 8080 --bind 127.0.0.1 --directory _site
 ```
 
 Then open:
@@ -25,6 +29,39 @@ Editable site content is stored in:
 - `data/research.json`
 - `data/people.json`
 - `data/publications.json`
+- `data/korean.json`
+
+The Korean page uses the same PI name, photo, profile links and contact email as
+the main page. Its Korean biography is edited under People; its other translated
+text is edited under Korean Introduction. No additional navigation tab is added.
+
+## Build and Publications
+
+Node.js 22 or later is required only at build time. The published site remains
+static HTML/CSS/JavaScript; there is no PHP or application server.
+
+- `npm run build` fetches the configured public APIs and creates `_site/` for both hosts.
+- `npm run build:offline` uses committed publication data without network access.
+- `npm run snapshot` refreshes `data/publications-cache.json`, the committed recovery copy.
+- `npm run optimize:images` regenerates web-sized images without changing the originals.
+
+The build pre-renders CMS data and the five most recent publications into HTML.
+The complete list, search and year filters continue to work in the browser.
+Stored records remain visible during a refresh or API outage. Source errors,
+empty ORCID works, and the last successful check are reported separately.
+
+GitHub Pages rebuilds daily at 21:17 UTC (06:17 KST), after main-branch changes,
+and on manual workflow dispatch. Scheduled runs can be delayed; GitHub can
+disable schedules after 60 days without repository activity. Check Actions
+periodically. The browser also attempts a refresh when the saved check is over
+24 hours old, and the refresh button can check the live sources at any time.
+
+Netlify rebuilds on repository changes. Both builds retain previously deployed
+publication records if an upstream API fails. An ORCID iD with no public works
+does not supply publication records; manage visibility in ORCID separately.
+
+To roll back a release, revert its Git commit and let the same deploy workflows
+run again. Source photos and the original logo are retained in the repository.
 
 Images uploaded through the admin UI are stored in:
 
@@ -42,4 +79,6 @@ The admin screen uses Decap CMS. The active configuration is ready for Netlify I
 6. Invite the site editor by email.
 7. Open `/admin/` on the deployed Netlify site and log in.
 
-After the editor saves changes, Decap CMS commits the updated JSON/images to GitHub, and Netlify redeploys the public website.
+After the editor saves changes, Decap CMS commits the updated JSON/images to GitHub.
+GitHub Pages and Netlify run the same build. Public content and search metadata
+are regenerated from the saved data; no hand-editing of deployed HTML is needed.

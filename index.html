@@ -13,9 +13,10 @@
     <meta name="google-site-verification" content="xzXf-PnsWxT0iccyj7uh-10yMKTEzglgrn_fMZEg5FU" />
     <link rel="canonical" href="https://cukcorelab.catholic.ac.kr/" data-canonical-url />
     <link rel="alternate" hreflang="ko" href="https://cukcorelab.catholic.ac.kr/social-pharmacy/" />
+    <link rel="alternate" hreflang="en" href="https://cukcorelab.catholic.ac.kr/" />
     <link rel="alternate" hreflang="x-default" href="https://cukcorelab.catholic.ac.kr/" />
-    <link rel="icon" href="https://cukcorelab.catholic.ac.kr/logo.png" type="image/png" />
-    <link rel="apple-touch-icon" href="https://cukcorelab.catholic.ac.kr/logo.png" />
+    <link rel="icon" href="assets/optimized/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="assets/optimized/apple-touch-icon.png" sizes="180x180" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CUK-CORE Lab" />
     <meta property="og:title" content="박선경 교수 연구실 | 가톨릭대학교 사회약학 · CUK-CORE Lab" data-og-title />
@@ -25,7 +26,7 @@
       data-og-description
     />
     <meta property="og:url" content="https://cukcorelab.catholic.ac.kr/" data-og-url />
-    <meta property="og:image" content="https://cukcorelab.catholic.ac.kr/assets/hero-heor-lab.png" />
+    <meta property="og:image" content="https://cukcorelab.catholic.ac.kr/assets/optimized/hero-social.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="박선경 교수 연구실 | 가톨릭대학교 사회약학 · CUK-CORE Lab" data-twitter-title />
     <meta
@@ -33,7 +34,7 @@
       content="가톨릭대학교 사회약학 박선경 교수의 보건사회약학 및 건강성과연구 연구실입니다."
       data-twitter-description
     />
-    <meta name="twitter:image" content="https://cukcorelab.catholic.ac.kr/assets/hero-heor-lab.png" />
+    <meta name="twitter:image" content="https://cukcorelab.catholic.ac.kr/assets/optimized/hero-social.jpg" />
     <title>박선경 교수 연구실 | 가톨릭대학교 사회약학 · CUK-CORE Lab</title>
     <script type="application/ld+json">
       {
@@ -147,23 +148,23 @@
         ]
       }
     </script>
-    <link rel="preload" as="image" href="assets/hero-heor-lab.png" />
+    <link rel="preload" as="image" href="assets/optimized/hero.webp" media="(min-width: 901px)" />
+    <link rel="preload" as="image" href="assets/optimized/hero-mobile.webp" media="(max-width: 900px)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&amp;family=Noto+Serif+KR:wght@500;600;700&amp;family=Source+Sans+3:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@600;700&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260801-1" />
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261031-1" />
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-    <script src="script.js?v=20260801-1" defer></script>
+    <script src="script.js?v=20261031-1" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="CUK-CORE Lab home" data-brand-home>
-        <img class="brand-logo" src="logo.png" alt="" data-brand-logo hidden />
+        <img class="brand-logo" src="assets/optimized/logo.webp" alt="" data-brand-logo hidden />
         <span class="brand-mark" data-brand-mark>SP</span>
         <span>
           <strong data-brand-name>CUK-CORE Lab</strong>
@@ -171,11 +172,11 @@
         </span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle>
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle>
         <i data-lucide="menu" aria-hidden="true"></i>
       </button>
 
-      <nav class="site-nav" aria-label="Primary navigation" data-nav>
+      <nav id="site-navigation" class="site-nav" aria-label="Primary navigation" data-nav>
         <a href="#about">About</a>
         <a href="#research">Research</a>
         <a href="#publications">Publications</a>
@@ -250,7 +251,7 @@
             <h2 id="publications-title" data-publications-title>Recent and complete publications</h2>
           </div>
           <div class="publication-actions">
-            <button class="icon-button" type="button" data-refresh-publications aria-label="Refresh publications">
+            <button class="icon-button" type="button" data-refresh-publications aria-label="Refresh publications" title="Check for new publications">
               <i data-lucide="refresh-cw" aria-hidden="true"></i>
             </button>
             <a class="button compact" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noreferrer" data-pubmed-link>
@@ -265,7 +266,7 @@
         </div>
 
         <div class="publication-meta">
-          <span data-publication-status>Loading PubMed records...</span>
+          <span data-publication-status role="status">Loading publication records...</span>
           <span data-publication-query>PubMed feed: lab researcher identifiers</span>
         </div>
 
@@ -275,6 +276,8 @@
               class="publication-tab is-active"
               type="button"
               role="tab"
+              id="publications-tab-recent"
+              aria-controls="publications-panel"
               aria-selected="true"
               data-publication-view="recent"
             >
@@ -284,14 +287,17 @@
               class="publication-tab"
               type="button"
               role="tab"
+              id="publications-tab-all"
+              aria-controls="publications-panel"
               aria-selected="false"
+              tabindex="-1"
               data-publication-view="all"
             >
               Complete list
               <span data-publication-count></span>
             </button>
           </div>
-          <p class="publication-summary" data-publication-summary></p>
+          <p class="publication-summary" data-publication-summary role="status"></p>
         </div>
 
         <div class="publication-filters" data-publication-filters hidden>
@@ -314,7 +320,7 @@
           </label>
         </div>
 
-        <div class="publication-list" data-publication-list aria-live="polite">
+        <div class="publication-list" id="publications-panel" data-publication-list role="tabpanel" aria-labelledby="publications-tab-recent" tabindex="0">
           <article class="publication-card skeleton">
             <div></div>
             <div></div>

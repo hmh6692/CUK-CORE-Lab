@@ -4,7 +4,15 @@ const crossrefBase = "https://api.crossref.org/works";
 const crossrefParams = "mailto=sk.park@catholic.ac.kr";
 const orcidBase = "https://pub.orcid.org/v3.0";
 
-const defaultContent = {
+function embeddedContent() {
+  try {
+    return JSON.parse(document.querySelector("[data-site-content]")?.textContent || "null");
+  } catch {
+    return null;
+  }
+}
+
+const defaultContent = embeddedContent() || {
   site: {
     brand: {
       mark: "SP",
@@ -238,7 +246,10 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 let activePublicationSettings = defaultContent.publications;
 let publicationState = {
   records: [],
-  sourceMode: "live",
+  sourceMode: "saved",
+  updatedAt: null,
+  sourceResults: [],
+  isRefreshing: false,
   view: "recent",
   query: "",
   year: "all",
@@ -280,7 +291,28 @@ function safeUrl(value = "") {
 
 function safeProfileUrl(value = "") {
   const text = String(value).trim();
-  return /^(https?:\/\/|mailto:)/i.test(text) ? text : "";
+  if (/^mailto:/i.test(text)) return safeEmail(text.slice(7)) ? text : "";
+  return safeExternalUrl(text);
+}
+
+function safeExternalUrl(value = "") {
+  try {
+    const url = new URL(String(value).trim());
+    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function assetPath(value = "") {
+  const path = safeUrl(value);
+  const optimized = {
+    "logo.png": "assets/optimized/logo.webp",
+    "PI_profile.jpg": "assets/optimized/PI_profile.webp",
+  }[path] || path;
+  return optimized && document.body.matches("[data-static-page]") && !/^(https?:|\/)/.test(optimized)
+    ? `../${optimized}`
+    : optimized;
 }
 
 function safeEmail(value = "") {
@@ -306,11 +338,21 @@ function multilineHtml(value = "") {
   return escapeHtml(value).replaceAll("\n", "<br />");
 }
 
+async function requestJson(path, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(path, { ...options, signal: controller.signal });
+    if (!response.ok) throw new Error(`Request failed (${response.status})`);
+    return await response.json();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function fetchJson(path, fallback) {
   try {
-    const response = await fetch(path, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Could not load ${path}`);
-    return await response.json();
+    return await requestJson(path, { cache: "no-cache" }, 5000);
   } catch (error) {
     return fallback;
   }
@@ -336,7 +378,7 @@ function renderSite(site) {
   setText("[data-brand-tagline]", site.brand?.tagline);
   const brandLogo = document.querySelector("[data-brand-logo]");
   const brandMark = document.querySelector("[data-brand-mark]");
-  const logo = safeUrl(site.brand?.logo);
+  const logo = assetPath(site.brand?.logo);
   if (brandLogo && brandMark) {
     if (logo) {
       brandLogo.src = logo;
@@ -372,9 +414,10 @@ function renderSite(site) {
   setText("[data-contact-title]", site.contact?.title);
   setHtml("[data-contact-address]", multilineHtml(site.contact?.address));
   const contactEmail = document.querySelector("[data-contact-email]");
-  if (contactEmail && site.contact?.email) {
-    contactEmail.href = `mailto:${site.contact.email}`;
-    contactEmail.innerHTML = `<i data-lucide="mail" aria-hidden="true"></i>${escapeHtml(site.contact.email)}`;
+  const email = safeEmail(site.contact?.email);
+  if (contactEmail && email) {
+    contactEmail.href = `mailto:${email}`;
+    contactEmail.innerHTML = `<i data-lucide="mail" aria-hidden="true"></i>${escapeHtml(email)}`;
   }
 
   setText("[data-footer-name]", site.footer?.name);
@@ -401,8 +444,100 @@ function renderResearch(research) {
   setHtml("[data-method-tags]", (research.methodTags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join(""));
 }
 
+function renderStructuredData(site, people, korean = null) {
+  const element = document.querySelector('script[type="application/ld+json"]');
+  if (!element) return;
+  const data = JSON.parse(element.textContent);
+  const pi = people.principalInvestigator || {};
+  const base = "https://cukcorelab.catholic.ac.kr/";
+  const pageUrl = korean ? `${base}social-pharmacy/` : base;
+  for (const entity of data["@graph"] || []) {
+    const types = [].concat(entity["@type"] || []);
+    if (types.includes("Organization")) {
+      entity.name = site.brand?.name;
+      entity.logo = assetPath(site.brand?.logo) ? new URL(assetPath(site.brand?.logo), pageUrl).href : undefined;
+      entity.email = safeEmail(site.contact?.email) ? `mailto:${site.contact.email}` : undefined;
+    }
+    if (types.includes("Person")) {
+      entity.name = pi.localName || pi.name;
+      entity.alternateName = pi.name;
+      entity.jobTitle = pi.title;
+      entity.image = assetPath(pi.photo) ? new URL(assetPath(pi.photo), pageUrl).href : undefined;
+      entity.sameAs = (pi.profileLinks || []).map((link) => safeExternalUrl(link.url)).filter(Boolean);
+    }
+    if (types.includes("WebSite")) entity.name = site.brand?.name;
+    if (types.includes("WebPage") && korean) {
+      entity.name = korean.meta?.title;
+      entity.description = korean.meta?.description;
+    }
+  }
+  element.textContent = JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+function renderKoreanPage(site, people, korean = {}) {
+  const pi = people.principalInvestigator || {};
+  const logo = document.querySelector(".brand-logo");
+  if (logo) {
+    const source = assetPath(site.brand?.logo);
+    if (source) logo.src = source;
+    logo.hidden = !source;
+    logo.alt = site.brand?.name || "";
+  }
+  setText(".brand strong", site.brand?.name);
+  setText(".brand small", site.brand?.tagline);
+  setText(".local-hero .eyebrow", site.brand?.tagline);
+  setText("#local-title", korean.hero?.title);
+  setText(".local-hero-lede", korean.hero?.lede);
+  setText(".local-identity", [pi.localName, pi.localAffiliation].filter(Boolean).join(" · "));
+  setText("#overview-title", korean.about?.title);
+  if (korean.about?.paragraphs) setHtml(".local-copy", korean.about.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join(""));
+  setText("#research-local-title", korean.research?.title);
+  if (korean.research?.cards) setHtml(".local-topic-grid", korean.research.cards.map((card, index) => `
+    <article class="local-topic"><span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(card.title)}</h3><p>${escapeHtml(card.description)}</p></article>`).join(""));
+  setText("#professor-title", pi.localName || pi.name);
+  setText('a[href="#professor"]', pi.localName || pi.name);
+  setText("[data-local-bio]", pi.localBio || "");
+  setHtml(".local-profile-meta", [pi.localAffiliation, site.brand?.name].filter(Boolean).map((text) => `<span>${escapeHtml(text)}</span>`).join(""));
+  const photo = document.querySelector(".local-profile-photo");
+  if (photo) {
+    const source = assetPath(pi.photo);
+    if (source) photo.src = source;
+    photo.hidden = !source;
+    photo.alt = [pi.localAffiliation, pi.localName].filter(Boolean).join(" ");
+  }
+  for (const [selector, label] of [["[data-local-university-link]", "University Profile"], ["[data-local-orcid-link]", "ORCID"]]) {
+    const link = document.querySelector(selector);
+    const url = safeExternalUrl((pi.profileLinks || []).find((item) => item.label === label)?.url);
+    if (link) {
+      link.hidden = !url;
+      if (url) link.href = url;
+    }
+  }
+  setText("#local-contact-title", korean.contact?.title);
+  setText(".local-contact-inner > div > p:not(.section-kicker)", korean.contact?.address);
+  const email = safeEmail(site.contact?.email);
+  const contact = document.querySelector(".contact-link");
+  if (contact) {
+    contact.hidden = !email;
+    contact.href = `mailto:${email}`;
+    contact.innerHTML = `<i data-lucide="mail" aria-hidden="true"></i>${escapeHtml(email)}`;
+  }
+  if (korean.meta?.title) {
+    document.title = korean.meta.title;
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", korean.meta.title);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", korean.meta.title);
+  }
+  if (korean.meta?.description) {
+    for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) {
+      document.querySelector(selector)?.setAttribute("content", korean.meta.description);
+    }
+  }
+  renderStructuredData(site, people, korean);
+}
+
 function personVisual(person) {
-  const photo = safeUrl(person.photo);
+  const photo = assetPath(person.photo);
   if (photo) {
     return `
       <span class="person-photo-frame">
@@ -645,7 +780,11 @@ function renderPublicationSettings(settings) {
   const sourceLabel = configuredSources(settings).join(", ") || "saved records";
   if (publicationQuery) publicationQuery.textContent = `Publication sources: ${sourceLabel} (${label})`;
   if (pubmedLink && query) pubmedLink.href = `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(query)}`;
-  if (scholarLink && settings.scholarUrl) scholarLink.href = settings.scholarUrl;
+  const scholarUrl = safeExternalUrl(settings.scholarUrl);
+  if (scholarLink) {
+    scholarLink.hidden = !scholarUrl;
+    if (scholarUrl) scholarLink.href = scholarUrl;
+  }
 }
 
 function compactDateParts(parts = []) {
@@ -669,11 +808,27 @@ function orcidDate(summary = {}) {
   return [date.year?.value, date.month?.value, date.day?.value].filter(Boolean).join("-");
 }
 
+function publicationDateInfo(value = "") {
+  const text = String(value).trim();
+  const numeric = text.match(/^(\d{4})(?:[-/](\d{1,2})(?:[-/](\d{1,2}))?)?(?=$|[\sT])/);
+  const named = text.match(/^(\d{4})\s+([A-Za-z]+)(?:\s+(\d{1,2}))?/);
+  const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  const parts = named
+    ? [Number(named[1]), months.indexOf(named[2].slice(0, 3).toLowerCase()) + 1, Number(named[3] || 1)]
+    : numeric ? [Number(numeric[1]), Number(numeric[2] || 1), Number(numeric[3] || 1)] : null;
+  if (!parts) return { time: 0, precision: 0 };
+  const [year, month, day] = parts;
+  const time = Date.UTC(year, month - 1, day);
+  const date = new Date(time);
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
+    return { time: 0, precision: 0 };
+  }
+  const precision = named ? (named[3] ? 3 : 2) : numeric[3] ? 3 : numeric[2] ? 2 : 1;
+  return { time, precision };
+}
+
 function sortDateValue(value = "") {
-  const parsed = Date.parse(value);
-  if (!Number.isNaN(parsed)) return parsed;
-  const year = String(value).match(/\b(19|20)\d{2}\b/)?.[0];
-  return year ? Date.parse(`${year}-01-01`) : 0;
+  return publicationDateInfo(value).time;
 }
 
 function normalizeDoi(doi = "") {
@@ -683,10 +838,10 @@ function normalizeDoi(doi = "") {
 function normalizePublicationTitle(title = "") {
   return String(title)
     .toLowerCase()
-    .normalize("NFKD")
+    .normalize("NFKC")
     .replace(/[\u2010-\u2015]/g, "-")
     .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
 }
 
@@ -723,6 +878,7 @@ function normalizeSavedPublication(publication) {
   return {
     id: publication.id || (doi ? `doi:${normalizeDoi(doi)}` : `saved:${normalizePublicationTitle(publication.title)}`),
     provider: publication.provider || "Google Scholar",
+    providers: publication.providers || [publication.provider || "Google Scholar"],
     uid: publication.uid || "",
     title: publication.title || "",
     authors: publication.authors || [],
@@ -805,7 +961,7 @@ function mergePublications(publications, limit = archivePublicationLimit()) {
     if (!existing) {
       merged.set(key, {
         ...publication,
-        providers: [publication.provider].filter(Boolean),
+        providers: publication.providers || [publication.provider].filter(Boolean),
       });
       keys.forEach((candidate) => aliases.set(candidate, key));
       continue;
@@ -813,14 +969,21 @@ function mergePublications(publications, limit = archivePublicationLimit()) {
 
     const next = { ...existing };
     const shouldPreferIncoming = isEnrichmentProvider(publication.provider);
-    for (const field of ["uid", "title", "source", "pubdate", "doi", "url", "sortDate"]) {
+    for (const field of ["uid", "title", "source", "doi", "url"]) {
       if (!next[field] && publication[field]) next[field] = publication[field];
-      if (shouldPreferIncoming && ["uid", "source", "pubdate", "doi", "url", "sortDate"].includes(field) && publication[field]) {
+      if (shouldPreferIncoming && ["uid", "source", "doi", "url"].includes(field) && publication[field]) {
         next[field] = publication[field];
       }
     }
+    // Keep a known day when another provider only supplies a month or year.
+    const existingDate = publicationDateInfo(next.sortDate || next.pubdate);
+    const incomingDate = publicationDateInfo(publication.sortDate || publication.pubdate);
+    if (incomingDate.precision > existingDate.precision) {
+      next.sortDate = publication.sortDate || publication.pubdate;
+      next.pubdate = publication.pubdate || publication.sortDate;
+    }
     if ((!next.authors || !next.authors.length) && publication.authors?.length) next.authors = publication.authors;
-    next.providers = [...new Set([...(next.providers || []), publication.provider].filter(Boolean))];
+    next.providers = [...new Set([...(next.providers || []), ...(publication.providers || [publication.provider])].filter(Boolean))];
     merged.set(key, next);
     keys.forEach((candidate) => aliases.set(candidate, key));
   }
@@ -836,16 +999,14 @@ async function fetchPubmedPublications(settings) {
   const searchUrl = `${eutilsBase}/esearch.fcgi?db=pubmed&term=${encodeURIComponent(
     query,
   )}&retmode=json&retmax=${archivePublicationLimit(settings)}&sort=pub+date&${eutilsParams}`;
-  const searchResponse = await fetch(searchUrl);
-  if (!searchResponse.ok) throw new Error("PubMed search failed");
-  const searchData = await searchResponse.json();
+  const searchData = await requestJson(searchUrl);
+  if (!searchData.esearchresult) throw new Error("Invalid PubMed search response");
   const ids = searchData.esearchresult?.idlist || [];
   if (!ids.length) return [];
 
   const summaryUrl = `${eutilsBase}/esummary.fcgi?db=pubmed&id=${ids.join(",")}&retmode=json&${eutilsParams}`;
-  const summaryResponse = await fetch(summaryUrl);
-  if (!summaryResponse.ok) throw new Error("PubMed summary failed");
-  const summaryData = await summaryResponse.json();
+  const summaryData = await requestJson(summaryUrl);
+  if (!Array.isArray(summaryData.result?.uids)) throw new Error("Invalid PubMed summary response");
   return summaryData.result.uids.map((uid) => normalizePubmedPublication(summaryData.result[uid]));
 }
 
@@ -853,13 +1014,12 @@ async function fetchOrcidPublications(settings) {
   const profiles = (settings.orcidProfiles || []).filter((profile) => profile.orcid);
   if (!profiles.length) return [];
 
-  const groupsByProfile = await Promise.all(
+  return settlePublicationRequests(
     profiles.map(async (profile) => {
-      const response = await fetch(`${orcidBase}/${encodeURIComponent(profile.orcid)}/works`, {
+      const data = await requestJson(`${orcidBase}/${encodeURIComponent(profile.orcid)}/works`, {
         headers: { Accept: "application/vnd.orcid+json" },
       });
-      if (!response.ok) throw new Error(`ORCID works failed for ${profile.orcid}`);
-      const data = await response.json();
+      if (!Array.isArray(data.group)) throw new Error("Invalid ORCID response");
       const summaries = (data.group || []).flatMap((group) =>
         (group["work-summary"] || []).map((summary) => ({
           ...summary,
@@ -867,33 +1027,29 @@ async function fetchOrcidPublications(settings) {
         })),
       );
       const maxWorks = boundedNumber(profile.maxWorks, archivePublicationLimit(settings), 1, archivePublicationLimit(settings));
-      return summaries.slice(0, maxWorks).map((summary) => normalizeOrcidPublication(summary, profile));
+      return mergePublications(summaries.map((summary) => normalizeOrcidPublication(summary, profile)), maxWorks);
     }),
   );
-
-  return groupsByProfile.flat();
 }
 
 async function fetchCrossrefDoiPublications(settings) {
   const dois = (settings.crossrefDois || []).map(normalizeDoi).filter(Boolean);
   if (!dois.length) return [];
 
-  const items = await Promise.all(
+  return settlePublicationRequests(
     dois.map(async (doi) => {
-      const response = await fetch(`${crossrefBase}/${encodeURIComponent(doi)}?${crossrefParams}`);
-      if (!response.ok) throw new Error(`Crossref DOI lookup failed for ${doi}`);
-      const data = await response.json();
+      const data = await requestJson(`${crossrefBase}/${encodeURIComponent(doi)}?${crossrefParams}`);
+      if (!data.message?.DOI) throw new Error("Invalid Crossref DOI response");
       return normalizeCrossrefPublication(data.message, "Crossref");
     }),
   );
-  return items;
 }
 
 async function fetchCrossrefQueryPublications(settings) {
   const queries = (settings.crossrefQueries || []).filter((query) => query.orcid || query.query);
   if (!queries.length) return [];
 
-  const groups = await Promise.all(
+  return settlePublicationRequests(
     queries.map(async (query) => {
       const params = new URLSearchParams({
         rows: String(boundedNumber(query.rows, archivePublicationLimit(settings), 1, archivePublicationLimit(settings))),
@@ -903,22 +1059,79 @@ async function fetchCrossrefQueryPublications(settings) {
       });
       if (query.orcid) params.set("filter", `orcid:${query.orcid}`);
       if (query.query) params.set("query.bibliographic", query.query);
-      const response = await fetch(`${crossrefBase}?${params.toString()}`);
-      if (!response.ok) throw new Error(`Crossref query failed for ${query.name || query.orcid || query.query}`);
-      const data = await response.json();
+      const data = await requestJson(`${crossrefBase}?${params.toString()}`);
+      if (!Array.isArray(data.message?.items)) throw new Error("Invalid Crossref search response");
       return (data.message?.items || []).map((item) => normalizeCrossrefPublication(item, "Crossref"));
     }),
   );
+}
 
-  return groups.flat();
+async function settlePublicationRequests(requests) {
+  const results = await Promise.allSettled(requests);
+  const successful = results.filter((result) => result.status === "fulfilled");
+  if (!successful.length && results.length) throw new Error("Publication source unavailable");
+  const records = successful.flatMap((result) => result.value);
+  records.failedRequests = results.length - successful.length;
+  return records;
+}
+
+function publicationSettingsKey(settings) {
+  return JSON.stringify([
+    settings.pubmedQueries || [], settings.orcidProfiles || [],
+    settings.crossrefDois || [], settings.crossrefQueries || [],
+  ]);
+}
+
+function savedPublicationSnapshot(settings, previous = {}) {
+  const compatible = previous.settingsKey === publicationSettingsKey(settings);
+  return {
+    records: mergePublications([
+      ...(settings.fallbackPublications || []).map(normalizeSavedPublication),
+      ...(compatible ? previous.records || [] : []).map(normalizeSavedPublication),
+    ], archivePublicationLimit(settings)),
+    settingsKey: publicationSettingsKey(settings),
+    updatedAt: compatible ? previous.updatedAt || null : null,
+    sourceResults: compatible ? previous.sourceResults || [] : [],
+    mode: "saved",
+  };
+}
+
+async function collectPublications(settings, previous = {}) {
+  const snapshot = savedPublicationSnapshot(settings, previous);
+  const sources = [
+    { name: "PubMed", enabled: (settings.pubmedQueries || []).some((item) => item.term), fetch: fetchPubmedPublications },
+    { name: "ORCID", enabled: (settings.orcidProfiles || []).some((item) => item.orcid), fetch: fetchOrcidPublications },
+    { name: "Crossref DOI", enabled: (settings.crossrefDois || []).some(Boolean), fetch: fetchCrossrefDoiPublications },
+    { name: "Crossref search", enabled: (settings.crossrefQueries || []).some((item) => item.orcid || item.query), fetch: fetchCrossrefQueryPublications },
+  ].filter((source) => source.enabled);
+  const results = await Promise.allSettled(sources.map((source) => source.fetch(settings)));
+  const sourceResults = results.map((result, index) => ({
+    name: sources[index].name,
+    status: result.status === "rejected" ? "error"
+      : result.value.failedRequests ? "partial" : result.value.length ? "ok" : "empty",
+    count: result.status === "fulfilled" ? result.value.length : 0,
+  }));
+  const liveRecords = results.flatMap((result) => result.status === "fulfilled" ? result.value : []);
+  const partial = sourceResults.some((source) => ["error", "partial"].includes(source.status));
+  return {
+    ...snapshot,
+    records: mergePublications([...snapshot.records, ...liveRecords], archivePublicationLimit(settings)),
+    updatedAt: liveRecords.length ? new Date().toISOString() : snapshot.updatedAt,
+    checkedAt: new Date().toISOString(),
+    sourceResults,
+    mode: liveRecords.length ? (partial ? "partial" : "live") : "saved",
+  };
 }
 
 function publicationLinks(publication) {
-  const doi = getDoi(publication);
+  const rawDoi = normalizeDoi(getDoi(publication));
+  const doi = /^10\.\d{4,9}\/\S+$/i.test(rawDoi) ? rawDoi : "";
+  const doiUrl = doi ? `https://doi.org/${encodeURIComponent(doi)}` : "";
+  const pubmedUrl = /^\d+$/.test(String(publication.uid || "")) ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : "";
   return {
     doi,
-    doiUrl: doi ? `https://doi.org/${doi}` : "",
-    publicationUrl: publication.url || (publication.uid ? `https://pubmed.ncbi.nlm.nih.gov/${publication.uid}/` : ""),
+    doiUrl,
+    publicationUrl: safeExternalUrl(publication.url) || pubmedUrl || doiUrl,
   };
 }
 
@@ -930,7 +1143,7 @@ function renderPublicationCard(publication, mode = "live") {
       <p class="source-line">${escapeHtml((publication.providers || [publication.provider || mode]).join(" + "))}</p>
       <h3>${
         publicationUrl
-          ? `<a href="${publicationUrl}" target="_blank" rel="noreferrer">${title}</a>`
+          ? `<a href="${escapeHtml(publicationUrl)}" target="_blank" rel="noreferrer">${title}</a>`
           : title
       }</h3>
       <p class="journal-line">
@@ -940,7 +1153,7 @@ function renderPublicationCard(publication, mode = "live") {
       <p>${escapeHtml(formatAuthors(publication.authors))}</p>
       ${
         doi
-          ? `<p class="doi"><a href="${doiUrl}" target="_blank" rel="noreferrer">doi: ${escapeHtml(doi)}</a></p>`
+          ? `<p class="doi"><a href="${escapeHtml(doiUrl)}" target="_blank" rel="noreferrer">doi: ${escapeHtml(doi)}</a></p>`
           : ""
       }
     </article>
@@ -960,7 +1173,7 @@ function renderPublicationArchiveItem(publication, mode = "live") {
         <p class="source-line">${escapeHtml((publication.providers || [publication.provider || mode]).join(" + "))}</p>
         <h3>${
           publicationUrl
-            ? `<a href="${publicationUrl}" target="_blank" rel="noreferrer">${title}</a>`
+            ? `<a href="${escapeHtml(publicationUrl)}" target="_blank" rel="noreferrer">${title}</a>`
             : title
         }</h3>
         <p class="journal-line">
@@ -971,7 +1184,7 @@ function renderPublicationArchiveItem(publication, mode = "live") {
       </div>
       ${
         doi
-          ? `<a class="publication-doi-chip" href="${doiUrl}" target="_blank" rel="noreferrer">DOI</a>`
+          ? `<a class="publication-doi-chip" href="${escapeHtml(doiUrl)}" target="_blank" rel="noreferrer">DOI</a>`
           : ""
       }
     </article>
@@ -1047,31 +1260,42 @@ function updatePublicationChrome() {
   const recentLimit = recentPublicationLimit();
   const filteredCount = filteredArchivePublications().length;
   const visibleCount = publicationState.view === "all" ? filteredCount : Math.min(recentLimit, total);
-  const stamp = new Date().toLocaleDateString(undefined, {
+  const checkedDate = publicationState.updatedAt ? new Date(publicationState.updatedAt) : null;
+  const stamp = checkedDate && Number.isFinite(checkedDate.getTime()) ? checkedDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
-  });
+  }) : "";
 
   publicationViewButtons.forEach((button) => {
     const isActive = button.dataset.publicationView === publicationState.view;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-selected", String(isActive));
+    button.tabIndex = isActive ? 0 : -1;
+    if (isActive) publicationList?.setAttribute("aria-labelledby", button.id);
   });
 
   if (publicationFilters) publicationFilters.hidden = publicationState.view !== "all";
   if (publicationCount) publicationCount.textContent = total ? String(total) : "";
   if (publicationSummary) {
-    const isFiltered = publicationState.query.trim() || publicationState.year !== "all";
+    const isFiltered = publicationState.view === "all" && (publicationState.query.trim() || publicationState.year !== "all");
     publicationSummary.textContent = isFiltered
       ? `${visibleCount} matching - ${total} total`
       : `${visibleCount} shown - ${total} total`;
   }
   if (publicationStatus) {
-    publicationStatus.textContent =
-      publicationState.sourceMode === "live"
-        ? `${visibleCount} shown from configured sources - ${stamp}`
-        : `${visibleCount} shown from saved publication records - ${stamp}`;
+    const failed = publicationState.sourceResults.some((source) => ["error", "partial"].includes(source.status));
+    publicationStatus.textContent = publicationState.isRefreshing ? "Checking publication sources..."
+      : !total ? "No publication records available."
+      : `${stamp ? `Last checked ${stamp}` : "Saved publication records"}${failed ? " - Some sources unavailable" : ""}`;
+  }
+  if (publicationQuery && publicationState.sourceResults.length) {
+    publicationQuery.textContent = publicationState.sourceResults.map((source) => {
+      if (source.status === "error") return `${source.name}: unavailable`;
+      if (source.status === "partial") return `${source.name}: partial`;
+      if (source.status === "empty") return `${source.name}: no public records`;
+      return source.name;
+    }).join(" / ");
   }
 }
 
@@ -1082,11 +1306,11 @@ function renderPublicationView() {
   const visiblePublications = view === "all" ? filteredArchivePublications() : records.slice(0, recentLimit);
 
   publicationList.classList.toggle("is-archive", view === "all");
-  if (!visiblePublications.length && view === "all") {
+  if (!visiblePublications.length) {
     publicationList.innerHTML = `
       <div class="publication-empty">
         <i data-lucide="search-x" aria-hidden="true"></i>
-        <p>No publications match these filters.</p>
+        <p>${records.length ? "No publications match these filters." : "Publication records are currently unavailable."}</p>
       </div>
     `;
   } else {
@@ -1100,52 +1324,58 @@ function renderPublicationView() {
   createIcons();
 }
 
-function renderPublications(publications, mode = "live") {
+function renderPublications(publications, mode = "saved", metadata = {}) {
   if (!publicationList || !publicationStatus) return;
   publicationState = {
     ...publicationState,
     records: publications,
     sourceMode: mode,
+    updatedAt: Object.hasOwn(metadata, "updatedAt") ? metadata.updatedAt : publicationState.updatedAt,
+    sourceResults: metadata.sourceResults ?? publicationState.sourceResults,
   };
   updatePublicationFilterOptions();
   renderPublicationView();
 }
 
-async function loadPublications(settings = activePublicationSettings) {
+async function loadPublications(settings = activePublicationSettings, { refresh = true, cache = null } = {}) {
   if (!publicationList || !publicationStatus) return;
-  publicationStatus.textContent = "Loading publication records...";
-  if (publicationSummary) publicationSummary.textContent = "";
+  if (publicationState.isRefreshing) return;
+  const previous = cache || { ...publicationState, settingsKey: publicationSettingsKey(settings) };
+  const saved = savedPublicationSnapshot(settings, previous);
+  renderPublications(saved.records, "saved", saved);
+  const checkedTime = Date.parse(saved.updatedAt || "");
+  if (!refresh && Number.isFinite(checkedTime) && Date.now() - checkedTime < 24 * 60 * 60 * 1000) return;
+  publicationState.isRefreshing = true;
   if (refreshButton) refreshButton.disabled = true;
-  const savedPublications = (settings.fallbackPublications || []).map(normalizeSavedPublication);
+  updatePublicationChrome();
 
   try {
-    const results = await Promise.allSettled([
-      fetchPubmedPublications(settings),
-      fetchOrcidPublications(settings),
-      fetchCrossrefDoiPublications(settings),
-      fetchCrossrefQueryPublications(settings),
-    ]);
-    const publications = mergePublications(
-      [...savedPublications, ...results.flatMap((result) => (result.status === "fulfilled" ? result.value : []))],
-      archivePublicationLimit(settings),
-    );
-    if (!publications.length) throw new Error("No publication records found");
-    renderPublications(publications, "live");
+    const snapshot = await collectPublications(settings, saved);
+    renderPublications(snapshot.records, snapshot.mode, snapshot);
   } catch (error) {
-    renderPublications(
-      mergePublications(savedPublications, archivePublicationLimit(settings)),
-      "fallback",
-    );
+    renderPublications(saved.records, "saved", { ...saved, sourceResults: [{ name: "Live sources", status: "error" }] });
   } finally {
+    publicationState.isRefreshing = false;
     if (refreshButton) refreshButton.disabled = false;
+    updatePublicationChrome();
   }
 }
 
 function setupPublicationViews() {
+  const buttons = Array.from(publicationViewButtons);
   publicationViewButtons.forEach((button) => {
     button.addEventListener("click", () => {
       publicationState.view = button.dataset.publicationView === "all" ? "all" : "recent";
       renderPublicationView();
+    });
+    button.addEventListener("keydown", (event) => {
+      const index = buttons.indexOf(button);
+      const nextIndex = { ArrowLeft: (index - 1 + buttons.length) % buttons.length,
+        ArrowRight: (index + 1) % buttons.length, Home: 0, End: buttons.length - 1 }[event.key];
+      if (nextIndex === undefined) return;
+      event.preventDefault();
+      buttons[nextIndex].click();
+      buttons[nextIndex].focus();
     });
   });
 
@@ -1162,66 +1392,77 @@ function setupPublicationViews() {
 
 function setupNavigation() {
   if (!nav || !navToggle) return;
-
-  navToggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("is-open");
+  const korean = document.documentElement.lang === "ko";
+  const setOpen = (isOpen) => {
+    nav.classList.toggle("is-open", isOpen);
     navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.setAttribute("aria-label", korean ? (isOpen ? "메뉴 닫기" : "메뉴 열기") : (isOpen ? "Close navigation" : "Open navigation"));
     const icon = navToggle.querySelector("svg");
     if (icon) {
       icon.outerHTML = `<i data-lucide="${isOpen ? "x" : "menu"}" aria-hidden="true"></i>`;
       createIcons();
     }
-  });
+  };
+  navToggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
 
   nav.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLAnchorElement) {
-      nav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
-      const icon = navToggle.querySelector("svg");
-      if (icon) icon.outerHTML = '<i data-lucide="menu" aria-hidden="true"></i>';
-      createIcons();
+    if (event.target.closest("a")) setOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.classList.contains("is-open")) {
+      setOpen(false);
+      navToggle.focus();
     }
+  });
+  document.addEventListener("click", (event) => {
+    if (!nav.contains(event.target) && !navToggle.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener("focusin", (event) => {
+    if (!nav.contains(event.target) && !navToggle.contains(event.target)) setOpen(false);
   });
 }
 
 function setupNetlifyIdentityRedirect() {
-  if (!window.netlifyIdentity) return;
-  window.netlifyIdentity.on("init", (user) => {
-    if (!user) {
-      window.netlifyIdentity.on("login", () => {
-        document.location.href = "/admin/";
-      });
-    }
-  });
+  if (/(?:^#|&)(?:invite_token|recovery_token|confirmation_token|access_token)=/.test(window.location.hash)) {
+    window.location.replace(`https://cuk-core-lab.netlify.app/admin/${window.location.search}${window.location.hash}`);
+  }
 }
 
 async function init() {
+  setupNetlifyIdentityRedirect();
+  setupNavigation();
   if (document.body.matches("[data-static-page]")) {
+    const [site, people, korean] = await Promise.all([
+      fetchJson("../data/site.json", defaultContent.site),
+      fetchJson("../data/people.json", defaultContent.people),
+      fetchJson("../data/korean.json", defaultContent.korean || {}),
+    ]);
+    renderKoreanPage(site, people, korean);
     const year = document.querySelector("[data-year]");
     if (year) year.textContent = new Date().getFullYear();
-    setupNavigation();
     createIcons();
     return;
   }
 
-  const [site, research, people, publications] = await Promise.all([
+  const [site, research, people, publications, publicationCache] = await Promise.all([
     fetchJson("data/site.json", defaultContent.site),
     fetchJson("data/research.json", defaultContent.research),
     fetchJson("data/people.json", defaultContent.people),
     fetchJson("data/publications.json", defaultContent.publications),
+    fetchJson("data/publications-cache.json", defaultContent.publicationCache || {}),
   ]);
 
   document.querySelector("[data-year]").textContent = new Date().getFullYear();
   renderSite(site);
   renderResearch(research);
   renderPeople(people);
+  renderStructuredData(site, people);
   renderPublicationSettings(publications);
-  setupNavigation();
   setupPublicationViews();
-  setupNetlifyIdentityRedirect();
   refreshButton?.addEventListener("click", () => loadPublications(activePublicationSettings));
-  await loadPublications(publications);
+  createIcons();
+  await loadPublications(publications, { refresh: false, cache: publicationCache });
   createIcons();
 }
 
-init();
+if (!globalThis.CORE_STATIC_RENDER) init();

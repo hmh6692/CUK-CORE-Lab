@@ -7,9 +7,9 @@ local_backend: true
 media_folder: "assets/uploads"
 public_folder: "assets/uploads"
 
-site_url: "/"
-display_url: "/"
-logo_url: "/assets/hero-heor-lab.png"
+site_url: "https://cukcorelab.catholic.ac.kr"
+display_url: "https://cukcorelab.catholic.ac.kr"
+logo_url: "/assets/optimized/logo.webp"
 
 collections:
   - name: "site"
@@ -70,6 +70,51 @@ collections:
               - { label: "Lab Name", name: "name", widget: "string" }
               - { label: "Footer Tagline", name: "tagline", widget: "string" }
 
+      - label: "Korean Introduction"
+        name: "korean"
+        file: "data/korean.json"
+        format: "json"
+        fields:
+          - label: "Browser Metadata"
+            name: "meta"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+          - label: "Introduction"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Lead Text", name: "lede", widget: "text" }
+          - label: "About"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - label: "Paragraphs"
+                name: "paragraphs"
+                widget: "list"
+                field: { label: "Paragraph", name: "paragraph", widget: "text" }
+          - label: "Research"
+            name: "research"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - label: "Research Topics"
+                name: "cards"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Description", name: "description", widget: "text" }
+          - label: "Contact"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Address", name: "address", widget: "text" }
+
       - label: "Research"
         name: "research"
         file: "data/research.json"
@@ -118,6 +163,7 @@ collections:
               - { label: "Title / Affiliation", name: "title", widget: "text" }
               - { label: "Korean Name", name: "localName", widget: "string", required: false }
               - { label: "Korean Affiliation", name: "localAffiliation", widget: "string", required: false }
+              - { label: "Korean Biography", name: "localBio", widget: "text", required: false, hint: "Displayed on the Korean introduction page." }
               - { label: "Photo", name: "photo", widget: "image", required: false }
               - label: "Profile Links"
                 name: "profileLinks"

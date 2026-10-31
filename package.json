@@ -1,0 +1,21 @@
+{
+  "name": "cuk-core-lab",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "build:offline": "node scripts/build.cjs --offline",
+    "snapshot": "node scripts/build.cjs --snapshot-only",
+    "optimize:images": "node scripts/optimize-images.cjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "linkedom": "0.18.14"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  }
+}

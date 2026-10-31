@@ -22,6 +22,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
@@ -204,7 +208,7 @@ summary:focus-visible {
   color: var(--paper);
   background:
     linear-gradient(90deg, rgba(15, 37, 32, 0.96) 0%, rgba(15, 37, 32, 0.86) 34%, rgba(15, 37, 32, 0.24) 76%),
-    url("assets/hero-heor-lab.png") center right / cover no-repeat;
+    url("assets/optimized/hero.webp") center right / cover no-repeat;
 }
 
 .hero-copy {
@@ -1276,7 +1280,7 @@ summary:focus-visible {
   color: var(--paper);
   background:
     linear-gradient(90deg, rgba(15, 37, 32, 0.97) 0%, rgba(15, 37, 32, 0.84) 46%, rgba(15, 37, 32, 0.32) 100%),
-    url("assets/hero-heor-lab.png") center right / cover no-repeat;
+    url("assets/optimized/hero.webp") center right / cover no-repeat;
 }
 
 .local-hero-inner {
@@ -1493,7 +1497,7 @@ summary:focus-visible {
     padding: 86px 22px 66px;
     background:
       linear-gradient(90deg, rgba(15, 37, 32, 0.96) 0%, rgba(15, 37, 32, 0.72) 70%, rgba(15, 37, 32, 0.38) 100%),
-      url("assets/hero-heor-lab.png") center right / cover no-repeat;
+      url("assets/optimized/hero-mobile.webp") center right / cover no-repeat;
   }
 
   .hero h1 {
@@ -1566,6 +1570,9 @@ summary:focus-visible {
   .local-hero {
     min-height: 58vh;
     padding: 78px 22px 64px;
+    background-image:
+      linear-gradient(90deg, rgba(15, 37, 32, 0.97) 0%, rgba(15, 37, 32, 0.84) 46%, rgba(15, 37, 32, 0.32) 100%),
+      url("assets/optimized/hero-mobile.webp");
   }
 
   .local-hero h1 {

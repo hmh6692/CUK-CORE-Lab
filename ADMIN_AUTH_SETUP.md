@@ -2,6 +2,21 @@
 
 This site uses Decap CMS for browser-based editing at `/admin/`.
 
+## Current Editor Address
+
+Use `https://cuk-core-lab.netlify.app/admin/`. The school-domain and GitHub Pages
+admin URLs redirect to this address, preserving invitation/recovery URL tokens.
+The public pages do not load the authentication widget for ordinary visitors.
+
+The current Git Gateway login is retained; no editor permissions or accounts
+were changed by the 2026-10-31 website update. Keep registration invite-only.
+Git Gateway is deprecated, so prepare a separately tested OAuth replacement
+before migrating. Do not disable the working gateway until replacement login
+and publishing have been verified with an editor account.
+
+Korean Introduction is now editable in the CMS. Shared PI details and the Korean
+biography are under People, and the shared email is under General Site Text.
+
 There are two realistic setup paths.
 
 ## Option A: Netlify Identity + Git Gateway

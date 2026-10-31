@@ -13,6 +13,10 @@ This repository is ready for GitHub Pages hosting.
 
 The workflow in `.github/workflows/pages.yml` publishes only the public website files. It does not publish the CV document, local logs, or other workspace-only files.
 
+The workflow installs locked Node.js build dependencies, runs offline regression
+tests, and builds `_site/` with `npm run build`. It also refreshes publications on
+a daily schedule. Netlify uses the same build command, including the Korean page.
+
 ## Admin Editing
 
 GitHub Pages can host the public website, but it does not provide a backend for Decap CMS authentication.

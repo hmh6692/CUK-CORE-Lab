@@ -13,8 +13,8 @@
     <link rel="alternate" hreflang="ko" href="https://cukcorelab.catholic.ac.kr/social-pharmacy/" />
     <link rel="alternate" hreflang="en" href="https://cukcorelab.catholic.ac.kr/" />
     <link rel="alternate" hreflang="x-default" href="https://cukcorelab.catholic.ac.kr/" />
-    <link rel="icon" href="https://cukcorelab.catholic.ac.kr/logo.png" type="image/png" />
-    <link rel="apple-touch-icon" href="https://cukcorelab.catholic.ac.kr/logo.png" />
+    <link rel="icon" href="../assets/optimized/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="../assets/optimized/apple-touch-icon.png" sizes="180x180" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CUK-CORE Lab" />
     <meta property="og:title" content="가톨릭대학교 사회약학 연구실 | 박선경 교수 · CUK-CORE Lab" />
@@ -23,14 +23,14 @@
       content="약물경제성평가, 건강성과연구, 근거합성 및 보건의료 빅데이터를 연구하는 가톨릭대학교 사회약학 연구실입니다."
     />
     <meta property="og:url" content="https://cukcorelab.catholic.ac.kr/social-pharmacy/" />
-    <meta property="og:image" content="https://cukcorelab.catholic.ac.kr/assets/hero-heor-lab.png" />
+    <meta property="og:image" content="https://cukcorelab.catholic.ac.kr/assets/optimized/hero-social.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="가톨릭대학교 사회약학 연구실 | 박선경 교수" />
     <meta
       name="twitter:description"
       content="CUK-CORE Lab의 한국어 연구실 소개와 주요 연구 분야를 확인하세요."
     />
-    <meta name="twitter:image" content="https://cukcorelab.catholic.ac.kr/assets/hero-heor-lab.png" />
+    <meta name="twitter:image" content="https://cukcorelab.catholic.ac.kr/assets/optimized/hero-social.jpg" />
     <title>가톨릭대학교 사회약학 연구실 | 박선경 교수 · CUK-CORE Lab</title>
     <script type="application/ld+json">
       {
@@ -106,33 +106,34 @@
         ]
       }
     </script>
-    <link rel="preload" as="image" href="../assets/hero-heor-lab.png" />
+    <link rel="preload" as="image" href="../assets/optimized/hero.webp" media="(min-width: 901px)" />
+    <link rel="preload" as="image" href="../assets/optimized/hero-mobile.webp" media="(max-width: 900px)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&amp;family=Noto+Serif+KR:wght@500;600;700&amp;family=Source+Sans+3:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@600;700&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../styles.css?v=20260801-1" />
+    <link rel="stylesheet" href="../styles.css?v=20261031-1" />
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-    <script src="../script.js?v=20260801-1" defer></script>
+    <script src="../script.js?v=20261031-1" defer></script>
   </head>
   <body class="local-page" data-static-page>
     <a class="skip-link" href="#main-content">본문으로 이동</a>
     <header class="site-header" data-header>
       <a class="brand" href="../" aria-label="CUK-CORE Lab 홈">
-        <img class="brand-logo" src="../logo.png" alt="CUK-CORE Lab" />
+        <img class="brand-logo" src="../assets/optimized/logo.webp" alt="CUK-CORE Lab" />
         <span>
           <strong>CUK-CORE Lab</strong>
           <small>Cross-disciplinary Outcomes Research for Evidence</small>
         </span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" data-nav-toggle>
+      <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle>
         <i data-lucide="menu" aria-hidden="true"></i>
       </button>
 
-      <nav class="site-nav" aria-label="주요 메뉴" data-nav>
+      <nav id="site-navigation" class="site-nav" aria-label="주요 메뉴" data-nav>
         <a href="#overview">연구실 소개</a>
         <a href="#research">연구 분야</a>
         <a href="#professor">박선경 교수</a>
@@ -220,15 +221,16 @@
         <div class="local-profile">
           <img
             class="local-profile-photo"
-            src="../PI_profile.jpg"
+            src="../assets/optimized/PI_profile.webp"
             alt="가톨릭대학교 약학대학 박선경 교수"
             width="640"
             height="800"
+            loading="lazy"
           />
           <div class="local-profile-copy">
             <p class="section-kicker">Principal Investigator</p>
             <h2 id="professor-title">박선경 교수</h2>
-            <p>
+            <p data-local-bio>
               가톨릭대학교 약학대학 조교수로서 사회약학, 약물경제성평가와 빅데이터 기반
               건강성과연구를 수행합니다. 연구실에서는 방법론적 엄밀성과 실제 보건의료
               의사결정에 대한 기여를 함께 중요하게 생각합니다.
@@ -242,6 +244,7 @@
               <a
                 class="button compact"
                 href="https://pharm.catholic.ac.kr/pharmacy/faculty/faculty.do?mode=view&persNo=212010916"
+                data-local-university-link
                 target="_blank"
                 rel="noreferrer"
               >
@@ -251,6 +254,7 @@
               <a
                 class="button compact"
                 href="https://orcid.org/0000-0003-4421-4513"
+                data-local-orcid-link
                 target="_blank"
                 rel="noreferrer"
               >
