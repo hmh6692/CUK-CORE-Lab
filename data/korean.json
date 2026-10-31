@@ -58,7 +58,28 @@
       {
         "sourceTitle": "Prospective Members",
         "title": "진학 및 연구 참여 문의",
-        "description": "정량적 보건의료 연구, 의약품 정책과 근거합성에 관심 있는 학생들의 문의를 환영합니다."
+        "description": "근거를 통해 더 나은 보건의료 의사결정을 만드는 일에 관심이 있나요? 여러분의 관심 주제와 연구실의 연구가 어떻게 연결될 수 있는지 살펴보세요.",
+        "recruitment": {
+          "questionsTitle": "우리가 탐구하는 질문",
+          "questions": [
+            {
+              "icon": "scale",
+              "text": "어떤 보건의료 중재가 환자와 의료체계에 더 나은 가치를 제공할까요?"
+            },
+            {
+              "icon": "database",
+              "text": "실제 진료자료에서 치료성과에 관해 무엇을 알아낼 수 있을까요?"
+            },
+            {
+              "icon": "book-open",
+              "text": "여러 연구의 근거를 모아 보건의료 정책에 어떻게 활용할 수 있을까요?"
+            }
+          ],
+          "contactTitle": "관심 있는 연구 이야기를 들려주세요",
+          "contactText": "전공과 학업 배경, 관심 연구 분야, 탐구해 보고 싶은 질문을 간단히 소개해 주세요.",
+          "emailLabel": "박선경 교수에게 문의",
+          "researchLabel": "연구 분야 살펴보기"
+        }
       }
     ]
   },

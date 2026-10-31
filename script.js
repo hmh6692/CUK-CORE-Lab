@@ -485,6 +485,9 @@ function renderKoreanPage({ site, research, people, publications, korean = {} })
       ...item, sourceTitle: item.title,
       title: translated?.title || item.title,
       description: translated?.description || item.description,
+      recruitment: item.recruitment || translated?.recruitment
+        ? { ...item.recruitment, ...translated?.recruitment }
+        : undefined,
     };
   });
   renderSite({
@@ -715,6 +718,52 @@ function memberGroupHtml(title, members) {
   `;
 }
 
+function teamNoteHtml(note, pi) {
+  const recruitment = note.recruitment;
+  const questions = Array.isArray(recruitment?.questions)
+    ? recruitment.questions.filter((question) => question?.text) : [];
+  const detailed = Boolean(questions.length || recruitment?.contactTitle || recruitment?.contactText);
+  const emailLink = (pi.profileLinks || []).map((link) => safeProfileUrl(link.url))
+    .find((url) => url.startsWith("mailto:"));
+  return `
+    <article${detailed ? ' class="prospective-note"' : ""}>
+      <h3>${escapeHtml(note.title)}</h3>
+      <p>${escapeHtml(note.description)}</p>
+      ${questions.length ? `
+        <div class="recruitment-questions">
+          <h4>${escapeHtml(recruitment.questionsTitle || pageText("Questions we explore", "우리가 탐구하는 질문"))}</h4>
+          <ul>
+            ${questions.map((question) => `
+              <li>
+                <i data-lucide="${escapeHtml(question.icon || "circle-help")}" aria-hidden="true"></i>
+                <span>${escapeHtml(question.text)}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </div>
+      ` : ""}
+      ${detailed ? `
+        <div class="recruitment-contact">
+          <h4>${escapeHtml(recruitment.contactTitle || pageText("Start a conversation", "관심 있는 연구 이야기를 들려주세요"))}</h4>
+          ${recruitment.contactText ? `<p>${escapeHtml(recruitment.contactText)}</p>` : ""}
+          <div class="recruitment-actions">
+            ${emailLink ? `
+              <a class="button recruitment-email" href="${escapeHtml(emailLink)}">
+                <i data-lucide="mail" aria-hidden="true"></i>
+                <span>${escapeHtml(recruitment.emailLabel || pageText("Email the PI", "연구책임자에게 문의"))}</span>
+              </a>
+            ` : ""}
+            <a class="recruitment-research" href="#research">
+              <span>${escapeHtml(recruitment.researchLabel || pageText("Explore our research", "연구 분야 살펴보기"))}</span>
+              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      ` : ""}
+    </article>
+  `;
+}
+
 function renderPeople(people) {
   setText("[data-people-kicker]", people.kicker);
   setText("[data-people-title]", people.title);
@@ -752,16 +801,7 @@ function renderPeople(people) {
   if (teamNotes) teamNotes.hidden = notes.length === 0;
   setHtml(
     "[data-team-notes]",
-    notes
-      .map(
-        (note) => `
-          <article>
-            <h3>${escapeHtml(note.title)}</h3>
-            <p>${escapeHtml(note.description)}</p>
-          </article>
-        `,
-      )
-      .join(""),
+    notes.map((note) => teamNoteHtml(note, pi)).join(""),
   );
 
   const memberGrid = document.querySelector("[data-member-grid]");

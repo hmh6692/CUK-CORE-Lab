@@ -127,6 +127,30 @@ collections:
                   - { label: "English Note Title", name: "sourceTitle", widget: "string", hint: "Match the title in People > Team Notes." }
                   - { label: "Title", name: "title", widget: "string" }
                   - { label: "Description", name: "description", widget: "text" }
+                  - label: "Prospective Members Details"
+                    name: "recruitment"
+                    widget: "object"
+                    required: false
+                    collapsed: true
+                    hint: "Translate the recruitment note here. The email address comes from the PI profile."
+                    fields:
+                      - { label: "Questions Heading", name: "questionsTitle", widget: "string", required: false }
+                      - label: "Research Questions"
+                        name: "questions"
+                        widget: "list"
+                        required: false
+                        summary: "{{fields.text}}"
+                        fields:
+                          - { label: "Question", name: "text", widget: "text" }
+                          - label: "Icon"
+                            name: "icon"
+                            widget: "select"
+                            options: ["scale", "database", "book-open"]
+                            default: "book-open"
+                      - { label: "Contact Heading", name: "contactTitle", widget: "string", required: false }
+                      - { label: "Contact Introduction", name: "contactText", widget: "text", required: false }
+                      - { label: "Email Button Label", name: "emailLabel", widget: "string", required: false }
+                      - { label: "Research Link Label", name: "researchLabel", widget: "string", required: false }
           - label: "Contact"
             name: "contact"
             widget: "object"
@@ -260,6 +284,30 @@ collections:
             fields:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
+              - label: "Prospective Members Details"
+                name: "recruitment"
+                widget: "object"
+                required: false
+                collapsed: true
+                hint: "Optional research questions and inquiry details. The email address comes from the PI profile."
+                fields:
+                  - { label: "Questions Heading", name: "questionsTitle", widget: "string", required: false }
+                  - label: "Research Questions"
+                    name: "questions"
+                    widget: "list"
+                    required: false
+                    summary: "{{fields.text}}"
+                    fields:
+                      - { label: "Question", name: "text", widget: "text" }
+                      - label: "Icon"
+                        name: "icon"
+                        widget: "select"
+                        options: ["scale", "database", "book-open"]
+                        default: "book-open"
+                  - { label: "Contact Heading", name: "contactTitle", widget: "string", required: false }
+                  - { label: "Contact Introduction", name: "contactText", widget: "text", required: false }
+                  - { label: "Email Button Label", name: "emailLabel", widget: "string", required: false }
+                  - { label: "Research Link Label", name: "researchLabel", widget: "string", required: false }
 
       - label: "Publications"
         name: "publications"

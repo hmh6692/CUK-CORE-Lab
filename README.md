@@ -44,6 +44,13 @@ the wrong translation. A new or renamed item uses English until translated.
 The main page has no additional Korean navigation tab. The Korean page retains
 an English return link and remains excluded from search indexing.
 
+The Prospective Members note includes research questions and inquiry links.
+Edit it under People > People Section Notes > Prospective Members Details;
+edit its Korean text under Korean Page > People > Team Notes. The email button
+uses the PI's Email profile link, so no additional email address needs updating.
+These optional details do not change the appearance of other team notes.
+Local examples in `previews/` are not included in the public build.
+
 ## Build and Publications
 
 Node.js 22 or later is required only at build time. The published site remains

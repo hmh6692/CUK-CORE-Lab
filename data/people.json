@@ -114,7 +114,28 @@
     },
     {
       "title": "Prospective Members",
-      "description": "Students interested in quantitative health research, pharmacy policy, and evidence synthesis are welcome to get in touch."
+      "description": "Interested in how evidence can inform better healthcare decisions? Explore how your research interests connect with our work.",
+      "recruitment": {
+        "questionsTitle": "Questions we explore",
+        "questions": [
+          {
+            "icon": "scale",
+            "text": "Which health interventions offer good value for patients and health systems?"
+          },
+          {
+            "icon": "database",
+            "text": "What can real-world data tell us about treatment outcomes?"
+          },
+          {
+            "icon": "book-open",
+            "text": "How can evidence across studies inform healthcare policy?"
+          }
+        ],
+        "contactTitle": "Start a conversation",
+        "contactText": "Tell us about your academic background, research interests, and a question you would like to explore.",
+        "emailLabel": "Email Prof. Park",
+        "researchLabel": "Explore our research"
+      }
     }
   ]
 }

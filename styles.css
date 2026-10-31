@@ -821,8 +821,9 @@ summary:focus-visible {
 
 .people-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+  align-items: start;
+  gap: 24px;
   max-width: var(--max);
   margin: 0 auto;
 }
@@ -1079,6 +1080,8 @@ summary:focus-visible {
 
 .team-notes {
   display: grid;
+  align-content: start;
+  min-width: 0;
   gap: 12px;
 }
 
@@ -1092,6 +1095,125 @@ summary:focus-visible {
 
 .team-notes h3 {
   margin-top: 0;
+}
+
+.team-notes .prospective-note {
+  padding: 24px 26px;
+  border-top: 3px solid var(--green-2);
+  box-shadow: none;
+}
+
+.prospective-note h3 {
+  margin-bottom: 12px;
+  font-size: 1.25rem;
+}
+
+.prospective-note p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.prospective-note h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.recruitment-questions {
+  margin-top: 24px;
+}
+
+.recruitment-questions h4 {
+  color: var(--green-2);
+}
+
+.recruitment-questions ul {
+  display: grid;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recruitment-questions li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.recruitment-questions svg,
+.recruitment-questions i {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--green-2);
+  stroke-width: 1.6;
+}
+
+.recruitment-questions li:nth-child(2) svg {
+  color: var(--blue);
+}
+
+.recruitment-questions li:nth-child(3) svg {
+  color: var(--burgundy);
+}
+
+.recruitment-contact {
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.recruitment-contact p {
+  margin-top: 7px;
+}
+
+.recruitment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin-top: 18px;
+}
+
+.recruitment-email {
+  min-height: 42px;
+  padding: 8px 12px;
+  color: var(--paper);
+  background: var(--green);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.recruitment-email:hover {
+  background: var(--green-2);
+}
+
+.recruitment-email svg,
+.recruitment-research svg {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.recruitment-research {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 42px;
+  color: var(--green-2);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.recruitment-research:hover span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .member-groups {
