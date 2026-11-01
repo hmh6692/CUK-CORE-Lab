@@ -93,6 +93,36 @@ test("offline build retains complete source data and pre-renders public content"
   }
 });
 
+test("Korean typography reserves serif for major headings and unifies body rhythm", async () => {
+  const css = await fs.readFile(path.join(root, "styles.css"), "utf8");
+  const { document } = parseHTML(`<html><head><style>${css}</style></head><body></body></html>`);
+  const rules = [...document.querySelector("style").sheet.cssRules].filter((rule) => rule.selectorText);
+  const selectors = (rule) => rule.selectorText.split(",").map((selector) => selector.trim());
+  const styleFor = (selector) => {
+    const rule = rules.find((item) => selectors(item).includes(selector));
+    assert.ok(rule, `Missing typography rule: ${selector}`);
+    return rule.style;
+  };
+
+  for (const selector of [".korean-page h3", ".korean-page h4", ".korean-page .hero-local", ".korean-page .profile-local strong", ".korean-page .publication-year"]) {
+    assert.equal(styleFor(selector).getPropertyValue("font-family"), "var(--font-kr-sans)");
+  }
+  for (const selector of [".korean-page", ".korean-page .intro-copy", ".korean-page .research-card p", ".korean-page .team-notes p", ".korean-page .recruitment-questions li"]) {
+    assert.equal(styleFor(selector).getPropertyValue("font-size"), "1rem");
+    assert.equal(styleFor(selector).getPropertyValue("line-height"), "1.75");
+  }
+  const serifHeadings = [".korean-page .section-grid h2", ".korean-page .section-heading h2", ".korean-page .contact-inner h2"];
+  for (const selector of serifHeadings) {
+    assert.equal(styleFor(selector).getPropertyValue("font-family"), "var(--font-kr-serif)");
+  }
+  for (const rule of rules) {
+    if (!rule.style.getPropertyValue("font-family").includes("serif")) continue;
+    for (const selector of selectors(rule).filter((item) => item.includes(".korean-page"))) {
+      assert.ok(serifHeadings.includes(selector), `Unexpected Korean serif style: ${selector}`);
+    }
+  }
+});
+
 test("school admin URLs preserve auth callbacks and do not redirect Netlify", async () => {
   const script = await fs.readFile(path.join(root, "admin/bootstrap.js"), "utf8");
   for (const hostname of ["cukcorelab.catholic.ac.kr", "hmh6692.github.io", "cuk-core-lab.netlify.app", "localhost"]) {

@@ -45,6 +45,11 @@ The main navigation includes a Korean language link, and the Korean page has
 an English return link. Both are available in the mobile menu as well.
 The Korean page remains excluded from search indexing; the main page is the search entry.
 
+Korean typography reserves serif type for the hero and major section headings.
+Subheadings, names, controls and body text use the shared sans-serif pairing.
+Body copy uses a 1rem size and 1.75 line height; secondary labels remain smaller.
+These typography rules are scoped to `.korean-page` and do not restyle English pages.
+
 The Prospective Members note includes research questions and inquiry links.
 Edit it under People > People Section Notes > Prospective Members Details;
 edit its Korean text under Korean Page > People > Team Notes. The email button

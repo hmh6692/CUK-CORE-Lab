@@ -1395,6 +1395,7 @@ summary:focus-visible {
 .korean-page {
   --localized-heading-size: 2rem;
   font-family: var(--font-kr-sans);
+  font-size: 1rem;
   line-height: 1.75;
   overflow-wrap: anywhere;
 }
@@ -1409,18 +1410,77 @@ summary:focus-visible {
   text-wrap: balance;
 }
 
-.korean-page .member-group-heading h3 {
-  font-family: var(--font-kr-serif);
+.korean-page h3,
+.korean-page h4,
+.korean-page .hero-local,
+.korean-page .profile-local strong,
+.korean-page .publication-year {
+  font-family: var(--font-kr-sans);
 }
 
 .korean-page .research-card h3,
-.korean-page .team-notes h3 {
+.korean-page .team-notes h3,
+.korean-page .pi-card h3,
+.korean-page .member-card h3,
+.korean-page .member-group-heading h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
   line-height: 1.5;
+}
+
+.korean-page .publication-card h3,
+.korean-page .publication-row h3,
+.korean-page .publication-year {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.korean-page .intro-copy,
+.korean-page .research-card p,
+.korean-page .team-notes p,
+.korean-page .recruitment-questions li {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.korean-page .profile-subheading,
+.korean-page .experience-disclosure summary,
+.korean-page .prospective-note h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.korean-page .hero-local,
+.korean-page .profile-local span {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.korean-page .hero-local {
+  font-weight: 500;
+}
+
+.korean-page .profile-local strong {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.korean-page .section-kicker,
+.korean-page .role {
+  font-weight: 700;
+}
+
+.korean-page .button,
+.korean-page .profile-link,
+.korean-page .publication-tab {
+  font-weight: 600;
 }
 
 .korean-page .hero-lede {
   font-size: 1.125rem;
-  line-height: 1.85;
+  line-height: 1.75;
 }
 
 .korean-page .site-nav a {
